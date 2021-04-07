@@ -1,5 +1,5 @@
 import React from "react";
-import Post from "../../components/Post/index";
+import Post from "./Post/index";
 
 export default function Posts() {
   return <Post />;

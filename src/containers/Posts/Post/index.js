@@ -5,14 +5,16 @@ import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
 import CardContent from "@material-ui/core/CardContent";
 import CardMedia from "@material-ui/core/CardMedia";
-import Avatar from "@material-ui/core/Avatar";
+// import Avatar from "@material-ui/core/Avatar";
 import Typography from "@material-ui/core/Typography";
 import IconButton from "@material-ui/core/IconButton";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import Skeleton from "@material-ui/lab/Skeleton";
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
-import CommentGenerator from "../Comment/Generator/index";
+import CommentGenerator from "../../Comments/Generator/index";
+import Avatar from "../../../components/UI/Avatar/index";
+import PostGen from "../Generator/index";
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -53,10 +55,7 @@ function Media(props) {
               height={40}
             />
           ) : (
-            <Avatar
-              alt="Ted talk"
-              src="https://pbs.twimg.com/profile_images/877631054525472768/Xp5FAPD5_reasonably_small.jpg"
-            />
+            <Avatar />
           )
         }
         action={
@@ -153,7 +152,7 @@ Media.propTypes = {
 export default function Post() {
   return (
     <div>
-      <Media loading />
+      <PostGen />
       <Media />
     </div>
   );

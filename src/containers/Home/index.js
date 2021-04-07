@@ -2,7 +2,7 @@ import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
-import Facebook from "../Posts/index";
+import Posts from "../Posts/index";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -32,7 +32,12 @@ export default function Home() {
 
   return (
     <div className={classes.root}>
-      <Grid container spacing={3}>
+      <Grid
+        container
+        direction="row"
+        justify="space-between"
+        alignItems="flex-start"
+      >
         <Grid item xs={2} className={classes.sectionDesktop}>
           <Paper className={classes.paper}>xs=6</Paper>
         </Grid>
@@ -45,7 +50,7 @@ export default function Home() {
           xs={12}
           md={8}
         >
-          <Facebook />
+          <Posts />
         </Grid>
         <Grid item xs={2} className={classes.sectionDesktop}>
           <Paper className={classes.paper}>xs=3</Paper>
