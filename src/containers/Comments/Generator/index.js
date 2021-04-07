@@ -81,7 +81,7 @@ export default function ComGen(props) {
                   onFocus={onFocusIn}
                   onBlur={onFocusOut}
                   onInput={onInput}
-                  contentEditable
+                  contentEditable="plaintext-only"
                 ></div>
                 <input hidden />
               </form>

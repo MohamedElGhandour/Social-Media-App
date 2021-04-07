@@ -287,7 +287,7 @@ export default function PostGen(props) {
                           onFocus={onFocusIn}
                           onBlur={onFocusOut}
                           onInput={onInput}
-                          contentEditable
+                          contentEditable="plaintext-only"
                         ></div>
                       </div>
                     </Grid>
@@ -301,6 +301,7 @@ export default function PostGen(props) {
                         ref={input}
                         onChange={handleChange}
                         style={{ display: "none" }}
+                        accept="image/*"
                       />
                     </Grid>
                   </Grid>
