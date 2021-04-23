@@ -44,16 +44,10 @@ export default function ImageAvatars(props) {
           }}
           variant="dot"
         >
-          <Avatar
-            alt="Remy Sharp"
-            src="https://pbs.twimg.com/profile_images/877631054525472768/Xp5FAPD5_reasonably_small.jpg"
-          />
+          <Avatar alt="Remy Sharp" src={props.avatar} />
         </StyledBadge>
       ) : (
-        <Avatar
-          alt="Remy Sharp"
-          src="https://pbs.twimg.com/profile_images/877631054525472768/Xp5FAPD5_reasonably_small.jpg"
-        />
+        <Avatar alt="Remy Sharp" src={props.avatar} />
       )}
     </React.Fragment>
   );

@@ -9,10 +9,17 @@ import Fade from "@material-ui/core/Fade";
 import IconButton from "@material-ui/core/IconButton";
 import ClearIcon from "@material-ui/icons/Clear";
 import AttachFileIcon from "@material-ui/icons/AttachFile";
+import Alert from "@material-ui/lab/Alert";
+import Collapse from "@material-ui/core/Collapse";
+import CloseIcon from "@material-ui/icons/Close";
+import TextField from "@material-ui/core/TextField";
+import { useDispatch } from "react-redux";
+import { sendNewPost } from "../../../store/actions/index";
 
 const useStyles = makeStyles((theme) => ({
   card: {
-    maxWidth: 600,
+    maxWidth: 680,
+    width: "100%",
     margin: theme.spacing(2),
   },
   media: {
@@ -115,7 +122,7 @@ const useStyles = makeStyles((theme) => ({
   btnPost: {
     backgroundColor: "#1877f2",
     color: "#fff",
-    margin: theme.spacing(5, 0, 0),
+    margin: theme.spacing(2, 0, 0),
     textAlign: "center",
     padding: theme.spacing(1.1),
     borderRadius: 7,
@@ -142,44 +149,60 @@ const useStyles = makeStyles((theme) => ({
     width: 30,
     height: 30,
   },
+  contanerPost: {
+    maxHeight: "400px",
+    overflow: "auto",
+    "&::-webkit-scrollbar": {
+      width: "20px",
+    },
+    "&::-webkit-scrollbar-track": {
+      backgroundColor: "transparent",
+    },
+    "&::-webkit-scrollbar-thumb": {
+      backgroundColor: "#d6dee1",
+      borderRadius: "20px",
+      border: "6px solid transparent",
+      backgroundClip: "content-box",
+    },
+    "&::-webkit-scrollbar-thumb:hover": {
+      backgroundColor: "#a8bbbf",
+    },
+  },
+  imgUrl: {
+    width: "100%",
+  },
 }));
 
 export default function PostGen(props) {
   const classes = useStyles();
+  const dispatch = useDispatch();
   const [open, setOpen] = React.useState(false);
+  const [openAlert, setOpenAlert] = React.useState(false);
   const content = React.useRef();
   const input = React.useRef();
   const placeHolder = React.useRef();
   const [img, setImg] = React.useState(null);
+  const [imgURL, setImgURL] = React.useState("");
+
   const sendPost = () => {
-    // const body = {
-    //   content: content.current.innerHTML,
-    //   name: "Ted",
-    //   img: null,
-    // };
-    // fetch(
-    //   "https://socail-media-app-ghandour-default-rtdb.firebaseio.com/posts.json",
-    //   {
-    //     method: "post",
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //     },
-    //     body: JSON.stringify(body),
-    //   }
-    // )
-    //   .then((response) => response.json())
-    //   .then((data) => {
-    //     console.log("Success", data);
-    //   })
-    //   .catch((error) => {
-    //     console.log("Fail", error);
-    //   });
+    const body = content.current.innerHTML;
+    const image = imgURL ? imgURL : null;
+    const data = {
+      avatar: "https://avatars.githubusercontent.com/u/42450595?v=4",
+      image: image,
+      body: body,
+      timestamp: new Date().getTime(),
+      author: "Mohamed Elghandour",
+    };
+    dispatch(sendNewPost(data));
   };
   const handleOpen = () => {
     setOpen(true);
   };
   const handleClose = () => {
     setOpen(false);
+    setOpenAlert(false);
+    setImg(null);
   };
   const onInput = (event) => {
     const input = event.target;
@@ -203,12 +226,14 @@ export default function PostGen(props) {
   };
   const handleChange = (event) => {
     setImg(URL.createObjectURL(event.target.files[0]));
+    setOpenAlert(true);
   };
   const openInputFile = () => {
     input.current.click();
   };
   const handleRemoveImg = () => {
     setImg(null);
+    setOpenAlert(false);
   };
   return (
     <React.Fragment>
@@ -216,11 +241,14 @@ export default function PostGen(props) {
         <div className={classes.root}>
           <Grid container>
             <Grid item xs={2} sm={1}>
-              <Avatar />
+              <Avatar
+                online
+                avatar="https://avatars.githubusercontent.com/u/42450595?v=4"
+              />
             </Grid>
             <Grid className={classes.comment} item xs={10} sm={11}>
               <div className={classes.input} onClick={handleOpen}>
-                What's on your mind, Ted?
+                What's on your mind, Mohamed Elghandour?
               </div>
             </Grid>
           </Grid>
@@ -269,59 +297,100 @@ export default function PostGen(props) {
                     <h3 className={classes.profileName}>Ted</h3>
                   </Grid>
                 </Grid>
-                <Grid className={classes.commentPost} item xs={10} sm={11}>
-                  <Grid
-                    container
-                    direction="row"
-                    justify="space-between"
-                    alignItems="flex-end"
-                  >
-                    <Grid item xs={10} sm={11}>
-                      <div className={classes.form}>
-                        <div className={classes.placeholder} ref={placeHolder}>
-                          What's on your mind, Ted?
-                        </div>
-                        <div
-                          ref={content}
-                          className={classes.inputPost}
-                          onFocus={onFocusIn}
-                          onBlur={onFocusOut}
-                          onInput={onInput}
-                          contentEditable="plaintext-only"
-                        ></div>
-                      </div>
-                    </Grid>
-                    <Grid item xs={2} sm={1}>
-                      <IconButton onClick={openInputFile} color="inherit">
-                        <AttachFileIcon />
-                      </IconButton>
-                      <input
-                        id="file-input"
-                        type="file"
-                        ref={input}
-                        onChange={handleChange}
-                        style={{ display: "none" }}
-                        accept="image/*"
-                      />
-                    </Grid>
-                  </Grid>
-                </Grid>
-                {img && (
-                  <Grid item xs={12} className={classes.imgContainer}>
-                    <img alt="test" className={classes.previewImg} src={img} />
-                    <IconButton
-                      color="inherit"
-                      onClick={handleRemoveImg}
-                      className={classes.clearImg}
+                <Grid item className={classes.contanerPost} xs={12}>
+                  <Grid className={classes.commentPost} item xs={10} sm={11}>
+                    <Grid
+                      container
+                      direction="row"
+                      justify="space-between"
+                      alignItems="flex-end"
                     >
-                      <ClearIcon style={{ color: "#666d75" }} />
-                    </IconButton>
+                      <Grid item xs={10} sm={11}>
+                        <div className={classes.form}>
+                          <div
+                            className={classes.placeholder}
+                            ref={placeHolder}
+                          >
+                            What's on your mind, Mohamed Elghandour?
+                          </div>
+                          <div
+                            ref={content}
+                            className={classes.inputPost}
+                            onFocus={onFocusIn}
+                            onBlur={onFocusOut}
+                            onInput={onInput}
+                            contentEditable="plaintext-only"
+                          ></div>
+                        </div>
+                      </Grid>
+                      <Grid item xs={2} sm={1}>
+                        <IconButton onClick={openInputFile} color="inherit">
+                          <AttachFileIcon />
+                        </IconButton>
+                        <input
+                          id="file-input"
+                          type="file"
+                          ref={input}
+                          onChange={handleChange}
+                          style={{ display: "none" }}
+                          accept="image/*"
+                        />
+                      </Grid>
+                    </Grid>
                   </Grid>
-                )}
+                  {img && (
+                    <Grid item xs={12} className={classes.imgContainer}>
+                      <img
+                        alt="test"
+                        className={classes.previewImg}
+                        src={img}
+                      />
+                      <IconButton
+                        color="inherit"
+                        onClick={handleRemoveImg}
+                        className={classes.clearImg}
+                      >
+                        <ClearIcon style={{ color: "#666d75" }} />
+                      </IconButton>
+                    </Grid>
+                  )}
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    className={classes.imgUrl}
+                    value={imgURL}
+                    onChange={(e) => setImgURL(e.target.value)}
+                    id="standard-basic"
+                    label="Image URL"
+                  />
+                </Grid>
                 <Grid item xs={12}>
                   <div onClick={sendPost} className={classes.btnPost}>
                     Post
                   </div>
+                </Grid>
+                <Grid item xs={12} style={{ marginTop: 10 }}>
+                  <Collapse in={openAlert}>
+                    <Alert
+                      severity="warning"
+                      className={classes.alert}
+                      action={
+                        <IconButton
+                          aria-label="close"
+                          color="inherit"
+                          size="small"
+                          onClick={() => {
+                            setOpenAlert(false);
+                          }}
+                        >
+                          <CloseIcon fontSize="inherit" />
+                        </IconButton>
+                      }
+                    >
+                      Uploading Files doesn't work for now but can use Image
+                      URL.
+                    </Alert>
+                  </Collapse>
                 </Grid>
               </Grid>
             </div>

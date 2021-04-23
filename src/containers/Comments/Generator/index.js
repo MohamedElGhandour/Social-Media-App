@@ -2,8 +2,8 @@ import React from "react";
 import Avatar from "../../../components/UI/Avatar/index";
 import Grid from "@material-ui/core/Grid";
 import { makeStyles } from "@material-ui/core/styles";
-import IconButton from "@material-ui/core/IconButton";
-import AttachFileIcon from "@material-ui/icons/AttachFile";
+import { useDispatch } from "react-redux";
+import { addComment } from "../../../store/actions/index";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -44,27 +44,41 @@ const useStyles = makeStyles((theme) => ({
 
 export default function ComGen(props) {
   const classes = useStyles();
-
+  const placeholder = React.useRef();
+  const body = React.useRef();
+  const dispatch = useDispatch();
   const onInput = (event) => {
     const input = event.target;
-    const placeHolder = document.querySelector(`.${classes.placeholder}`);
     !input.innerHTML
-      ? (placeHolder.style.display = "block")
-      : (placeHolder.style.display = "none");
+      ? (placeholder.current.style.display = "block")
+      : (placeholder.current.style.display = "none");
   };
   const onFocusOut = () => {
-    const placeHolder = document.querySelector(`.${classes.placeholder}`);
-    placeHolder.style.color = "#65676b";
+    placeholder.current.style.color = "#65676b";
   };
   const onFocusIn = () => {
-    const placeHolder = document.querySelector(`.${classes.placeholder}`);
-    placeHolder.style.color = "#8c8d8e";
+    placeholder.current.style.color = "#8c8d8e";
+  };
+  const handleKeyDown = (event) => {
+    if (event.key === "Enter" && body.current.innerHTML !== "") {
+      const newComment = {
+        body: body.current.innerHTML,
+        avatar: props.avatar,
+        timestamp: new Date().getTime(),
+        author: "Mohamed Elghandour",
+        postId: props.global.id,
+      };
+      const newPost = { ...props.global };
+      dispatch(addComment(newPost, newComment));
+      body.current.innerHTML = "";
+      placeholder.current.style.display = "block";
+    }
   };
   return (
     <div className={classes.root}>
       <Grid container>
         <Grid item xs={2} sm={1}>
-          <Avatar online />
+          <Avatar online avatar={props.avatar} />
         </Grid>
         <Grid className={classes.comment} item xs={10} sm={11}>
           <Grid
@@ -73,23 +87,25 @@ export default function ComGen(props) {
             justify="space-between"
             alignItems="flex-end"
           >
-            <Grid item xs={10} sm={11}>
-              <form className={classes.form}>
-                <div className={classes.placeholder}>write a comment...</div>
+            <Grid item xs={11}>
+              <form
+                className={classes.form}
+                onSubmit={() => console.log("test")}
+              >
+                <div ref={placeholder} className={classes.placeholder}>
+                  write a comment...
+                </div>
                 <div
                   className={classes.input}
                   onFocus={onFocusIn}
                   onBlur={onFocusOut}
                   onInput={onInput}
+                  onKeyUp={handleKeyDown}
+                  ref={body}
                   contentEditable="plaintext-only"
                 ></div>
-                <input hidden />
+                <input type="submit" hidden />
               </form>
-            </Grid>
-            <Grid item xs={2} sm={1}>
-              <IconButton color="inherit">
-                <AttachFileIcon style={{ fontSize: "18px" }} />
-              </IconButton>
             </Grid>
           </Grid>
         </Grid>

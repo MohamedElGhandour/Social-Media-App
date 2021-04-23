@@ -41,15 +41,7 @@ export default function Home() {
         <Grid item xs={2} className={classes.sectionDesktop}>
           <Paper className={classes.paper}>xs=6</Paper>
         </Grid>
-        <Grid
-          item
-          container
-          direction="column"
-          justify="flex-start"
-          alignItems="center"
-          xs={12}
-          md={8}
-        >
+        <Grid item xs={12} md={8}>
           <Posts />
         </Grid>
         <Grid item xs={2} className={classes.sectionDesktop}>
