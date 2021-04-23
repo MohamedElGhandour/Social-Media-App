@@ -1,0 +1,62 @@
+{
+  "posts": [
+    {
+      "avatar": "https://avatars.githubusercontent.com/u/42450595?v=4",
+      "image": "https://www.udacity.com/blog/wp-content/uploads/2020/11/Hello-World_Blog-scaled.jpeg",
+      "body": "Hello ",
+      "timestamp": 1619013204203,
+      "author": "Mohamed Elghandour",
+      "id": 5
+    },
+    {
+      "avatar": "https://avatars.githubusercontent.com/u/42450595?v=4",
+      "image": "https://debasischowdhury.com/wp-content/uploads/2020/04/hello_world_new_black.png",
+      "body": "Hello World",
+      "timestamp": 1619014868102,
+      "author": "Mohamed Elghandour",
+      "id": 7
+    },
+    {
+      "avatar": "https://avatars.githubusercontent.com/u/42450595?v=4",
+      "image": "https://1.bp.blogspot.com/-UzSiErjcaRY/XXEHGwjzhNI/AAAAAAAAFzw/jwNALBF1CBUdiDwn8bXgjKM0sh7UMgYnQCLcBGAs/s640/maxresdefault.jpg",
+      "body": "LOVE ❤️",
+      "timestamp": 1619019362514,
+      "author": "Mohamed Elghandour",
+      "id": 8
+    },
+    {
+      "avatar": "https://avatars.githubusercontent.com/u/42450595?v=4",
+      "image": "https://user-images.githubusercontent.com/22680912/46479049-d8a9c400-c80b-11e8-92a1-89fc10701f4a.jpg",
+      "body": "GREAT ❤️",
+      "timestamp": 1619036535266,
+      "author": "Mohamed Elghandour",
+      "id": 9
+    }
+  ],
+  "comments": [
+    {
+      "body": "Hi",
+      "avatar": "https://avatars.githubusercontent.com/u/42450595?v=4",
+      "timestamp": 1619116999242,
+      "author": "Mohamed Elghandour",
+      "id": 3,
+      "postId": 5
+    },
+    {
+      "body": "Nice!",
+      "avatar": "https://avatars.githubusercontent.com/u/42450595?v=4",
+      "timestamp": 1619116882805,
+      "author": "Mohamed Elghandour",
+      "id": 2,
+      "postId": 7
+    },
+    {
+      "body": "good Job",
+      "avatar": "https://avatars.githubusercontent.com/u/42450595?v=4",
+      "timestamp": 1619107594210,
+      "author": "Mohamed Elghandour",
+      "id": 1,
+      "postId": 9
+    }
+  ]
+}
