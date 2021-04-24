@@ -21,6 +21,7 @@ import MailIcon from "@material-ui/icons/Mail";
 import NotificationsIcon from "@material-ui/icons/Notifications";
 import MoreIcon from "@material-ui/icons/MoreVert";
 import PropTypes from "prop-types";
+import { NavLink } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   grow: {
@@ -134,6 +135,9 @@ export default function PrimarySearchAppBar(props) {
     setMobileMoreAnchorEl(event.currentTarget);
   };
 
+  const avatar = localStorage.getItem("avatar");
+  const name = localStorage.getItem("name");
+
   const menuId = "primary-search-account-menu";
   const renderMenu = (
     <Menu
@@ -146,7 +150,9 @@ export default function PrimarySearchAppBar(props) {
       onClose={handleMenuClose}
     >
       <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
-      <MenuItem onClick={handleMenuClose}>My account</MenuItem>
+      <MenuItem onClick={handleMenuClose}>
+        <NavLink to="/logout">Log out</NavLink>
+      </MenuItem>
     </Menu>
   );
 
@@ -232,7 +238,7 @@ export default function PrimarySearchAppBar(props) {
                   textAlign: "center",
                 }}
               >
-                <Chip avatar={<Avatar>M</Avatar>} label="Clickable" clickable />
+                <Chip avatar={<Avatar src={avatar} />} label={name} clickable />
               </div>
               <IconButton aria-label="show 4 new mails" color="inherit">
                 <Badge badgeContent={4} color="secondary">

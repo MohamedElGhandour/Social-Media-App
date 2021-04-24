@@ -12,27 +12,17 @@ import Grid from "@material-ui/core/Grid";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
-import background from "../../assets/images/spectacular-african-model-with-trendy-haircut-posing-with-okay-sign-indoor-photo-of-amazed-brunette-black-guy-in-summer-t-shirt.jpg";
-
-function Copyright() {
-  return (
-    <Typography variant="body2" color="textSecondary" align="center">
-      {"Copyright © "}
-      <Link color="inherit" href="https://github.com/MohamedElGhandour">
-        Mohamed Elghandour
-      </Link>{" "}
-      {new Date().getFullYear()}
-      {"."}
-    </Typography>
-  );
-}
+import Copyright from "../../../components/UI/Copyright/index";
+import { useDispatch } from "react-redux";
+import { auth } from "../../../store/actions/index";
+// import background from "../../assets/images/spectacular-african-model-with-trendy-haircut-posing-with-okay-sign-indoor-photo-of-amazed-brunette-black-guy-in-summer-t-shirt.jpg";
 
 const useStyles = makeStyles((theme) => ({
   root: {
     height: "100vh",
   },
   image: {
-    backgroundImage: `url(${background})`,
+    backgroundImage: `url()`,
     backgroundRepeat: "no-repeat",
     backgroundColor:
       theme.palette.type === "light"
@@ -62,6 +52,21 @@ const useStyles = makeStyles((theme) => ({
 
 export default function SignInSide() {
   const classes = useStyles();
+  const dispatch = useDispatch();
+  const [email, setEmail] = React.useState("");
+  const [password, setPassword] = React.useState("");
+
+  const authEvent = (e) => {
+    e.preventDefault();
+    if (email && password !== "") {
+      const authData = {
+        email: email,
+        password: password,
+        isSignUp: false,
+      };
+      dispatch(auth(authData));
+    }
+  };
 
   return (
     <Grid
@@ -89,7 +94,7 @@ export default function SignInSide() {
           <Typography component="h1" variant="h5">
             Sign in
           </Typography>
-          <form className={classes.form} noValidate>
+          <form className={classes.form} noValidate onSubmit={authEvent}>
             <TextField
               variant="outlined"
               margin="normal"
@@ -99,6 +104,8 @@ export default function SignInSide() {
               label="Email Address"
               name="email"
               autoComplete="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               autoFocus
             />
             <TextField
@@ -110,6 +117,8 @@ export default function SignInSide() {
               label="Password"
               type="password"
               id="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               autoComplete="current-password"
             />
             <FormControlLabel

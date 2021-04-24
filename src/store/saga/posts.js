@@ -2,13 +2,13 @@ import { put } from "redux-saga/effects";
 import * as actions from "../actions/index";
 
 export function* fetchPostsSaga() {
+  const token = yield localStorage.getItem("token");
   try {
     const response = yield fetch(
-      "http://localhost:4000/posts?_embed=comments&_sort=id&_order=desc",
+      "http://localhost:4000/api/posts?_embed=comments&_sort=id&_order=desc",
       {
         headers: {
-          Authorization:
-            "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im1vaGFtZWRAZW1haWwuY29tIiwicGFzc3dvcmQiOiJuaWxzb24iLCJpYXQiOjE2MTkxODg4ODcsImV4cCI6MTYxOTE4ODg4N30.v23-Bsp3JrmAkPcHnlDgG3RfAfVOyS7dt7EduZ3ATcA",
+          Authorization: `Bearer ${token}`,
         },
       }
     );
@@ -22,14 +22,16 @@ export function* fetchPostsSaga() {
 }
 
 export function* sendNewPostSaga(action) {
+  const token = yield localStorage.getItem("token");
   try {
-    const response = yield fetch("http://localhost:4000/posts", {
+    const response = yield fetch("http://localhost:4000/api/posts", {
       method: "POST", // *GET, POST, PUT, DELETE, etc.
       mode: "cors", // no-cors, *cors, same-origin
       cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
       credentials: "same-origin", // include, *same-origin, omit
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
         // 'Content-Type': 'application/x-www-form-urlencoded',
       },
       redirect: "follow", // manual, *follow, error
@@ -44,14 +46,16 @@ export function* sendNewPostSaga(action) {
 }
 
 export function* addCommentSaga(action) {
+  const token = yield localStorage.getItem("token");
   try {
-    const response = yield fetch(`http://localhost:4000/comments/`, {
+    const response = yield fetch(`http://localhost:4000/api/comments/`, {
       method: "POST", // *GET, POST, PUT, DELETE, etc.
       mode: "cors", // no-cors, *cors, same-origin
       cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
       credentials: "same-origin", // include, *same-origin, omit
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
         // 'Content-Type': 'application/x-www-form-urlencoded',
       },
       redirect: "follow", // manual, *follow, error

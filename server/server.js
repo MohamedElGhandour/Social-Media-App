@@ -8,8 +8,9 @@ const router = jsonServer.router("./api/db.json");
 const middlewares = jsonServer.defaults();
 const userdb = JSON.parse(fs.readFileSync("./api/users.json", "UTF-8"));
 const SECRET_KEY = "123456789";
-const expiresIn = "1";
+const expiresIn = "1h";
 
+server.use(jsonServer.defaults());
 server.use(bodyParser.urlencoded({ extended: true }));
 server.use(bodyParser.json());
 
@@ -20,9 +21,9 @@ function createToken(payload) {
 
 // Verify the token
 function verifyToken(token) {
-  return jwt.verify(token, SECRET_KEY, (err, decode) => {
-    return decode !== undefined ? decode : err;
-  });
+  return jwt.verify(token, SECRET_KEY, (err, decode) =>
+    decode !== undefined ? decode : err
+  );
 }
 
 // Check if the user exists in database
@@ -34,14 +35,16 @@ function isAuthenticated({ email, password }) {
   );
 }
 
-server.post("/auth/login", (req, res) => {
+server.post("/api/auth/login", (req, res) => {
   const { email, password } = req.body;
+
   if (isAuthenticated({ email, password }) === false) {
     const status = 401;
     const message = "Incorrect email or password";
     res.status(status).json({ status, message, ...req.body });
     return;
   }
+
   fs.readFile("./api/users.json", (err, data) => {
     if (err) {
       const status = 401;
@@ -61,13 +64,16 @@ server.post("/auth/login", (req, res) => {
     });
     const user = currentUser[0];
 
+    delete user["password"];
+
     const access_token = createToken({ email, password });
-    res.status(200).json({ access_token, user });
+    const expiresIn = verifyToken(access_token).exp;
+    res.status(200).json({ access_token, ...user, expiresIn });
   });
 });
 
 // Register New User
-server.post("/auth/register", (req, res) => {
+server.post("/api/auth/register", (req, res) => {
   const { email, password, name } = req.body;
   if (isAuthenticated({ email, password }) === true) {
     const status = 401;
@@ -103,7 +109,10 @@ server.post("/auth/register", (req, res) => {
       email: email,
       password: password,
       name: name,
-    }); //add some data
+      avatar: null,
+    });
+
+    //add some data
     var writeData = fs.writeFile(
       "./api/users.json",
       JSON.stringify(data),
@@ -135,18 +144,28 @@ server.use(/^(?!\/auth).*$/, (req, res, next) => {
     return;
   }
   try {
-    verifyToken(req.headers.authorization.split(" ")[1]);
+    // verifyToken(req.headers.authorization.split(" ")[1]);
+    // console.log(verifyToken(req.headers.authorization.split(" ")[1]).err);
+    const decoded = verifyToken(req.headers.authorization.split(" ")[1]);
+    console.log({ ...decoded });
+    if (
+      decoded.name === "JsonWebTokenError" ||
+      decoded.name === "TokenExpiredError"
+    )
+      throw decoded;
+
     next();
   } catch (err) {
+    console.log(err.message);
     const status = 401;
     const message = "Error: access_token is not valid";
     res.status(status).json({ status, message });
   }
 });
 
-server.use(jsonServer.defaults());
+server.use("/api", router);
 server.use(middlewares);
-server.use(router);
+// server.use(router);
 server.listen(4000, () => {
   console.log("JSON Server is running");
 });

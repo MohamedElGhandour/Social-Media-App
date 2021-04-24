@@ -12,7 +12,8 @@ const failedFetchPosts = (state, action) => {
 
 const successSendNewPost = (state, action) => {
   const newArr = cloneDeep(state.posts);
-  newArr.unshift(action.data);
+  const addCommentsToPost = { ...action.data, comments: [] };
+  newArr.unshift(addCommentsToPost);
   return { ...state, posts: newArr };
 };
 
