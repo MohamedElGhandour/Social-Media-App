@@ -6,7 +6,7 @@ const jsonServer = require("json-server");
 const server = jsonServer.create();
 const router = jsonServer.router("./api/db.json");
 const middlewares = jsonServer.defaults();
-const userdb = JSON.parse(fs.readFileSync("./api/users.json", "UTF-8"));
+const userdb = JSON.parse(fs.readFileSync("./api/db.json", "UTF-8"));
 const SECRET_KEY = "123456789";
 const expiresIn = "1h";
 
@@ -35,6 +35,58 @@ function isAuthenticated({ email, password }) {
   );
 }
 
+server.use("/api/users", (req, res) => {
+  const status = 405;
+  const message = "Not Available (Cheater -_-)";
+  res.status(status).json({ status, message });
+  return;
+});
+
+server.use("/api/usersName", (req, res) => {
+  if (
+    req.headers.authorization === undefined ||
+    req.headers.authorization.split(" ")[0] !== "Bearer"
+  ) {
+    const status = 401;
+    const message = "Bad authorization header";
+    res.status(status).json({ status, message });
+    return;
+  }
+  try {
+    // verifyToken(req.headers.authorization.split(" ")[1]);
+    // console.log(verifyToken(req.headers.authorization.split(" ")[1]).err);
+    const decoded = verifyToken(req.headers.authorization.split(" ")[1]);
+    if (
+      decoded.name === "JsonWebTokenError" ||
+      decoded.name === "TokenExpiredError"
+    )
+      throw decoded;
+
+    fs.readFile("./api/db.json", (err, data) => {
+      if (err) {
+        const status = 401;
+        const message = err;
+        res.status(status).json({ status, message });
+        return;
+      }
+
+      // Get current users data
+      var data = JSON.parse(data.toString());
+      // Get current user data
+      const users = [...data.users];
+      users.forEach((user) => {
+        delete user.password;
+      });
+      res.status(200).json({ users });
+    });
+  } catch (err) {
+    console.log(err.message);
+    const status = 401;
+    const message = "Error: access_token is not valid";
+    res.status(status).json({ status, message });
+  }
+});
+
 server.post("/api/auth/login", (req, res) => {
   const { email, password } = req.body;
 
@@ -45,7 +97,7 @@ server.post("/api/auth/login", (req, res) => {
     return;
   }
 
-  fs.readFile("./api/users.json", (err, data) => {
+  fs.readFile("./api/db.json", (err, data) => {
     if (err) {
       const status = 401;
       const message = err;

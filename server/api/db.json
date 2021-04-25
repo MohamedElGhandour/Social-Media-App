@@ -6,6 +6,7 @@
       "body": "Hello ",
       "timestamp": 1619013204203,
       "author": "Mohamed Elghandour",
+      "userId": "1",
       "id": 5
     },
     {
@@ -14,6 +15,7 @@
       "body": "Hello World",
       "timestamp": 1619014868102,
       "author": "Mohamed Elghandour",
+      "userId": "2",
       "id": 7
     },
     {
@@ -22,6 +24,7 @@
       "body": "LOVE ❤️",
       "timestamp": 1619019362514,
       "author": "Mohamed Elghandour",
+      "userId": "3",
       "id": 8
     },
     {
@@ -30,7 +33,26 @@
       "body": "GREAT ❤️",
       "timestamp": 1619036535266,
       "author": "Mohamed Elghandour",
+      "userId": "1",
       "id": 9
+    },
+    {
+      "avatar": "/static/media/avatar.d0b0544d.png",
+      "image": "https://images.ctfassets.net/hrltx12pl8hq/7yQR5uJhwEkRfjwMFJ7bUK/dc52a0913e8ff8b5c276177890eb0129/offset_comp_772626-opt.jpg?fit=fill&w=800&h=300",
+      "body": "Hi, I'm New Here ❤️",
+      "timestamp": 1619312569596,
+      "author": "nilson",
+      "userId": "2",
+      "id": 10
+    },
+    {
+      "avatar": "/static/media/avatar.d0b0544d.png",
+      "image": null,
+      "body": "for test",
+      "timestamp": 1619315847759,
+      "author": "nilson",
+      "userId": "3",
+      "id": 11
     }
   ],
   "comments": [
@@ -81,6 +103,37 @@
       "author": "Mohamed Elghandour",
       "postId": 9,
       "id": 6
+    },
+    {
+      "body": "test\n\n",
+      "avatar": "/static/media/avatar.d0b0544d.png",
+      "timestamp": 1619311174208,
+      "author": "nilson",
+      "postId": 9,
+      "id": 7
+    }
+  ],
+  "users": [
+    {
+      "id": 1,
+      "avatar": null,
+      "name": "bruno",
+      "email": "bruno@email.com",
+      "password": "bruno"
+    },
+    {
+      "id": 2,
+      "avatar": null,
+      "name": "nilson",
+      "email": "nilson@email.com",
+      "password": "nilson"
+    },
+    {
+      "id": 3,
+      "avatar": null,
+      "email": "mohamed@email.com",
+      "password": "nilson",
+      "name": "mohamed"
     }
   ]
 }
