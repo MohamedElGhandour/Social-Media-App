@@ -12,7 +12,7 @@ const initialState = {
 
 const successAuth = (state, action) => {
   let avatar = defoultProfilePic;
-  !action.data.avatar && (avatar = action.data.avatar);
+  action.data.avatar && (avatar = action.data.avatar);
   return {
     name: action.data.name,
     id: action.data.id,

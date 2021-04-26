@@ -5,15 +5,17 @@ import Auth from "./containers/auth/Login/index";
 import Logout from "./containers/auth/Logout/index";
 import { useSelector, useDispatch } from "react-redux";
 import { Switch, Route, Redirect } from "react-router-dom";
-import { authCheckState } from "./store/actions/index";
+import { authCheckState, fetchUsers } from "./store/actions/index";
 import "./App.css";
 
 function App() {
   const token = useSelector((state) => state.auth.token);
   const dispatch = useDispatch();
-  React.useEffect(() => {
-    dispatch(authCheckState());
-  });
+  dispatch(authCheckState());
+  dispatch(fetchUsers());
+  // React.useEffect(() => {
+
+  // }, [dispatch]);
   let route = (
     <Switch>
       <Route exact path="/auth" component={Auth} />
@@ -26,7 +28,7 @@ function App() {
         <Switch>
           <Route exact path="/profile" />
           <Route exact path="/logout" component={Logout} />
-          <Route path="/" component={Home} />
+          <Route exact path="/" component={Home} />
           <Redirect to="/" />
         </Switch>
       </Layout>

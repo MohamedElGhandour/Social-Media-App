@@ -15,12 +15,15 @@ import CloseIcon from "@material-ui/icons/Close";
 import TextField from "@material-ui/core/TextField";
 import { useDispatch } from "react-redux";
 import { sendNewPost } from "../../../store/actions/index";
+import Fab from "@material-ui/core/Fab";
+import AddIcon from "@material-ui/icons/Add";
 
 const useStyles = makeStyles((theme) => ({
   card: {
     maxWidth: 680,
     width: "100%",
-    margin: theme.spacing(2),
+    margin: "16px auto",
+    marginTop: "32px",
   },
   media: {
     height: 190,
@@ -30,10 +33,8 @@ const useStyles = makeStyles((theme) => ({
     margin: 10,
   },
   input: {
-    width: "100%",
     resize: "none",
     height: "auto",
-    overflow: "hidden",
     fontSize: ".9375rem",
     outline: "none",
     padding: "9px 12px",
@@ -41,11 +42,15 @@ const useStyles = makeStyles((theme) => ({
     color: "#65676b",
     cursor: "pointer",
     userSelect: "none",
+    whiteSpace: "nowrap",
+    overflow: "hidden",
+    textOverflow: "ellipsis",
   },
   comment: {
     backgroundColor: "#f0f2f5",
     borderRadius: "25px",
-    height: "40 auto",
+    height: "40px",
+    overflow: "none",
     transition: "all 300ms ease",
     "&:hover": {
       backgroundColor: "#e4e6e9",
@@ -100,6 +105,7 @@ const useStyles = makeStyles((theme) => ({
     lineHeight: 1.1667,
     color: "rgb(5, 5, 5)",
     cursor: "text",
+    minHeight: 60,
     position: "inherit",
     fontWeight: 400,
   },
@@ -117,6 +123,7 @@ const useStyles = makeStyles((theme) => ({
     lineHeight: 1.1667,
     color: "#65676b",
     fontWeight: 400,
+    minHeight: 60,
     userSelect: "none",
   },
   btnPost: {
@@ -171,6 +178,33 @@ const useStyles = makeStyles((theme) => ({
   imgUrl: {
     width: "100%",
   },
+  fab: {
+    position: "fixed",
+    width: 50,
+    height: 50,
+    bottom: theme.spacing(2),
+    right: theme.spacing(2),
+    backgroundColor: "white",
+    zIndex: 100,
+  },
+  [theme.breakpoints.up("xs")]: {
+    paper: {
+      width: "100%",
+      margin: "20px",
+    },
+    inputPost: {
+      minHeight: 100,
+    },
+  },
+  [theme.breakpoints.up("sm")]: {
+    paper: {
+      width: 500,
+      margin: 0,
+    },
+    inputPost: {
+      minHeight: 60,
+    },
+  },
 }));
 
 export default function PostGen(props) {
@@ -183,19 +217,22 @@ export default function PostGen(props) {
   const placeHolder = React.useRef();
   const [img, setImg] = React.useState(null);
   const [imgURL, setImgURL] = React.useState("");
+  const avatar = localStorage.getItem("avatar");
+  const name = localStorage.getItem("name");
+  const userId = localStorage.getItem("userId");
 
   const sendPost = () => {
     const body = content.current.innerHTML;
     const image = imgURL ? imgURL : null;
     const data = {
-      avatar: "https://avatars.githubusercontent.com/u/42450595?v=4",
       image: image,
       body: body,
       timestamp: new Date().getTime(),
-      author: "Mohamed Elghandour",
+      userId: userId,
     };
     dispatch(sendNewPost(data));
   };
+
   const handleOpen = () => {
     setOpen(true);
   };
@@ -241,14 +278,11 @@ export default function PostGen(props) {
         <div className={classes.root}>
           <Grid container>
             <Grid item xs={2} sm={1}>
-              <Avatar
-                online
-                avatar="https://avatars.githubusercontent.com/u/42450595?v=4"
-              />
+              <Avatar online avatar={avatar} />
             </Grid>
             <Grid className={classes.comment} item xs={10} sm={11}>
               <div className={classes.input} onClick={handleOpen}>
-                What's on your mind, Mohamed Elghandour?
+                What's on your mind, {name}?
               </div>
             </Grid>
           </Grid>
@@ -291,10 +325,10 @@ export default function PostGen(props) {
                   className={classes.upHeader}
                 >
                   <Grid item>
-                    <Avatar />
+                    <Avatar avatar={avatar} />
                   </Grid>
                   <Grid item>
-                    <h3 className={classes.profileName}>Ted</h3>
+                    <h3 className={classes.profileName}>{name}</h3>
                   </Grid>
                 </Grid>
                 <Grid item className={classes.contanerPost} xs={12}>
@@ -311,7 +345,7 @@ export default function PostGen(props) {
                             className={classes.placeholder}
                             ref={placeHolder}
                           >
-                            What's on your mind, Mohamed Elghandour?
+                            What's on your mind, {name}?
                           </div>
                           <div
                             ref={content}
@@ -397,6 +431,14 @@ export default function PostGen(props) {
           </div>
         </Fade>
       </Modal>
+      <Fab
+        aria-label={"add post"}
+        className={classes.fab}
+        onClick={handleOpen}
+        color="inherit"
+      >
+        <AddIcon />
+      </Fab>
     </React.Fragment>
   );
 }

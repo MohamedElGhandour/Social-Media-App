@@ -1,139 +1,134 @@
 {
   "posts": [
     {
-      "avatar": "https://avatars.githubusercontent.com/u/42450595?v=4",
       "image": "https://www.udacity.com/blog/wp-content/uploads/2020/11/Hello-World_Blog-scaled.jpeg",
       "body": "Hello ",
       "timestamp": 1619013204203,
-      "author": "Mohamed Elghandour",
-      "userId": "1",
+      "userId": 3,
       "id": 5
     },
     {
-      "avatar": "https://avatars.githubusercontent.com/u/42450595?v=4",
       "image": "https://debasischowdhury.com/wp-content/uploads/2020/04/hello_world_new_black.png",
       "body": "Hello World",
       "timestamp": 1619014868102,
-      "author": "Mohamed Elghandour",
-      "userId": "2",
+      "userId": 3,
       "id": 7
     },
     {
-      "avatar": "https://avatars.githubusercontent.com/u/42450595?v=4",
       "image": "https://1.bp.blogspot.com/-UzSiErjcaRY/XXEHGwjzhNI/AAAAAAAAFzw/jwNALBF1CBUdiDwn8bXgjKM0sh7UMgYnQCLcBGAs/s640/maxresdefault.jpg",
       "body": "LOVE ❤️",
       "timestamp": 1619019362514,
-      "author": "Mohamed Elghandour",
-      "userId": "3",
+      "userId": 3,
       "id": 8
     },
     {
-      "avatar": "https://avatars.githubusercontent.com/u/42450595?v=4",
       "image": "https://user-images.githubusercontent.com/22680912/46479049-d8a9c400-c80b-11e8-92a1-89fc10701f4a.jpg",
       "body": "GREAT ❤️",
       "timestamp": 1619036535266,
-      "author": "Mohamed Elghandour",
-      "userId": "1",
+      "userId": 3,
       "id": 9
     },
     {
-      "avatar": "/static/media/avatar.d0b0544d.png",
       "image": "https://images.ctfassets.net/hrltx12pl8hq/7yQR5uJhwEkRfjwMFJ7bUK/dc52a0913e8ff8b5c276177890eb0129/offset_comp_772626-opt.jpg?fit=fill&w=800&h=300",
       "body": "Hi, I'm New Here ❤️",
       "timestamp": 1619312569596,
-      "author": "nilson",
-      "userId": "2",
+      "userId": 2,
       "id": 10
     },
     {
-      "avatar": "/static/media/avatar.d0b0544d.png",
-      "image": null,
-      "body": "for test",
-      "timestamp": 1619315847759,
-      "author": "nilson",
-      "userId": "3",
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/1200px-Image_created_with_a_mobile_phone.png",
+      "body": "take your way 😊",
+      "timestamp": 1619378929084,
+      "userId": "1",
       "id": 11
     }
   ],
   "comments": [
     {
       "body": "Hi",
-      "avatar": "https://avatars.githubusercontent.com/u/42450595?v=4",
       "timestamp": 1619116999242,
-      "author": "Mohamed Elghandour",
       "id": 3,
-      "postId": 5
+      "postId": 5,
+      "userId": 3
     },
     {
       "body": "Nice!",
-      "avatar": "https://avatars.githubusercontent.com/u/42450595?v=4",
       "timestamp": 1619116882805,
-      "author": "Mohamed Elghandour",
       "id": 2,
-      "postId": 7
+      "postId": 7,
+      "userId": 3
     },
     {
       "body": "good Job",
-      "avatar": "https://avatars.githubusercontent.com/u/42450595?v=4",
       "timestamp": 1619107594210,
-      "author": "Mohamed Elghandour",
       "id": 1,
-      "postId": 9
+      "postId": 9,
+      "userId": 3
     },
     {
-      "body": "test\n\n",
-      "avatar": "https://avatars.githubusercontent.com/u/42450595?v=4",
-      "timestamp": 1619287286152,
-      "author": "Mohamed Elghandour",
+      "body": "Hi ❤️\n\n",
+      "timestamp": 1619357378732,
       "postId": 9,
-      "id": 4
+      "id": 4,
+      "userId": 2
     },
     {
-      "body": "test\n\n",
-      "avatar": "https://avatars.githubusercontent.com/u/42450595?v=4",
-      "timestamp": 1619293819661,
-      "author": "Mohamed Elghandour",
-      "postId": 9,
+      "body": "Follow me ❤️\n\n",
+      "timestamp": 1619377722531,
+      "postId": 10,
+      "userId": 2,
       "id": 5
     },
     {
-      "body": "alooooooooo\n\n",
-      "avatar": "https://avatars.githubusercontent.com/u/42450595?v=4",
-      "timestamp": 1619299935079,
-      "author": "Mohamed Elghandour",
-      "postId": 9,
+      "body": "Love It ❤️\n\n",
+      "timestamp": 1619378045259,
+      "postId": 8,
+      "userId": 2,
       "id": 6
     },
     {
-      "body": "test\n\n",
-      "avatar": "/static/media/avatar.d0b0544d.png",
-      "timestamp": 1619311174208,
-      "author": "nilson",
-      "postId": 9,
+      "body": "Nice Camera\n\n",
+      "timestamp": 1619378554539,
+      "postId": 10,
+      "userId": 1,
       "id": 7
+    },
+    {
+      "body": "I love It ❤️\n\n",
+      "timestamp": 1619378653746,
+      "postId": 9,
+      "userId": "1",
+      "id": 8
+    },
+    {
+      "body": "I love it ❤️😍\n\n",
+      "timestamp": 1619405215358,
+      "postId": 11,
+      "userId": "3",
+      "id": 9
     }
   ],
   "users": [
     {
       "id": 1,
-      "avatar": null,
+      "avatar": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTn3vWR41hjrGM7qQj0Qag5bllKhPLqG0nb8g&usqp=CAU",
       "name": "bruno",
       "email": "bruno@email.com",
       "password": "bruno"
     },
     {
       "id": 2,
-      "avatar": null,
+      "avatar": "https://broncosports.com/common/controls/image_handler.aspx?thumb_prefix=headshot_1&image_path=/images/2018/5/9/12107854.jpeg",
       "name": "nilson",
       "email": "nilson@email.com",
       "password": "nilson"
     },
     {
       "id": 3,
-      "avatar": null,
-      "email": "mohamed@email.com",
-      "password": "nilson",
-      "name": "mohamed"
+      "avatar": "https://avatars.githubusercontent.com/u/42450595?v=4",
+      "email": "MohamedElghandour@email.com",
+      "password": "123456",
+      "name": "Mohamed Elghandour"
     }
   ]
 }

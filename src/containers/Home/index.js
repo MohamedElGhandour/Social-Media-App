@@ -1,12 +1,23 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import Posts from "../Posts/index";
+import Lists from "../Lists/index";
 
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
+    position: "relative",
+  },
+  [theme.breakpoints.up("md")]: {
+    root: {
+      top: 56,
+    },
+  },
+  [theme.breakpoints.up("xs")]: {
+    root: {
+      top: 48,
+    },
   },
   paper: {
     padding: theme.spacing(2),
@@ -29,7 +40,6 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Home() {
   const classes = useStyles();
-
   return (
     <div className={classes.root}>
       <Grid
@@ -39,13 +49,13 @@ export default function Home() {
         alignItems="flex-start"
       >
         <Grid item xs={2} className={classes.sectionDesktop}>
-          <Paper className={classes.paper}>xs=6</Paper>
+          <Lists />
         </Grid>
-        <Grid item xs={12} md={8}>
+        <Grid item xs={12} md={8} style={{ padding: "0 16px" }}>
           <Posts />
         </Grid>
         <Grid item xs={2} className={classes.sectionDesktop}>
-          <Paper className={classes.paper}>xs=3</Paper>
+          <Lists />
         </Grid>
       </Grid>
     </div>

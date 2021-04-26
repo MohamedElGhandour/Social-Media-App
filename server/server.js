@@ -42,7 +42,7 @@ server.use("/api/users", (req, res) => {
   return;
 });
 
-server.use("/api/usersName", (req, res) => {
+server.use("/api/usersInfo", (req, res) => {
   if (
     req.headers.authorization === undefined ||
     req.headers.authorization.split(" ")[0] !== "Bearer"

@@ -5,7 +5,7 @@ import Post from "../../components/Posts/index";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchPosts } from "../../store/actions/index";
 
-export default function Posts() {
+export default function Posts(props) {
   const dispatch = useDispatch();
   const posts = useSelector((state) => state.posts.posts);
   useEffect(() => {

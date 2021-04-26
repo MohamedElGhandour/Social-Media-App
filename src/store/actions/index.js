@@ -6,6 +6,8 @@ export {
   successSendNewPost,
   addComment,
   successAddComment,
+  fetchUsers,
+  successFetchUsers,
 } from "./posts";
 
 export {

@@ -47,6 +47,9 @@ export default function ComGen(props) {
   const placeholder = React.useRef();
   const body = React.useRef();
   const dispatch = useDispatch();
+  const avatar = localStorage.getItem("avatar");
+  const userId = localStorage.getItem("userId");
+
   const onInput = (event) => {
     const input = event.target;
     !input.innerHTML
@@ -63,10 +66,9 @@ export default function ComGen(props) {
     if (event.key === "Enter" && body.current.innerHTML !== "") {
       const newComment = {
         body: body.current.innerHTML,
-        avatar: props.avatar,
         timestamp: new Date().getTime(),
-        author: "Mohamed Elghandour",
         postId: props.global.id,
+        userId: userId,
       };
       const newPost = { ...props.global };
       dispatch(addComment(newPost, newComment));
@@ -78,7 +80,7 @@ export default function ComGen(props) {
     <div className={classes.root}>
       <Grid container>
         <Grid item xs={2} sm={1}>
-          <Avatar online avatar={props.avatar} />
+          <Avatar online avatar={avatar} />
         </Grid>
         <Grid className={classes.comment} item xs={10} sm={11}>
           <Grid

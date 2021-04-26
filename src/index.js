@@ -12,11 +12,14 @@ import authReducer from "./store/reducers/auth";
 import { watchPosts, watchAuth } from "./store/saga/index";
 
 const composeEnhancers =
-  process.env.NODE_ENV === "development"
+  (process.env.NODE_ENV === "development"
     ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
-    : null || compose;
+    : null) || compose;
 
-const rootReducer = combineReducers({ posts: postsReducer, auth: authReducer });
+const rootReducer = combineReducers({
+  posts: postsReducer,
+  auth: authReducer,
+});
 
 const sagaMiddleware = createSagaMiddleware();
 

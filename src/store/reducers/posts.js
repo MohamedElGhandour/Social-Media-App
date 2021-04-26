@@ -1,10 +1,22 @@
 import * as actionTypes from "../actions/actionTypes";
 import cloneDeep from "lodash/cloneDeep";
+import defoultProfilePic from "../../assets/images/avatar.png";
 
-const initialState = { posts: [], error: null };
+const initialState = { posts: [], error: null, users: [] };
 
 const successFetchPosts = (state, action) => {
-  return { ...state, posts: action.posts };
+  const newPosts = cloneDeep(action.posts);
+  newPosts.forEach((post) => {
+    const userPost = state.users[post.userId - 1];
+    post.avatar = userPost.avatar;
+    post.author = userPost.name;
+    post.comments.forEach((comment) => {
+      const userComment = state.users[comment.userId - 1];
+      comment.avatar = userComment.avatar;
+      comment.author = userComment.name;
+    });
+  });
+  return { ...state, posts: newPosts };
 };
 const failedFetchPosts = (state, action) => {
   return { ...state, error: action.error };
@@ -12,19 +24,40 @@ const failedFetchPosts = (state, action) => {
 
 const successSendNewPost = (state, action) => {
   const newArr = cloneDeep(state.posts);
-  const addCommentsToPost = { ...action.data, comments: [] };
+  const name = localStorage.getItem("name");
+  const avatar = localStorage.getItem("avatar");
+  const addCommentsToPost = {
+    ...action.data,
+    author: name,
+    avatar: avatar,
+    comments: [],
+  };
   newArr.unshift(addCommentsToPost);
   return { ...state, posts: newArr };
 };
 
 const successAddComment = (state, action) => {
   const newState = cloneDeep(state);
+  const newComment = cloneDeep(action.comment);
+  const name = localStorage.getItem("name");
+  const avatar = localStorage.getItem("avatar");
+  newComment.author = name;
+  newComment.avatar = avatar;
   newState.posts.forEach((post) => {
     if (action.data.id === post.id) {
-      post.comments.push(action.comment);
+      post.comments.push(newComment);
     }
   });
   return { ...newState };
+};
+
+const successFetchUsers = (state, action) => {
+  const users = cloneDeep(action.data);
+  const avatar = defoultProfilePic;
+  users.forEach((user) => {
+    !user.avatar && (user.avatar = avatar);
+  });
+  return { ...state, users: users };
 };
 
 const reducer = (state = initialState, action) => {
@@ -37,6 +70,8 @@ const reducer = (state = initialState, action) => {
       return successSendNewPost(state, action);
     case actionTypes.SUCCESS_ADD_COMMENT:
       return successAddComment(state, action);
+    case actionTypes.SUCCESS_FETCH_USERS:
+      return successFetchUsers(state, action);
     default:
       return state;
   }

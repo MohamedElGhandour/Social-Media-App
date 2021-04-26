@@ -13,7 +13,6 @@ export function* fetchPostsSaga() {
       }
     );
     const res = yield response.json();
-    yield console.log(res);
     yield put(actions.successFetchPosts(res));
   } catch (error) {
     yield console.log(error);
@@ -67,5 +66,21 @@ export function* addCommentSaga(action) {
   } catch (error) {
     yield console.log(error);
     yield put(actions.failFetchPosts(error));
+  }
+}
+
+export function* fetchUsersSaga() {
+  const token = yield localStorage.getItem("token");
+  try {
+    const response = yield fetch("http://localhost:4000/api/usersInfo", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    const res = yield response.json();
+    yield put(actions.successFetchUsers(res.users));
+  } catch (error) {
+    yield console.log(error);
+    // yield put(actions.failFetchPosts(error));
   }
 }

@@ -33,3 +33,10 @@ export const successAddComment = (data, comment) => ({
   data: data,
   comment: comment,
 });
+
+export const fetchUsers = () => ({ type: actionTypes.FETCH_USERS });
+
+export const successFetchUsers = (data) => ({
+  type: actionTypes.SUCCESS_FETCH_USERS,
+  data: data,
+});

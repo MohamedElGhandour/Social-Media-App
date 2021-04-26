@@ -27,7 +27,7 @@ export function* authSaga(action) {
     const res = yield response.json();
     const expirationDate = yield new Date(res.expiresIn * 1000);
     let avatar = defoultProfilePic;
-    !res.avatar && (avatar = res.avatar);
+    res.avatar && (avatar = res.avatar);
     yield localStorage.setItem("token", res.access_token);
     yield localStorage.setItem("userId", res.id);
     yield localStorage.setItem("avatar", avatar);
@@ -79,9 +79,6 @@ export function* authCheckStateSaga() {
         email: email,
       };
       yield put(actions.successAuth(data));
-      yield console.log(
-        (new Date(expirationDate).getTime() - new Date().getTime()) / 1000
-      );
       yield put(
         actions.checkAuthTimeout(
           (new Date(expirationDate).getTime() - new Date().getTime()) / 1000
