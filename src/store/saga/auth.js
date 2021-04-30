@@ -1,5 +1,5 @@
 import { put, delay } from "redux-saga/effects";
-import defoultProfilePic from "../../assets/images/avatar.png";
+import defoultProfilePic from "../../assets/images/avatar.jpg";
 import * as actions from "../actions/index";
 
 export function* authSaga(action) {

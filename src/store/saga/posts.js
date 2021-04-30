@@ -84,3 +84,31 @@ export function* fetchUsersSaga() {
     // yield put(actions.failFetchPosts(error));
   }
 }
+
+export function* toggleLoveSaga(action) {
+  const token = yield localStorage.getItem("token");
+  try {
+    const response = yield fetch(
+      `http://localhost:4000/api/posts/${action.post.id}`,
+      {
+        method: "PUT", // *GET, POST, PUT, DELETE, etc.
+        mode: "cors", // no-cors, *cors, same-origin
+        cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+        credentials: "same-origin", // include, *same-origin, omit
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+          // 'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        redirect: "follow", // manual, *follow, error
+        referrerPolicy: "no-referrer", // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+        body: JSON.stringify(action.post), // body data type must match "Content-Type" header
+      }
+    );
+    const res = yield response.json();
+    yield put(actions.successToggleLove(res));
+  } catch (error) {
+    yield console.log(error);
+    yield put(actions.failFetchPosts(error));
+  }
+}

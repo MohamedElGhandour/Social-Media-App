@@ -4,6 +4,7 @@ import {
   sendNewPostSaga,
   addCommentSaga,
   fetchUsersSaga,
+  toggleLoveSaga,
 } from "./posts";
 import {
   authSaga,
@@ -20,6 +21,7 @@ export function* watchPosts() {
     takeEvery(actionTypes.SEND_NEW_POST, sendNewPostSaga),
     takeEvery(actionTypes.ADD_COMMENT, addCommentSaga),
     takeEvery(actionTypes.FETCH_USERS, fetchUsersSaga),
+    takeEvery(actionTypes.TOGGLE_LOVE, toggleLoveSaga),
   ]);
 }
 

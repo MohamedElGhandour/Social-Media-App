@@ -1,5 +1,5 @@
 import * as actionTypes from "../actions/actionTypes";
-import defoultProfilePic from "../../assets/images/avatar.png";
+import defoultProfilePic from "../../assets/images/avatar.jpg";
 // import cloneDeep from "lodash/cloneDeep";
 
 const initialState = {

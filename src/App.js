@@ -13,9 +13,7 @@ function App() {
   const dispatch = useDispatch();
   dispatch(authCheckState());
   dispatch(fetchUsers());
-  // React.useEffect(() => {
-
-  // }, [dispatch]);
+  // React.useEffect(() => {}, []);
   let route = (
     <Switch>
       <Route exact path="/auth" component={Auth} />
@@ -28,7 +26,7 @@ function App() {
         <Switch>
           <Route exact path="/profile" />
           <Route exact path="/logout" component={Logout} />
-          <Route exact path="/" component={Home} />
+          <Route path="/" component={Home} />
           <Redirect to="/" />
         </Switch>
       </Layout>

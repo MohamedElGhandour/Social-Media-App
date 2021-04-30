@@ -1,6 +1,6 @@
 import * as actionTypes from "../actions/actionTypes";
 import cloneDeep from "lodash/cloneDeep";
-import defoultProfilePic from "../../assets/images/avatar.png";
+import defoultProfilePic from "../../assets/images/avatar.jpg";
 
 const initialState = { posts: [], error: null, users: [] };
 
@@ -60,6 +60,17 @@ const successFetchUsers = (state, action) => {
   return { ...state, users: users };
 };
 
+const successToggleLove = (state, action) => {
+  const _State = cloneDeep(state);
+  const _Post = cloneDeep(action.post);
+  _State.posts.forEach((post) => {
+    if (_Post.id === post.id) {
+      post.loves = _Post.loves;
+    }
+  });
+  return { ..._State };
+};
+
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case actionTypes.SUCCESS_FETCH_POSTS:
@@ -72,6 +83,8 @@ const reducer = (state = initialState, action) => {
       return successAddComment(state, action);
     case actionTypes.SUCCESS_FETCH_USERS:
       return successFetchUsers(state, action);
+    case actionTypes.SUCCESS_TOGGLE_LOVE:
+      return successToggleLove(state, action);
     default:
       return state;
   }

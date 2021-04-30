@@ -1,5 +1,5 @@
 import React from "react";
-import Avatar from "../../../components/UI/Avatar/index";
+import Avatar from "@material-ui/core/Avatar";
 import Grid from "@material-ui/core/Grid";
 import { makeStyles } from "@material-ui/core/styles";
 import { useDispatch } from "react-redux";
@@ -25,8 +25,7 @@ const useStyles = makeStyles((theme) => ({
   },
   comment: {
     backgroundColor: "#f0f2f5",
-    borderRadius: "25px",
-    height: "40 auto",
+    borderRadius: 10,
   },
   form: {
     position: "relative",
@@ -37,7 +36,7 @@ const useStyles = makeStyles((theme) => ({
     outline: "none",
     padding: "9px 12px",
     lineHeight: 1.6,
-    color: "#65676b",
+    color: "#a4afbe",
     userSelect: "none",
   },
 }));
@@ -48,7 +47,7 @@ export default function ComGen(props) {
   const body = React.useRef();
   const dispatch = useDispatch();
   const avatar = localStorage.getItem("avatar");
-  const userId = localStorage.getItem("userId");
+  const userId = parseInt(localStorage.getItem("userId"));
 
   const onInput = (event) => {
     const input = event.target;
@@ -57,7 +56,7 @@ export default function ComGen(props) {
       : (placeholder.current.style.display = "none");
   };
   const onFocusOut = () => {
-    placeholder.current.style.color = "#65676b";
+    placeholder.current.style.color = "#a4afbe";
   };
   const onFocusIn = () => {
     placeholder.current.style.color = "#8c8d8e";
@@ -80,7 +79,7 @@ export default function ComGen(props) {
     <div className={classes.root}>
       <Grid container>
         <Grid item xs={2} sm={1}>
-          <Avatar online avatar={avatar} />
+          <Avatar src={avatar} style={{ borderRadius: "25%" }} />
         </Grid>
         <Grid className={classes.comment} item xs={10} sm={11}>
           <Grid

@@ -3,28 +3,29 @@ import { makeStyles } from "@material-ui/core/styles";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
-import ListItemText from "@material-ui/core/ListItemText";
-import Avatar from "../../components/UI/Avatar/index";
+import Avatar from "@material-ui/core/Avatar";
 import { NavLink } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    width: "100%",
+    width: "100vh",
     maxWidth: 360,
+    margin: "auto",
     marginTop: 32,
     backgroundColor: "transparent",
+    // position: "fixed",
   },
   user: {
     borderRadius: 10,
   },
   head: {
-    color: "#65676b",
+    color: "#a4afbe",
     fontWeight: 600,
     fontSize: "1rem",
     lineHeight: 1.1765,
     wordBreak: "break-word",
-    margin: "5px 0",
+    margin: "0 0 10px 0",
     padding: "0 0 0 16px",
   },
 }));
@@ -40,6 +41,11 @@ export default function SimpleList() {
         style={{
           maxHeight: 400,
           overflow: "auto",
+          backgroundColor: "#fff",
+          borderRadius: 15,
+          boxShadow: "0px 0px 20px 20px rgb(0 0 0 / 3%)",
+          margin: "0 10px",
+          padding: "15px 10px ",
         }}
         aria-label="main mailbox folders"
       >
@@ -49,14 +55,34 @@ export default function SimpleList() {
             to={`/profile/${user.id}`}
             style={{
               textDecoration: "none",
-              color: "#050505",
+              color: "#1d3a5f",
+              fontWeight: 500,
             }}
           >
             <ListItem className={classes.user} button>
               <ListItemIcon>
-                <Avatar avatar={user.avatar} />
+                <Avatar src={user.avatar} style={{ borderRadius: "25%" }} />
               </ListItemIcon>
-              <ListItemText primary={user.name} />
+              <div
+                style={{
+                  flex: "1 1 auto",
+                  minWidth: 0,
+                  marginTop: 4,
+                  marginBottom: 4,
+                }}
+              >
+                <span
+                  style={{
+                    fontSize: "1rem",
+                    fontFamily: ` "Roboto", "Helvetica", "Arial", sans-serif`,
+                    fontWeight: 500,
+                    lineHeight: 1.5,
+                    letterSpacing: "0.00938em",
+                  }}
+                >
+                  {user.name}
+                </span>
+              </div>
             </ListItem>
           </NavLink>
         ))}

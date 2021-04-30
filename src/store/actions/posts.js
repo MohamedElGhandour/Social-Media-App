@@ -28,6 +28,16 @@ export const addComment = (data, comment) => ({
   comment: comment,
 });
 
+export const toggleLove = (post) => ({
+  type: actionTypes.TOGGLE_LOVE,
+  post: post,
+});
+
+export const successToggleLove = (post) => ({
+  type: actionTypes.SUCCESS_TOGGLE_LOVE,
+  post: post,
+});
+
 export const successAddComment = (data, comment) => ({
   type: actionTypes.SUCCESS_ADD_COMMENT,
   data: data,

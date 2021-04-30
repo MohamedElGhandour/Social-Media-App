@@ -2,24 +2,19 @@ import React from "react";
 import { fade, makeStyles } from "@material-ui/core/styles";
 import {
   Avatar,
-  Chip,
   AppBar,
   Toolbar,
   IconButton,
   Badge,
   MenuItem,
   Menu,
-  Slide,
-  useScrollTrigger,
 } from "@material-ui/core";
-import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
 import MenuIcon from "@material-ui/icons/Menu";
 import SearchIcon from "@material-ui/icons/Search";
-import MailIcon from "@material-ui/icons/Mail";
-import NotificationsIcon from "@material-ui/icons/Notifications";
-import PropTypes from "prop-types";
+import MailOutlineIcon from "@material-ui/icons/MailOutline";
+import NotificationsNoneIcon from "@material-ui/icons/NotificationsNone";
 import { NavLink } from "react-router-dom";
-import logo from "../../../assets/images/l-icon.svg";
+import logo from "../../../assets/images/newL.svg";
 
 const useStyles = makeStyles((theme) => ({
   grow: {
@@ -85,19 +80,16 @@ const useStyles = makeStyles((theme) => ({
   },
   [theme.breakpoints.up("xs")]: {
     navBar: {
-      minHeight: 48,
       padding: "0 20px 0 16px",
     },
   },
   [theme.breakpoints.up("sm")]: {
     navBar: {
-      minHeight: 52,
       padding: "0 20px 0 16px",
     },
   },
   [theme.breakpoints.up("md")]: {
     navBar: {
-      minHeight: 56,
       padding: "0 20px 0 0",
     },
   },
@@ -112,35 +104,13 @@ const useStyles = makeStyles((theme) => ({
     width: 40,
     height: 40,
     backgroundColor: "#efefef",
+    color: "#111513",
     marginLeft: 10,
     "&:hover": {
       backgroundColor: "#d8d8d8",
     },
   },
 }));
-
-function HideOnScroll(props) {
-  const { children, window } = props;
-  // Note that you normally won't need to set the window ref as useScrollTrigger
-  // will default to window.
-  // This is only being set here because the demo is in an iframe.
-  const trigger = useScrollTrigger({ target: window ? window() : undefined });
-
-  return (
-    <Slide appear={false} direction="down" in={!trigger}>
-      {children}
-    </Slide>
-  );
-}
-
-HideOnScroll.propTypes = {
-  children: PropTypes.element.isRequired,
-  /**
-   * Injected by the documentation to work in an iframe.
-   * You won't need it on your project.
-   */
-  window: PropTypes.func,
-};
 
 export default function PrimarySearchAppBar(props) {
   const classes = useStyles();
@@ -157,46 +127,8 @@ export default function PrimarySearchAppBar(props) {
   };
 
   const avatar = localStorage.getItem("avatar");
-  const name = localStorage.getItem("name");
 
   const menuId = "primary-search-account-menu";
-
-  const menuNav = (
-    <React.Fragment>
-      <IconButton
-        aria-label="show 4 new mails"
-        className={classes.iconNav}
-        style={{ color: "#050505" }}
-        color="inherit"
-      >
-        <Badge badgeContent={4} color="secondary">
-          <MailIcon />
-        </Badge>
-      </IconButton>
-      <IconButton
-        className={classes.iconNav}
-        style={{ color: "#050505" }}
-        aria-label="show 17 new notifications"
-        color="inherit"
-      >
-        <Badge badgeContent={1} color="secondary">
-          <NotificationsIcon />
-        </Badge>
-      </IconButton>
-      <IconButton
-        edge="end"
-        aria-label="account of current user"
-        aria-controls={menuId}
-        className={classes.iconNav}
-        style={{ color: "#050505" }}
-        aria-haspopup="true"
-        onClick={handleProfileMenuOpen}
-        color="inherit"
-      >
-        <ArrowDropDownIcon />
-      </IconButton>
-    </React.Fragment>
-  );
 
   const renderMenu = (
     <Menu
@@ -222,92 +154,74 @@ export default function PrimarySearchAppBar(props) {
 
   return (
     <div className={classes.grow}>
-      <HideOnScroll {...props}>
-        <AppBar position="fixed" color="inherit">
-          {/* Nav Bar */}
-          <Toolbar className={classes.navBar}>
-            {/* Slide Toggle Btn  */}
+      <AppBar
+        position="fixed"
+        style={{
+          boxShadow:
+            "rgb(238 238 238 / 20%) 0px 2px 1px -1px, rgb(0 0 0 / 14%) 0px 1px 1px 0px, rgb(0 0 0 / 12%) 0px 1px 3px 0px, 0px 0px 20px 20px rgb(0 0 0 / 3%)",
+          backgroundColor: "#fcfcfd",
+        }}
+        color="inherit"
+      >
+        {/* Nav Bar */}
+        <Toolbar className={classes.navBar}>
+          {/* Slide Toggle Btn  */}
+          <IconButton
+            edge="start"
+            className={(classes.menuButton, classes.sectionMobile)}
+            color="inherit"
+            aria-label="open drawer"
+          >
+            <MenuIcon />
+          </IconButton>
+          {/* logo */}
+          <IconButton
+            style={{
+              width: 40,
+              height: 40,
+              marginLeft: 10,
+            }}
+            color="inherit"
+          >
+            <Avatar src={logo} style={{ borderRadius: "25%" }} />
+          </IconButton>
+          <IconButton className={classes.iconNav} color="inherit">
+            <SearchIcon />
+          </IconButton>
+
+          <div className={classes.grow} />
+          <div>
             <IconButton
-              edge="start"
-              className={(classes.menuButton, classes.sectionMobile)}
-              color="inherit"
-              aria-label="open drawer"
-            >
-              <MenuIcon />
-            </IconButton>
-            {/* logo */}
-            <IconButton
-              style={{
-                width: 40,
-                height: 40,
-                marginLeft: 10,
-              }}
-              aria-label="show 17 new notifications"
+              aria-label="show 4 new mails"
+              className={classes.iconNav}
               color="inherit"
             >
-              <Avatar src={logo} />
+              <Badge badgeContent={4} color="secondary">
+                <MailOutlineIcon />
+              </Badge>
             </IconButton>
             <IconButton
               className={classes.iconNav}
               aria-label="show 17 new notifications"
               color="inherit"
             >
-              <SearchIcon />
+              <Badge badgeContent={1} color="secondary">
+                <NotificationsNoneIcon />
+              </Badge>
             </IconButton>
-            {/* <div className={classes.search}>
-              <div className={classes.searchIcon}>
-                <SearchIcon />
-              </div>
-              <InputBase
-                placeholder="Search…"
-                classes={{
-                  root: classes.inputRoot,
-                  input: classes.inputInput,
-                }}
-                inputProps={{ "aria-label": "search" }}
-              />
-            </div> */}
-            <div className={classes.grow} />
-            <div className={classes.sectionDesktop}>
-              <div
-                style={{
-                  flex: "0 0 auto",
-                  color: "rgba(0, 0, 0, 0.54)",
-                  overflow: "visible",
-                  fontSize: "1.5rem",
-                  textAlign: "center",
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
-                <Chip
-                  avatar={
-                    <Avatar
-                      src={avatar}
-                      style={{ width: 30, height: 30, marginLeft: "2.5px" }}
-                    />
-                  }
-                  className={classes.chip}
-                  label={name}
-                  clickable
-                />
-              </div>
-              {menuNav}
-            </div>
-            <div className={classes.sectionMobile}>
-              <IconButton
-                className={classes.iconNav}
-                aria-label="show 17 new notifications"
-                color="inherit"
-              >
-                <Avatar src={avatar} />
-              </IconButton>
-              {menuNav}
-            </div>
-          </Toolbar>
-        </AppBar>
-      </HideOnScroll>
+            <IconButton
+              edge="end"
+              aria-label="account of current user"
+              aria-controls={menuId}
+              className={classes.iconNav}
+              onClick={handleProfileMenuOpen}
+              color="inherit"
+            >
+              <Avatar src={avatar} style={{ borderRadius: "25%" }} />
+            </IconButton>
+          </div>
+        </Toolbar>
+      </AppBar>
       {renderMenu}
     </div>
   );

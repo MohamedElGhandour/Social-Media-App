@@ -1,6 +1,6 @@
 import React from "react";
 import Card from "@material-ui/core/Card";
-import Avatar from "../../../components/UI/Avatar/index";
+import Avatar from "@material-ui/core/Avatar";
 import Grid from "@material-ui/core/Grid";
 import { makeStyles } from "@material-ui/core/styles";
 import Modal from "@material-ui/core/Modal";
@@ -8,13 +8,14 @@ import Backdrop from "@material-ui/core/Backdrop";
 import Fade from "@material-ui/core/Fade";
 import IconButton from "@material-ui/core/IconButton";
 import ClearIcon from "@material-ui/icons/Clear";
-import AttachFileIcon from "@material-ui/icons/AttachFile";
 import Alert from "@material-ui/lab/Alert";
 import Collapse from "@material-ui/core/Collapse";
 import CloseIcon from "@material-ui/icons/Close";
 import TextField from "@material-ui/core/TextField";
 import { useDispatch } from "react-redux";
 import { sendNewPost } from "../../../store/actions/index";
+import Button from "@material-ui/core/Button";
+import AddPhotoAlternateOutlinedIcon from "@material-ui/icons/AddPhotoAlternateOutlined";
 import Fab from "@material-ui/core/Fab";
 import AddIcon from "@material-ui/icons/Add";
 
@@ -24,6 +25,9 @@ const useStyles = makeStyles((theme) => ({
     width: "100%",
     margin: "16px auto",
     marginTop: "32px",
+    borderRadius: 15,
+    boxShadow: "0px 0px 20px 20px rgb(0 0 0 / 3%)",
+    backgroundColor: "#fff",
   },
   media: {
     height: 190,
@@ -39,7 +43,7 @@ const useStyles = makeStyles((theme) => ({
     outline: "none",
     padding: "9px 12px",
     lineHeight: 1.6,
-    color: "#65676b",
+    color: "#a4afbe",
     cursor: "pointer",
     userSelect: "none",
     whiteSpace: "nowrap",
@@ -47,13 +51,13 @@ const useStyles = makeStyles((theme) => ({
     textOverflow: "ellipsis",
   },
   comment: {
-    backgroundColor: "#f0f2f5",
-    borderRadius: "25px",
+    backgroundColor: "#fff",
     height: "40px",
     overflow: "none",
     transition: "all 300ms ease",
+    borderRadius: 10,
     "&:hover": {
-      backgroundColor: "#e4e6e9",
+      backgroundColor: "#f0f2f5",
     },
   },
   modal: {
@@ -103,7 +107,7 @@ const useStyles = makeStyles((theme) => ({
     outline: "none",
     padding: "9px 12px",
     lineHeight: 1.1667,
-    color: "rgb(5, 5, 5)",
+    color: "#566b87",
     cursor: "text",
     minHeight: 60,
     position: "inherit",
@@ -121,13 +125,13 @@ const useStyles = makeStyles((theme) => ({
     outline: "none",
     padding: "9px 12px",
     lineHeight: 1.1667,
-    color: "#65676b",
+    color: "#a4afbe",
     fontWeight: 400,
     minHeight: 60,
     userSelect: "none",
   },
   btnPost: {
-    backgroundColor: "#1877f2",
+    backgroundColor: "#1878f2",
     color: "#fff",
     margin: theme.spacing(2, 0, 0),
     textAlign: "center",
@@ -135,6 +139,8 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: 7,
     fontWeight: 600,
     cursor: "pointer",
+    width: "100%",
+    transition: "all .5s ease",
     "&:hover": {
       backgroundColor: "#216FDB",
     },
@@ -184,8 +190,9 @@ const useStyles = makeStyles((theme) => ({
     height: 50,
     bottom: theme.spacing(2),
     right: theme.spacing(2),
-    backgroundColor: "white",
     zIndex: 100,
+    color: "#fff",
+    backgroundColor: "#1878f2",
   },
   [theme.breakpoints.up("xs")]: {
     paper: {
@@ -219,7 +226,7 @@ export default function PostGen(props) {
   const [imgURL, setImgURL] = React.useState("");
   const avatar = localStorage.getItem("avatar");
   const name = localStorage.getItem("name");
-  const userId = localStorage.getItem("userId");
+  const userId = parseInt(localStorage.getItem("userId"));
 
   const sendPost = () => {
     const body = content.current.innerHTML;
@@ -229,6 +236,7 @@ export default function PostGen(props) {
       body: body,
       timestamp: new Date().getTime(),
       userId: userId,
+      loves: [],
     };
     dispatch(sendNewPost(data));
   };
@@ -256,7 +264,7 @@ export default function PostGen(props) {
     }
   };
   const onFocusOut = () => {
-    placeHolder.current.style.color = "#65676b";
+    placeHolder.current.style.color = "#a4afbe";
   };
   const onFocusIn = () => {
     placeHolder.current.style.color = "#8c8d8e";
@@ -278,11 +286,11 @@ export default function PostGen(props) {
         <div className={classes.root}>
           <Grid container>
             <Grid item xs={2} sm={1}>
-              <Avatar online avatar={avatar} />
+              <Avatar src={avatar} style={{ borderRadius: "25%" }} />
             </Grid>
-            <Grid className={classes.comment} item xs={10} sm={11}>
+            <Grid item className={classes.comment} xs={10} sm={11}>
               <div className={classes.input} onClick={handleOpen}>
-                What's on your mind, {name}?
+                What's new, {name}?
               </div>
             </Grid>
           </Grid>
@@ -325,7 +333,7 @@ export default function PostGen(props) {
                   className={classes.upHeader}
                 >
                   <Grid item>
-                    <Avatar avatar={avatar} />
+                    <Avatar src={avatar} style={{ borderRadius: "25%" }} />
                   </Grid>
                   <Grid item>
                     <h3 className={classes.profileName}>{name}</h3>
@@ -359,7 +367,9 @@ export default function PostGen(props) {
                       </Grid>
                       <Grid item xs={2} sm={1}>
                         <IconButton onClick={openInputFile} color="inherit">
-                          <AttachFileIcon />
+                          <AddPhotoAlternateOutlinedIcon
+                            style={{ color: "#46bd62" }}
+                          />
                         </IconButton>
                         <input
                           id="file-input"
@@ -399,9 +409,9 @@ export default function PostGen(props) {
                   />
                 </Grid>
                 <Grid item xs={12}>
-                  <div onClick={sendPost} className={classes.btnPost}>
-                    Post
-                  </div>
+                  <Button onClick={sendPost} className={classes.btnPost}>
+                    Post it!
+                  </Button>
                 </Grid>
                 <Grid item xs={12} style={{ marginTop: 10 }}>
                   <Collapse in={openAlert}>

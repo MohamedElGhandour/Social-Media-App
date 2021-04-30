@@ -8,6 +8,8 @@ export {
   successAddComment,
   fetchUsers,
   successFetchUsers,
+  successToggleLove,
+  toggleLove,
 } from "./posts";
 
 export {

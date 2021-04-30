@@ -1,5 +1,5 @@
 import React from "react";
-import Avatar from "../../components/UI/Avatar/index";
+import Avatar from "@material-ui/core/Avatar";
 import Grid from "@material-ui/core/Grid";
 import Link from "@material-ui/core/Link";
 import { makeStyles } from "@material-ui/core/styles";
@@ -24,7 +24,7 @@ export default function Comment(props) {
     <div className={classes.root}>
       <Grid container>
         <Grid item xs={2} sm={1}>
-          <Avatar avatar={props.avatar} />
+          <Avatar src={props.avatar} style={{ borderRadius: "25%" }} />
         </Grid>
         <Grid item>
           <Grid
@@ -39,13 +39,17 @@ export default function Comment(props) {
               style={{ color: "#000", fontWeight: "bold", fontSize: ".75rem" }}
               component="p"
             >
-              <Link href="#" style={{ color: "#000" }} onClick={preventDefault}>
+              <Link
+                href="#"
+                style={{ color: "#1d3a5fd" }}
+                onClick={preventDefault}
+              >
                 {props.author}
               </Link>
             </Typography>
             <Typography
               variant="body1"
-              style={{ color: "#000", fontSize: ".875rem" }}
+              style={{ color: "#505050", fontSize: ".875rem" }}
               component="p"
             >
               {props.body}
