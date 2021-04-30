@@ -42,6 +42,13 @@ server.use("/api/users", (req, res) => {
   return;
 });
 
+// server.use("/api/db", (req, res) => {
+//   const status = 405;
+//   const message = "Not Available (Cheater -_-)";
+//   res.status(status).json({ status, message });
+//   return;
+// });
+
 server.use("/api/usersInfo", (req, res) => {
   if (
     req.headers.authorization === undefined ||
@@ -53,8 +60,6 @@ server.use("/api/usersInfo", (req, res) => {
     return;
   }
   try {
-    // verifyToken(req.headers.authorization.split(" ")[1]);
-    // console.log(verifyToken(req.headers.authorization.split(" ")[1]).err);
     const decoded = verifyToken(req.headers.authorization.split(" ")[1]);
     if (
       decoded.name === "JsonWebTokenError" ||
@@ -69,7 +74,6 @@ server.use("/api/usersInfo", (req, res) => {
         res.status(status).json({ status, message });
         return;
       }
-
       // Get current users data
       var data = JSON.parse(data.toString());
       // Get current user data
@@ -141,7 +145,7 @@ server.post("/api/auth/register", (req, res) => {
     return;
   }
 
-  fs.readFile("./api/users.json", (err, data) => {
+  fs.readFile("./api/db.json", (err, data) => {
     if (err) {
       const status = 401;
       const message = err;
@@ -162,11 +166,13 @@ server.post("/api/auth/register", (req, res) => {
       password: password,
       name: name,
       avatar: null,
+      following: [],
+      pending: [],
     });
 
     //add some data
     var writeData = fs.writeFile(
-      "./api/users.json",
+      "./api/db.json",
       JSON.stringify(data),
       (err, result) => {
         // WRITE
@@ -199,7 +205,6 @@ server.use(/^(?!\/auth).*$/, (req, res, next) => {
     // verifyToken(req.headers.authorization.split(" ")[1]);
     // console.log(verifyToken(req.headers.authorization.split(" ")[1]).err);
     const decoded = verifyToken(req.headers.authorization.split(" ")[1]);
-    console.log({ ...decoded });
     if (
       decoded.name === "JsonWebTokenError" ||
       decoded.name === "TokenExpiredError"
