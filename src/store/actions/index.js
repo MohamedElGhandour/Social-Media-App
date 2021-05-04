@@ -10,6 +10,10 @@ export {
   successFetchUsers,
   successToggleLove,
   toggleLove,
+  toggleFollow,
+  toggleRequest,
+  successToggleRequest,
+  successToggleFollow,
 } from "./posts";
 
 export {

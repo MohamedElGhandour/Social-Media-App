@@ -4,6 +4,7 @@ import Grid from "@material-ui/core/Grid";
 import { makeStyles } from "@material-ui/core/styles";
 import { useDispatch } from "react-redux";
 import { addComment } from "../../../store/actions/index";
+import { NavLink } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -79,7 +80,9 @@ export default function ComGen(props) {
     <div className={classes.root}>
       <Grid container>
         <Grid item xs={2} sm={1}>
-          <Avatar src={avatar} style={{ borderRadius: "25%" }} />
+          <NavLink to={`/profile/${userId}`}>
+            <Avatar src={avatar} style={{ borderRadius: "25%" }} />
+          </NavLink>
         </Grid>
         <Grid className={classes.comment} item xs={10} sm={11}>
           <Grid

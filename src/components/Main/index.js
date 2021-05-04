@@ -13,20 +13,11 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: 15,
     boxShadow: "0px 0px 20px 20px rgb(0 0 0 / 3%)",
     margin: "16px auto",
-    padding: "15px 10px ",
+    padding: "10px ",
     boxSizing: "border-box",
   },
   user: {
     borderRadius: 10,
-  },
-  head: {
-    color: "#a4afbe",
-    fontWeight: 600,
-    fontSize: "1rem",
-    lineHeight: 1.1765,
-    wordBreak: "break-word",
-    margin: "0 0 10px 0",
-    padding: "0 0 0 16px",
   },
 }));
 

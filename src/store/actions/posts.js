@@ -50,3 +50,26 @@ export const successFetchUsers = (data) => ({
   type: actionTypes.SUCCESS_FETCH_USERS,
   data: data,
 });
+
+export const toggleFollow = (id, userId, isAccepted) => ({
+  type: actionTypes.TOGGLE_FOLLOW,
+  id: id,
+  userId: userId,
+  isAccepted: isAccepted,
+});
+
+export const toggleRequest = (id, userId) => ({
+  type: actionTypes.TOGGLE_REQUEST,
+  id: id,
+  userId: userId,
+});
+
+export const successToggleRequest = (users) => ({
+  type: actionTypes.SUCCESS_TOGGLE_REQUEST,
+  users: users,
+});
+
+export const successToggleFollow = (users) => ({
+  type: actionTypes.SUCCESS_TOGGLE_FOLLOW,
+  users: users,
+});

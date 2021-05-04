@@ -5,6 +5,8 @@ import {
   addCommentSaga,
   fetchUsersSaga,
   toggleLoveSaga,
+  toggleRequestSaga,
+  toggleFollowSaga,
 } from "./posts";
 import {
   authSaga,
@@ -22,6 +24,8 @@ export function* watchPosts() {
     takeEvery(actionTypes.ADD_COMMENT, addCommentSaga),
     takeEvery(actionTypes.FETCH_USERS, fetchUsersSaga),
     takeEvery(actionTypes.TOGGLE_LOVE, toggleLoveSaga),
+    takeEvery(actionTypes.TOGGLE_REQUEST, toggleRequestSaga),
+    takeEvery(actionTypes.TOGGLE_FOLLOW, toggleFollowSaga),
   ]);
 }
 

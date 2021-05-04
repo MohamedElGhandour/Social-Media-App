@@ -1,6 +1,8 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { NavLink } from "react-router-dom";
+import { useSelector } from "react-redux";
+import Grid from "@material-ui/core/Grid";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
@@ -68,6 +70,17 @@ export default function SelectedListItem() {
     setSelectedIndex(index);
   };
   const userId = parseInt(localStorage.getItem("userId"));
+  const users = useSelector((state) => state.posts.users);
+  const [user] = users.filter((user) => user.id === userId);
+  const pendding = [];
+  user !== undefined &&
+    user.pending.forEach((id) => {
+      for (let index = 0; index < users.length; index++) {
+        const element = users[index];
+        if (element.id === id) pendding.push(element);
+      }
+    });
+  const length = pendding.length;
   return (
     <div
       style={{
@@ -131,7 +144,7 @@ export default function SelectedListItem() {
             </ListItem>
           </NavLink>
           <NavLink
-            to="/users"
+            to="/people"
             className={
               selectedIndex === 1 ? classes.activeDomains : classes.domains
             }
@@ -155,33 +168,66 @@ export default function SelectedListItem() {
               }
               onClick={(event) => handleListItemClick(event, 1)}
             >
-              <ListItemIcon>
-                <GroupAddOutlinedIcon
-                  style={
-                    selectedIndex === 1
-                      ? {
-                          color: "#1878f2",
-                        }
-                      : {
-                          color: "#abb9c9",
-                        }
-                  }
-                />
-              </ListItemIcon>
-              <div className={classes.textRoot}>
-                <span
-                  className={classes.spanText}
-                  style={
-                    selectedIndex === 1
-                      ? {
-                          color: "#1878f2",
-                        }
-                      : null
-                  }
-                >
-                  People
-                </span>
-              </div>
+              <Grid
+                container
+                direction="row"
+                justify="space-between"
+                alignItems="center"
+              >
+                <Grid item>
+                  <Grid container alignItems="center">
+                    <Grid item>
+                      <ListItemIcon>
+                        <GroupAddOutlinedIcon
+                          style={
+                            selectedIndex === 1
+                              ? {
+                                  color: "#1878f2",
+                                }
+                              : {
+                                  color: "#abb9c9",
+                                }
+                          }
+                        />
+                      </ListItemIcon>
+                    </Grid>
+                    <Grid item>
+                      <div className={classes.textRoot}>
+                        <span
+                          className={classes.spanText}
+                          style={
+                            selectedIndex === 1
+                              ? {
+                                  color: "#1878f2",
+                                }
+                              : null
+                          }
+                        >
+                          People
+                        </span>
+                      </div>
+                    </Grid>
+                  </Grid>
+                </Grid>
+                {selectedIndex !== 1 ? (
+                  <Grid item>
+                    <p
+                      style={{
+                        fontWeight: 500,
+                        padding: "3px 7px",
+                        backgroundColor: "#216fdb",
+                        fontSize: ".9rem",
+                        color: "#fff",
+                        margin: "0",
+                        borderRadius: 9,
+                        paddingTop: 4,
+                      }}
+                    >
+                      {length}
+                    </p>
+                  </Grid>
+                ) : null}
+              </Grid>
             </ListItem>
           </NavLink>
           <NavLink

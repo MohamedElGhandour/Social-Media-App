@@ -1,19 +1,22 @@
-import React from "react";
+import React, { Suspense } from "react";
 import Layout from "./hoc/layout/index";
-import Home from "./containers/Home/index";
+import Home from "./components/Home/index";
 import Auth from "./containers/auth/Login/index";
 import Logout from "./containers/auth/Logout/index";
+import People from "./components/People/index";
+import Photos from "./components/Photos/index";
+import CircularProgress from "@material-ui/core/CircularProgress";
 import { useSelector, useDispatch } from "react-redux";
 import { Switch, Route, Redirect } from "react-router-dom";
-import { authCheckState, fetchUsers } from "./store/actions/index";
+import { authCheckState } from "./store/actions/index";
 import "./App.css";
 
 function App() {
   const token = useSelector((state) => state.auth.token);
   const dispatch = useDispatch();
-  dispatch(authCheckState());
-  dispatch(fetchUsers());
-  // React.useEffect(() => {}, []);
+  React.useEffect(() => {
+    dispatch(authCheckState());
+  }, [dispatch]);
   let route = (
     <Switch>
       <Route exact path="/auth" component={Auth} />
@@ -24,9 +27,39 @@ function App() {
     (route = (
       <Layout>
         <Switch>
-          <Route exact path="/profile" />
-          <Route exact path="/logout" component={Logout} />
-          <Route path="/" component={Home} />
+          <Route path="/profile" />
+          <Route
+            path="/logout"
+            render={() => (
+              <Suspense fallback={<CircularProgress />}>
+                <Logout />
+              </Suspense>
+            )}
+          />
+          <Route
+            path="/people"
+            render={() => (
+              <Suspense fallback={<CircularProgress />}>
+                <People />
+              </Suspense>
+            )}
+          />
+          <Route
+            path="/photos"
+            render={() => (
+              <Suspense fallback={<CircularProgress />}>
+                <Photos />
+              </Suspense>
+            )}
+          />
+          <Route
+            path="/"
+            render={() => (
+              <Suspense fallback={<CircularProgress />}>
+                <Home />
+              </Suspense>
+            )}
+          />
           <Redirect to="/" />
         </Switch>
       </Layout>

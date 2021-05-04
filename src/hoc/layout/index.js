@@ -32,6 +32,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Layout(props) {
   const classes = useStyles();
+
   return (
     <React.Fragment>
       <Toolbar />
@@ -57,7 +58,7 @@ export default function Layout(props) {
               </Grid>
             </Grid>
           </Grid>
-          <Grid item xs={12} md={9} style={{ padding: "0 16px" }}>
+          <Grid item xs={12} md={9}>
             {props.children}
           </Grid>
         </Grid>

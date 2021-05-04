@@ -9,7 +9,7 @@ const successFetchPosts = (state, action) => {
   newPosts.forEach((post) => {
     const userPost = state.users[post.userId - 1];
     post.avatar = userPost.avatar;
-    post.author = userPost.name;
+    post.name = userPost.name;
     post.comments.forEach((comment) => {
       const userComment = state.users[comment.userId - 1];
       comment.avatar = userComment.avatar;
@@ -71,6 +71,24 @@ const successToggleLove = (state, action) => {
   return { ..._State };
 };
 
+const successToggleFollow = (state, action) => {
+  const { users } = cloneDeep(action.users);
+  const avatar = defoultProfilePic;
+  users.forEach((user) => {
+    !user.avatar && (user.avatar = avatar);
+  });
+  return { ...state, users: users };
+};
+
+const successToggleRequest = (state, action) => {
+  const { users } = cloneDeep(action.users);
+  const avatar = defoultProfilePic;
+  users.forEach((user) => {
+    !user.avatar && (user.avatar = avatar);
+  });
+  return { ...state, users: users };
+};
+
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case actionTypes.SUCCESS_FETCH_POSTS:
@@ -85,6 +103,10 @@ const reducer = (state = initialState, action) => {
       return successFetchUsers(state, action);
     case actionTypes.SUCCESS_TOGGLE_LOVE:
       return successToggleLove(state, action);
+    case actionTypes.SUCCESS_TOGGLE_REQUEST:
+      return successToggleRequest(state, action);
+    case actionTypes.SUCCESS_TOGGLE_FOLLOW:
+      return successToggleFollow(state, action);
     default:
       return state;
   }

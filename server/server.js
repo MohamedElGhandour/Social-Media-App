@@ -42,12 +42,12 @@ server.use("/api/users", (req, res) => {
   return;
 });
 
-// server.use("/api/db", (req, res) => {
-//   const status = 405;
-//   const message = "Not Available (Cheater -_-)";
-//   res.status(status).json({ status, message });
-//   return;
-// });
+server.use("/api/db", (req, res) => {
+  const status = 405;
+  const message = "Not Available (Cheater -_-)";
+  res.status(status).json({ status, message });
+  return;
+});
 
 server.use("/api/usersInfo", (req, res) => {
   if (
@@ -75,9 +75,9 @@ server.use("/api/usersInfo", (req, res) => {
         return;
       }
       // Get current users data
-      var data = JSON.parse(data.toString());
+      const currentData = JSON.parse(data.toString());
       // Get current user data
-      const users = [...data.users];
+      const users = [...currentData.users];
       users.forEach((user) => {
         delete user.password;
       });
@@ -110,10 +110,10 @@ server.post("/api/auth/login", (req, res) => {
     }
 
     // Get current users data
-    var data = JSON.parse(data.toString());
+    const currentData = JSON.parse(data.toString());
 
     // Get current user data
-    const currentUser = data.users.filter((user) => {
+    const currentUser = currentData.users.filter((user) => {
       if (email === user.email && password === user.password) {
         return user;
       }
@@ -154,13 +154,13 @@ server.post("/api/auth/register", (req, res) => {
     }
 
     // Get current users data
-    var data = JSON.parse(data.toString());
+    const currentData = JSON.parse(data.toString());
 
     // Get the id of last user
-    var last_item_id = data.users[data.users.length - 1].id;
+    const last_item_id = currentData.users[data.users.length - 1].id;
 
     //Add new user
-    data.users.push({
+    currentData.users.push({
       id: last_item_id + 1,
       email: email,
       password: password,
@@ -171,7 +171,7 @@ server.post("/api/auth/register", (req, res) => {
     });
 
     //add some data
-    var writeData = fs.writeFile(
+    const writeData = fs.writeFile(
       "./api/db.json",
       JSON.stringify(data),
       (err, result) => {
@@ -189,6 +189,177 @@ server.post("/api/auth/register", (req, res) => {
   // Create token for new user
   const access_token = createToken({ email, password });
   res.status(200).json({ access_token });
+});
+
+// Request
+server.use("/api/request", (req, res) => {
+  const { id, userId } = req.body;
+  if (
+    req.headers.authorization === undefined ||
+    req.headers.authorization.split(" ")[0] !== "Bearer"
+  ) {
+    const status = 401;
+    const message = "Bad authorization header";
+    res.status(status).json({ status, message });
+    return;
+  }
+  try {
+    const decoded = verifyToken(req.headers.authorization.split(" ")[1]);
+    if (
+      decoded.name === "JsonWebTokenError" ||
+      decoded.name === "TokenExpiredError"
+    )
+      throw decoded;
+
+    fs.readFile("./api/db.json", (err, data) => {
+      if (err) {
+        const status = 401;
+        const message = err;
+        res.status(status).json({ status, message });
+        return;
+      }
+      // Get current users data
+      const currentData = JSON.parse(data.toString());
+      // Get current user data
+      currentData.users.forEach((user) => {
+        if (userId === user.id) {
+          if (user.pending.includes(id)) {
+            const pending = user.pending.filter(
+              (idFollower) => !idFollower === id
+            );
+            user.pending = pending;
+          } else {
+            const [antheruser] = currentData.users.filter(
+              (user) => user.id === id
+            );
+            if (antheruser.following.includes(userId)) {
+              currentData.users.forEach((user) => {
+                if (user.id === id) {
+                  const newFollowing = user.following.filter(
+                    (followerId) => followerId === id
+                  );
+                  user.following = newFollowing;
+                }
+              });
+            } else {
+              user.pending.push(id);
+            }
+          }
+        }
+      });
+      //add some data
+      const writeData = fs.writeFile(
+        "./api/db.json",
+        JSON.stringify(currentData),
+        (err, result) => {
+          // WRITE
+          if (err) {
+            const status = 401;
+            const message = err;
+            res.status(status).json({ status, message });
+            return;
+          }
+        }
+      );
+      // Get current user data
+      const users = [...currentData.users];
+      users.forEach((user) => {
+        delete user.password;
+      });
+      res.status(200).json({ users });
+    });
+  } catch (err) {
+    console.log(err.message);
+    const status = 401;
+    const message = "Error: access_token is not valid";
+    res.status(status).json({ status, message });
+  }
+});
+
+// Follow
+server.use("/api/follow", (req, res) => {
+  const { id, userId, isAccepted } = req.body;
+  if (
+    req.headers.authorization === undefined ||
+    req.headers.authorization.split(" ")[0] !== "Bearer"
+  ) {
+    const status = 401;
+    const message = "Bad authorization header";
+    res.status(status).json({ status, message });
+    return;
+  }
+  if (isAccepted === ("" || null || undefined)) {
+    const status = 401;
+    const message = "isAccepted Is Require";
+    res.status(status).json({ status, message });
+    return;
+  }
+
+  try {
+    const decoded = verifyToken(req.headers.authorization.split(" ")[1]);
+    if (
+      decoded.name === "JsonWebTokenError" ||
+      decoded.name === "TokenExpiredError"
+    )
+      throw decoded;
+
+    fs.readFile("./api/db.json", (err, data) => {
+      if (err) {
+        const status = 401;
+        const message = err;
+        res.status(status).json({ status, message });
+        return;
+      }
+      // Get current users data
+      const currentData = JSON.parse(data.toString());
+      // Get current user data
+      currentData.users.forEach((user) => {
+        if (userId === user.id) {
+          if (isAccepted) {
+            const pending = user.pending.filter(
+              (idFollower) => idFollower !== id
+            );
+            user.pending = pending;
+            currentData.users.forEach((user) => {
+              if (id === user.id) {
+                user.following.push(userId);
+              }
+            });
+          } else {
+            const pending = user.pending.filter(
+              (idFollower) => idFollower !== id
+            );
+            user.pending = pending;
+          }
+        }
+      });
+      //add some data
+      const writeData = fs.writeFile(
+        "./api/db.json",
+        JSON.stringify(currentData),
+        (err, result) => {
+          // WRITE
+          if (err) {
+            const status = 401;
+            const message = err;
+            res.status(status).json({ status, message });
+            return;
+          }
+        }
+      );
+      // Get current user data
+      const users = [...currentData.users];
+      users.forEach((user) => {
+        delete user.password;
+      });
+      res.status(200).json({ users });
+    });
+  } catch (err) {
+    console.log(err.message);
+    const status = 401;
+    const message = "Error: access_token is not valid";
+    res.status(status).json({ status, message });
+  }
 });
 
 server.use(/^(?!\/auth).*$/, (req, res, next) => {

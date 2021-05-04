@@ -3,20 +3,21 @@ import Grid from "@material-ui/core/Grid";
 import PostGen from "./Generator/index";
 import Post from "../../components/Posts/index";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchPosts, toggleLove } from "../../store/actions/index";
+import { fetchPosts, toggleLove, fetchUsers } from "../../store/actions/index";
 
 export default function Posts(props) {
   const dispatch = useDispatch();
   const posts = useSelector((state) => state.posts.posts);
   const toggleLoveFun = (post) => dispatch(toggleLove(post));
   useEffect(() => {
+    dispatch(fetchUsers());
     dispatch(fetchPosts());
   }, [dispatch]);
   return (
     <Grid container direction="column" justify="center" alignItems="center">
       <PostGen />
       {/* <Post loading /> */}
-      {posts &&
+      {posts.length > 0 ? (
         posts.map((post) => (
           <Post
             global={post}
@@ -25,13 +26,21 @@ export default function Posts(props) {
             avatar={post.avatar}
             image={post.image}
             body={post.body}
-            username={post.author}
+            name={post.name}
             timestamp={post.timestamp}
             comments={post.comments}
             loves={post.loves}
             toggleLove={toggleLoveFun}
+            userId={post.userId}
           />
-        ))}
+        ))
+      ) : (
+        <React.Fragment>
+          <Post loading />
+          <Post loading />
+          <Post loading />
+        </React.Fragment>
+      )}
     </Grid>
   );
 }

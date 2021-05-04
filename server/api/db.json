@@ -32,7 +32,7 @@
       "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/1200px-Image_created_with_a_mobile_phone.png",
       "body": "take your way 😊",
       "timestamp": 1619378929084,
-      "userId": "1",
+      "userId": 1,
       "id": 11,
       "loves": [
         1,
@@ -49,16 +49,6 @@
         2
       ],
       "id": 12
-    },
-    {
-      "image": null,
-      "body": "test",
-      "timestamp": 1619724129307,
-      "userId": 2,
-      "loves": [
-        2
-      ],
-      "id": 13
     }
   ],
   "comments": [
@@ -133,8 +123,13 @@
       "name": "bruno",
       "email": "bruno@email.com",
       "password": "bruno",
-      "following": [],
-      "pending": []
+      "following": [
+        2
+      ],
+      "pending": [
+        2,
+        3
+      ]
     },
     {
       "id": 2,
@@ -142,8 +137,12 @@
       "name": "nilson",
       "email": "nilson@email.com",
       "password": "nilson",
-      "following": [],
-      "pending": []
+      "following": [
+        3
+      ],
+      "pending": [
+        3
+      ]
     },
     {
       "id": 3,
@@ -152,7 +151,9 @@
       "password": "123456",
       "name": "Mohamed Elghandour",
       "following": [],
-      "pending": []
+      "pending": [
+        1
+      ]
     },
     {
       "id": 4,
@@ -161,7 +162,11 @@
       "name": "ahmed",
       "avatar": null,
       "following": [],
-      "pending": []
+      "pending": [
+        2,
+        3,
+        1
+      ]
     }
   ]
 }

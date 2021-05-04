@@ -1,39 +1,42 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/core/styles";
-import Card from "@material-ui/core/Card";
-import CardHeader from "@material-ui/core/CardHeader";
-import CardContent from "@material-ui/core/CardContent";
-import Typography from "@material-ui/core/Typography";
-import IconButton from "@material-ui/core/IconButton";
-import MoreVertIcon from "@material-ui/icons/MoreVert";
+import {
+  Card,
+  CardHeader,
+  CardContent,
+  Typography,
+  IconButton,
+  Grid,
+  Button,
+  Avatar,
+  Collapse,
+  Modal,
+  Backdrop,
+  Fade,
+  AppBar,
+  Tabs,
+  Tab,
+  Box,
+  List,
+  ListItem,
+  ListItemIcon,
+} from "@material-ui/core/";
+import {
+  MoreHoriz,
+  FavoriteBorderOutlined,
+  Favorite,
+  ChatBubbleOutlineOutlined,
+} from "@material-ui/icons";
 import Skeleton from "@material-ui/lab/Skeleton";
-import Grid from "@material-ui/core/Grid";
-import Button from "@material-ui/core/Button";
 import CommentGenerator from "../../containers/Comments/Generator/index";
 import Comment from "../../containers/Comments/index";
-import Avatar from "@material-ui/core/Avatar";
-import Link from "@material-ui/core/Link";
-import FavoriteBorderOutlinedIcon from "@material-ui/icons/FavoriteBorderOutlined";
-import FavoriteIcon from "@material-ui/icons/Favorite";
-import ChatBubbleOutlineOutlinedIcon from "@material-ui/icons/ChatBubbleOutlineOutlined";
-import Collapse from "@material-ui/core/Collapse";
-import Modal from "@material-ui/core/Modal";
-import Backdrop from "@material-ui/core/Backdrop";
-import Fade from "@material-ui/core/Fade";
-import AppBar from "@material-ui/core/AppBar";
-import Tabs from "@material-ui/core/Tabs";
-import Tab from "@material-ui/core/Tab";
-import Box from "@material-ui/core/Box";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
 import { NavLink } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { cloneDeep } from "lodash";
 import { createMuiTheme } from "@material-ui/core/styles";
 import { ThemeProvider } from "@material-ui/styles";
-
+import Tooltip from "../../containers/Tooltip/index";
 const theme = createMuiTheme({
   palette: {
     primary: {
@@ -102,7 +105,7 @@ const useStyles = makeStyles((theme) => ({
     textAlign: "center",
     width: "calc(50% - 10px)",
     color: "#69676b",
-    borderRadius: 10,
+    borderRadius: 8,
     textTransform: "capitalize",
     margin: "0 5px",
   },
@@ -131,11 +134,14 @@ const useStyles = makeStyles((theme) => ({
       textDecoration: "underline",
     },
   },
+  user: {
+    borderRadius: 10,
+  },
 }));
 
 export default function Post(props) {
   const { loading = false } = props;
-  const preventDefault = (event) => event.preventDefault();
+  // const preventDefault = (event) => event.preventDefault();
   const [comment, setComment] = React.useState(false);
   const [love, setLove] = React.useState(false);
   const userId = parseInt(localStorage.getItem("userId"));
@@ -161,7 +167,6 @@ export default function Post(props) {
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
-
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => {
     setOpen(true);
@@ -177,25 +182,28 @@ export default function Post(props) {
     handleOpen();
     handleChange(null, 1);
   };
+
   const users = useSelector((state) => state.posts.users);
   const usersComment = [];
-  comments.forEach((comment) => {
-    for (let index = 0; index < users.length; index++) {
-      const element = users[index];
-      if (element.id === comment.userId) {
-        usersComment.push(element);
+  !loading &&
+    comments.forEach((comment) => {
+      for (let index = 0; index < users.length; index++) {
+        const element = users[index];
+        if (element.id === comment.userId) {
+          usersComment.push(element);
+        }
       }
-    }
-  });
+    });
   const usersLove = [];
-  loves.forEach((love) => {
-    for (let index = 0; index < users.length; index++) {
-      const element = users[index];
-      if (element.id === love) {
-        usersLove.push(element);
+  !loading &&
+    loves.forEach((love) => {
+      for (let index = 0; index < users.length; index++) {
+        const element = users[index];
+        if (element.id === love) {
+          usersLove.push(element);
+        }
       }
-    }
-  });
+    });
   return (
     <React.Fragment>
       <Card className={classes.card}>
@@ -209,13 +217,22 @@ export default function Post(props) {
                 height={40}
               />
             ) : (
-              <Avatar src={props.avatar} style={{ borderRadius: "25%" }} />
+              <Tooltip
+                id={props.userId}
+                name={props.name}
+                avatar={props.avatar}
+                placement="top"
+              >
+                <NavLink to={`/profile/${props.userId}`}>
+                  <Avatar src={props.avatar} style={{ borderRadius: "25%" }} />
+                </NavLink>
+              </Tooltip>
             )
           }
           action={
             loading ? null : (
               <IconButton aria-label="settings">
-                <MoreVertIcon />
+                <MoreHoriz />
               </IconButton>
             )
           }
@@ -233,13 +250,19 @@ export default function Post(props) {
                 style={{ color: "#000", fontWeight: "bold" }}
                 component="p"
               >
-                <Link
-                  href="#"
-                  onClick={preventDefault}
-                  style={{ color: "#1d3a5fd" }}
+                <Tooltip
+                  id={props.userId}
+                  name={props.name}
+                  avatar={props.avatar}
+                  placement="top"
                 >
-                  {props.username}
-                </Link>
+                  <NavLink
+                    to={`/profile/${props.userId}`}
+                    style={{ color: "rgb(29, 58, 95)", textDecoration: "none" }}
+                  >
+                    {props.name}
+                  </NavLink>
+                </Tooltip>
               </Typography>
             )
           }
@@ -309,7 +332,7 @@ export default function Post(props) {
                 >
                   {loves.length > 0 ? (
                     <React.Fragment>
-                      <FavoriteIcon
+                      <Favorite
                         style={{
                           fontSize: ".9375rem",
                           position: "relative",
@@ -359,17 +382,17 @@ export default function Post(props) {
                 onClick={() => post()}
                 style={{ color: "#f33e58" }}
               >
-                <FavoriteIcon />
+                <Favorite />
                 <span style={{ paddingLeft: 5 }}>Love</span>
               </Button>
             ) : (
               <Button className={classes.btn} onClick={() => post()}>
-                <FavoriteBorderOutlinedIcon />
+                <FavoriteBorderOutlined />
                 <span style={{ paddingLeft: 5 }}>Love</span>
               </Button>
             )}
             <Button className={classes.btn} onClick={() => setComment(true)}>
-              <ChatBubbleOutlineOutlinedIcon />
+              <ChatBubbleOutlineOutlined />
               <span style={{ paddingLeft: 5 }}>Comment</span>
             </Button>
           </Grid>
@@ -380,7 +403,7 @@ export default function Post(props) {
               global={props.global}
               comments={comments}
               avatar={props.avatar}
-              author={props.author}
+              author={props.name}
             />
             {comments.map((comment) => (
               <Comment
@@ -388,6 +411,7 @@ export default function Post(props) {
                 body={comment.body}
                 key={comment.id}
                 author={comment.author}
+                userId={comment.userId}
               />
             ))}
           </Collapse>
@@ -422,13 +446,13 @@ export default function Post(props) {
                   <Tab
                     label="Loves"
                     style={{ width: "50%" }}
-                    icon={<FavoriteIcon />}
+                    icon={<Favorite />}
                     {...a11yProps(0)}
                   />
                   <Tab
                     label="Comments"
                     style={{ width: "50%", color: "#4c4c4c" }}
-                    icon={<ChatBubbleOutlineOutlinedIcon />}
+                    icon={<ChatBubbleOutlineOutlined />}
                     {...a11yProps(1)}
                   />
                 </Tabs>
@@ -449,44 +473,53 @@ export default function Post(props) {
                   <div style={{ textAlign: "center" }}>Be First Love</div>
                 )}
                 {usersLove.map((user) => (
-                  <NavLink
+                  <Tooltip
                     key={user.id}
-                    to={`/profile/${user.id}`}
-                    style={{
-                      textDecoration: "none",
-                      color: "#1d3a5f",
-                      fontWeight: 500,
-                    }}
+                    id={user.id}
+                    name={user.name}
+                    avatar={user.avatar}
+                    placement="top"
                   >
-                    <ListItem className={classes.user} button>
-                      <ListItemIcon>
-                        <Avatar
-                          src={user.avatar}
-                          style={{ borderRadius: "25%" }}
-                        />
-                      </ListItemIcon>
-                      <div
+                    <div>
+                      <NavLink
+                        to={`/profile/${user.id}`}
                         style={{
-                          flex: "1 1 auto",
-                          minWidth: 0,
-                          marginTop: 4,
-                          marginBottom: 4,
+                          textDecoration: "none",
+                          color: "#1d3a5f",
+                          fontWeight: 500,
                         }}
                       >
-                        <span
-                          style={{
-                            fontSize: "1rem",
-                            fontFamily: ` "Roboto", "Helvetica", "Arial", sans-serif`,
-                            fontWeight: 500,
-                            lineHeight: 1.5,
-                            letterSpacing: "0.00938em",
-                          }}
-                        >
-                          {user.name}
-                        </span>
-                      </div>
-                    </ListItem>
-                  </NavLink>
+                        <ListItem className={classes.user} button>
+                          <ListItemIcon>
+                            <Avatar
+                              src={user.avatar}
+                              style={{ borderRadius: "25%" }}
+                            />
+                          </ListItemIcon>
+                          <div
+                            style={{
+                              flex: "1 1 auto",
+                              minWidth: 0,
+                              marginTop: 4,
+                              marginBottom: 4,
+                            }}
+                          >
+                            <span
+                              style={{
+                                fontSize: "1rem",
+                                fontFamily: ` "Roboto", "Helvetica", "Arial", sans-serif`,
+                                fontWeight: 500,
+                                lineHeight: 1.5,
+                                letterSpacing: "0.00938em",
+                              }}
+                            >
+                              {user.name}
+                            </span>
+                          </div>
+                        </ListItem>
+                      </NavLink>
+                    </div>
+                  </Tooltip>
                 ))}
               </List>
             </TabPanel>
@@ -505,44 +538,53 @@ export default function Post(props) {
                   <div style={{ textAlign: "center" }}>Be First Comment</div>
                 )}
                 {usersComment.map((user) => (
-                  <NavLink
+                  <Tooltip
                     key={user.id}
-                    to={`/profile/${user.id}`}
-                    style={{
-                      textDecoration: "none",
-                      color: "#1d3a5f",
-                      fontWeight: 500,
-                    }}
+                    id={user.id}
+                    name={user.name}
+                    avatar={user.avatar}
+                    placement="top"
                   >
-                    <ListItem className={classes.user} button>
-                      <ListItemIcon>
-                        <Avatar
-                          src={user.avatar}
-                          style={{ borderRadius: "25%" }}
-                        />
-                      </ListItemIcon>
-                      <div
+                    <div>
+                      <NavLink
+                        to={`/profile/${user.id}`}
                         style={{
-                          flex: "1 1 auto",
-                          minWidth: 0,
-                          marginTop: 4,
-                          marginBottom: 4,
+                          textDecoration: "none",
+                          color: "#1d3a5f",
+                          fontWeight: 500,
                         }}
                       >
-                        <span
-                          style={{
-                            fontSize: "1rem",
-                            fontFamily: ` "Roboto", "Helvetica", "Arial", sans-serif`,
-                            fontWeight: 500,
-                            lineHeight: 1.5,
-                            letterSpacing: "0.00938em",
-                          }}
-                        >
-                          {user.name}
-                        </span>
-                      </div>
-                    </ListItem>
-                  </NavLink>
+                        <ListItem className={classes.user} button>
+                          <ListItemIcon>
+                            <Avatar
+                              src={user.avatar}
+                              style={{ borderRadius: "25%" }}
+                            />
+                          </ListItemIcon>
+                          <div
+                            style={{
+                              flex: "1 1 auto",
+                              minWidth: 0,
+                              marginTop: 4,
+                              marginBottom: 4,
+                            }}
+                          >
+                            <span
+                              style={{
+                                fontSize: "1rem",
+                                fontFamily: ` "Roboto", "Helvetica", "Arial", sans-serif`,
+                                fontWeight: 500,
+                                lineHeight: 1.5,
+                                letterSpacing: "0.00938em",
+                              }}
+                            >
+                              {user.name}
+                            </span>
+                          </div>
+                        </ListItem>
+                      </NavLink>
+                    </div>
+                  </Tooltip>
                 ))}
               </List>
             </TabPanel>
