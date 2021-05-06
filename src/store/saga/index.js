@@ -7,6 +7,8 @@ import {
   toggleLoveSaga,
   toggleRequestSaga,
   toggleFollowSaga,
+  fetchNewsSaga,
+  fetchProfileSaga,
 } from "./posts";
 import {
   authSaga,
@@ -20,6 +22,8 @@ import * as actionTypes from "../actions/actionTypes";
 export function* watchPosts() {
   yield all([
     takeEvery(actionTypes.FETCH_POSTS, fetchPostsSaga),
+    takeEvery(actionTypes.FETCH_NEWS, fetchNewsSaga),
+    takeEvery(actionTypes.FETCH_PROFILE, fetchProfileSaga),
     takeEvery(actionTypes.SEND_NEW_POST, sendNewPostSaga),
     takeEvery(actionTypes.ADD_COMMENT, addCommentSaga),
     takeEvery(actionTypes.FETCH_USERS, fetchUsersSaga),

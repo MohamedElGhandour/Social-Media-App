@@ -14,6 +14,10 @@ export {
   toggleRequest,
   successToggleRequest,
   successToggleFollow,
+  fetchNews,
+  successFetchNews,
+  fetchProfile,
+  successFetchProfile,
 } from "./posts";
 
 export {

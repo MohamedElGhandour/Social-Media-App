@@ -24,7 +24,6 @@ const useStyles = makeStyles((theme) => ({
     maxWidth: 680,
     width: "100%",
     margin: "16px auto",
-    marginTop: "32px",
     borderRadius: 15,
     boxShadow: "0px 0px 20px 20px rgb(0 0 0 / 3%)",
     backgroundColor: "#fff",
@@ -74,6 +73,7 @@ const useStyles = makeStyles((theme) => ({
     outline: "none",
     border: "none",
     position: "relative",
+    borderRadius: 15,
   },
   header: {
     textAlign: "center",
@@ -87,6 +87,7 @@ const useStyles = makeStyles((theme) => ({
     position: "absolute",
     top: 0,
     right: 0,
+    borderRadius: "25%",
     margin: theme.spacing(2, 2, 0, 0),
   },
   rootModal: {

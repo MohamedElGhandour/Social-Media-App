@@ -20,12 +20,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Home() {
+export default function News() {
   const classes = useStyles();
   return (
     <Grid container direction="row" justify="center" alignItems="flex-start">
       <Grid item xs={12} md={8} style={{ padding: "0 16px", marginTop: 16 }}>
-        <Posts home />
+        <Posts />
       </Grid>
       <Grid
         item

@@ -1,9 +1,30 @@
 import * as actionTypes from "./actionTypes";
 
-export const fetchPosts = () => ({ type: actionTypes.FETCH_POSTS });
+export const fetchPosts = () => ({
+  type: actionTypes.FETCH_POSTS,
+});
 
 export const successFetchPosts = (posts) => ({
   type: actionTypes.SUCCESS_FETCH_POSTS,
+  posts: posts,
+});
+
+export const fetchNews = () => ({
+  type: actionTypes.FETCH_NEWS,
+});
+
+export const successFetchNews = (posts) => ({
+  type: actionTypes.SUCCESS_FETCH_NEWS,
+  posts: posts,
+});
+
+export const fetchProfile = (id) => ({
+  type: actionTypes.FETCH_PROFILE,
+  id: id,
+});
+
+export const successFetchProfile = (posts) => ({
+  type: actionTypes.SUCCESS_FETCH_PROFILE,
   posts: posts,
 });
 

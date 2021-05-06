@@ -2,7 +2,13 @@ import * as actionTypes from "../actions/actionTypes";
 import cloneDeep from "lodash/cloneDeep";
 import defoultProfilePic from "../../assets/images/avatar.jpg";
 
-const initialState = { posts: [], error: null, users: [] };
+const initialState = {
+  posts: [],
+  profile: [],
+  news: [],
+  error: null,
+  users: [],
+};
 
 const successFetchPosts = (state, action) => {
   const newPosts = cloneDeep(action.posts);
@@ -18,6 +24,36 @@ const successFetchPosts = (state, action) => {
   });
   return { ...state, posts: newPosts };
 };
+const successFetchNews = (state, action) => {
+  const newPosts = cloneDeep(action.posts);
+  newPosts.forEach((post) => {
+    const userPost = state.users[post.userId - 1];
+    post.avatar = userPost.avatar;
+    post.name = userPost.name;
+    post.comments.forEach((comment) => {
+      const userComment = state.users[comment.userId - 1];
+      comment.avatar = userComment.avatar;
+      comment.author = userComment.name;
+    });
+  });
+  return { ...state, news: newPosts };
+};
+
+const successFetchProfile = (state, action) => {
+  const newPosts = cloneDeep(action.posts);
+  newPosts.forEach((post) => {
+    const userPost = state.users[post.userId - 1];
+    post.avatar = userPost.avatar;
+    post.name = userPost.name;
+    post.comments.forEach((comment) => {
+      const userComment = state.users[comment.userId - 1];
+      comment.avatar = userComment.avatar;
+      comment.author = userComment.name;
+    });
+  });
+  return { ...state, profile: newPosts };
+};
+
 const failedFetchPosts = (state, action) => {
   return { ...state, error: action.error };
 };
@@ -93,6 +129,10 @@ const reducer = (state = initialState, action) => {
   switch (action.type) {
     case actionTypes.SUCCESS_FETCH_POSTS:
       return successFetchPosts(state, action);
+    case actionTypes.SUCCESS_FETCH_NEWS:
+      return successFetchNews(state, action);
+    case actionTypes.SUCCESS_FETCH_PROFILE:
+      return successFetchProfile(state, action);
     case actionTypes.FAILED_FETCH_POSTS:
       return failedFetchPosts(state, action);
     case actionTypes.SUCCESS_SEND_NEW_POST:

@@ -50,44 +50,46 @@ export default function Home() {
     >
       <Grid container direction="row" justify="center" alignItems="flex-start">
         <Grid item xs={12} style={{ padding: "0 16px" }}>
-          <Grid
-            container
-            direction="row"
-            justify="space-between"
-            alignItems="flex-start"
-          >
-            <Grid item>
-              <p
-                style={{
-                  color: "#a1aebe",
-                  fontWeight: 600,
-                  fontSize: "1rem",
-                  lineHeight: 1.1765,
-                  wordBreak: "break-word",
-                  margin: "0",
-                  padding: "0 0 0 16px",
-                }}
-              >
-                Requests
-              </p>
+          {length > 0 ? (
+            <Grid
+              container
+              direction="row"
+              justify="space-between"
+              alignItems="flex-start"
+            >
+              <Grid item>
+                <p
+                  style={{
+                    color: "#a1aebe",
+                    fontWeight: 600,
+                    fontSize: "1rem",
+                    lineHeight: 1.1765,
+                    wordBreak: "break-word",
+                    margin: "0",
+                    padding: "0 0 0 16px",
+                  }}
+                >
+                  Requests
+                </p>
+              </Grid>
+              <Grid item>
+                <p
+                  style={{
+                    fontWeight: 500,
+                    padding: "3px 7px",
+                    backgroundColor: "#216fdb",
+                    fontSize: ".9rem",
+                    color: "#fff",
+                    margin: "0 10px 0 0",
+                    paddingTop: 4,
+                    borderRadius: "25%",
+                  }}
+                >
+                  {length}
+                </p>
+              </Grid>
             </Grid>
-            <Grid item>
-              <p
-                style={{
-                  fontWeight: 500,
-                  padding: "3px 7px",
-                  backgroundColor: "#216fdb",
-                  fontSize: ".9rem",
-                  color: "#fff",
-                  margin: "0 10px 0 0",
-                  borderRadius: 9,
-                  paddingTop: 4,
-                }}
-              >
-                {length}
-              </p>
-            </Grid>
-          </Grid>
+          ) : null}
           {pendding &&
             pendding.map((user) => (
               <Grid
@@ -237,8 +239,8 @@ export default function Home() {
                   fontSize: ".9rem",
                   color: "#fff",
                   margin: "0 10px 0 0",
-                  borderRadius: 9,
                   paddingTop: 4,
+                  borderRadius: "25%",
                 }}
               >
                 {lengthUsers}

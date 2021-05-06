@@ -104,32 +104,33 @@ const useStyles = makeStyles((theme) => ({
     width: 40,
     height: 40,
     backgroundColor: "#efefef",
+    borderRadius: "25%",
     color: "#111513",
     marginLeft: 10,
     "&:hover": {
       backgroundColor: "#d8d8d8",
     },
   },
+  anchorTopRight: {
+    borderRadius: "25%",
+    color: "#fff",
+    backgroundColor: "#f02849",
+  },
 }));
 
 export default function PrimarySearchAppBar(props) {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
-
   const isMenuOpen = Boolean(anchorEl);
-
   const handleProfileMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
   };
-
   const handleMenuClose = () => {
     setAnchorEl(null);
   };
-
   const avatar = localStorage.getItem("avatar");
-
   const menuId = "primary-search-account-menu";
-
+  const userId = localStorage.getItem("userId");
   const renderMenu = (
     <Menu
       anchorEl={anchorEl}
@@ -140,7 +141,16 @@ export default function PrimarySearchAppBar(props) {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
+      <NavLink
+        to={`/profile/${userId}`}
+        style={{
+          textDecoration: "none",
+          color: "#1d3a5f",
+          fontWeight: 500,
+        }}
+      >
+        <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
+      </NavLink>
       <MenuItem onClick={handleMenuClose}>
         <NavLink
           to="/logout"
@@ -160,6 +170,7 @@ export default function PrimarySearchAppBar(props) {
           boxShadow:
             "rgb(238 238 238 / 20%) 0px 2px 1px -1px, rgb(0 0 0 / 14%) 0px 1px 1px 0px, rgb(0 0 0 / 12%) 0px 1px 3px 0px, 0px 0px 20px 20px rgb(0 0 0 / 3%)",
           backgroundColor: "#fcfcfd",
+          borderRadius: "0 0 10px 10px",
         }}
         color="inherit"
       >
@@ -169,26 +180,29 @@ export default function PrimarySearchAppBar(props) {
           <IconButton
             edge="start"
             className={(classes.menuButton, classes.sectionMobile)}
+            onClick={props.toggleDrawer}
             color="inherit"
             aria-label="open drawer"
           >
             <MenuIcon />
           </IconButton>
           {/* logo */}
-          <IconButton
-            style={{
-              width: 40,
-              height: 40,
-              marginLeft: 10,
-            }}
-            color="inherit"
-          >
-            <Avatar src={logo} style={{ borderRadius: "25%" }} />
-          </IconButton>
-          <IconButton className={classes.iconNav} color="inherit">
-            <SearchIcon />
-          </IconButton>
-
+          <NavLink to="/">
+            <IconButton
+              style={{
+                width: 40,
+                height: 40,
+                marginLeft: 10,
+                color: "rgb(24 120 242)",
+              }}
+              color="inherit"
+            >
+              <Avatar src={logo} style={{ borderRadius: "25%" }} />
+            </IconButton>
+            <IconButton className={classes.iconNav} color="inherit">
+              <SearchIcon />
+            </IconButton>
+          </NavLink>
           <div className={classes.grow} />
           <div>
             <IconButton
@@ -196,7 +210,13 @@ export default function PrimarySearchAppBar(props) {
               className={classes.iconNav}
               color="inherit"
             >
-              <Badge badgeContent={4} color="secondary">
+              <Badge
+                badgeContent={4}
+                classes={{
+                  anchorOriginTopRightRectangle: classes.anchorTopRight,
+                }} // <== Working Code
+                color="primary"
+              >
                 <MailOutlineIcon />
               </Badge>
             </IconButton>
@@ -205,7 +225,13 @@ export default function PrimarySearchAppBar(props) {
               aria-label="show 17 new notifications"
               color="inherit"
             >
-              <Badge badgeContent={1} color="secondary">
+              <Badge
+                badgeContent={1}
+                classes={{
+                  anchorOriginTopRightRectangle: classes.anchorTopRight,
+                }} // <== Working Code
+                color="primary"
+              >
                 <NotificationsNoneIcon />
               </Badge>
             </IconButton>

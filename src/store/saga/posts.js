@@ -3,6 +3,49 @@ import * as actions from "../actions/index";
 
 export function* fetchPostsSaga() {
   const token = yield localStorage.getItem("token");
+  const userId = yield parseInt(localStorage.getItem("userId"));
+  const following = yield localStorage.getItem("following");
+  const array = yield following !== null ? following.split(",") : [];
+  let query = yield "";
+  yield array.forEach((user) => {
+    query += `&userId=${user}`;
+  });
+  const url = `http://localhost:4000/api/posts?_embed=comments&_sort=id&_order=desc&userId=${userId}${query}`;
+  try {
+    const response = yield fetch(url, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    const res = yield response.json();
+    yield put(actions.successFetchPosts(res));
+  } catch (error) {
+    yield console.log(error);
+    yield put(actions.failFetchPosts(error));
+  }
+}
+
+export function* fetchProfileSaga(action) {
+  const token = yield localStorage.getItem("token");
+  try {
+    const response = yield fetch(
+      `http://localhost:4000/api/posts?_embed=comments&_sort=id&_order=desc&userId=${action.id}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    const res = yield response.json();
+    yield put(actions.successFetchProfile(res));
+  } catch (error) {
+    yield console.log(error);
+    yield put(actions.failFetchPosts(error));
+  }
+}
+
+export function* fetchNewsSaga() {
+  const token = yield localStorage.getItem("token");
   try {
     const response = yield fetch(
       "http://localhost:4000/api/posts?_embed=comments&_sort=id&_order=desc",
@@ -13,7 +56,7 @@ export function* fetchPostsSaga() {
       }
     );
     const res = yield response.json();
-    yield put(actions.successFetchPosts(res));
+    yield put(actions.successFetchNews(res));
   } catch (error) {
     yield console.log(error);
     yield put(actions.failFetchPosts(error));
@@ -71,6 +114,7 @@ export function* addCommentSaga(action) {
 
 export function* fetchUsersSaga() {
   const token = yield localStorage.getItem("token");
+  const userId = yield parseInt(localStorage.getItem("userId"));
   try {
     const response = yield fetch("http://localhost:4000/api/usersInfo", {
       headers: {
@@ -78,6 +122,8 @@ export function* fetchUsersSaga() {
       },
     });
     const res = yield response.json();
+    const [user] = res.users.filter((user) => user.id === userId);
+    yield localStorage.setItem("following", user.following);
     yield put(actions.successFetchUsers(res.users));
   } catch (error) {
     yield console.log(error);

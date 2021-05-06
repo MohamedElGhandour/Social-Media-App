@@ -34,6 +34,7 @@ export function* authSaga(action) {
     yield localStorage.setItem("name", res.name);
     yield localStorage.setItem("email", res.email);
     yield localStorage.setItem("expirationDate", expirationDate);
+    yield localStorage.setItem("following", res.following);
     yield put(actions.successAuth(res));
   } catch (error) {
     yield console.log(error);
@@ -47,6 +48,7 @@ export function* authLogoutSaga() {
   yield localStorage.removeItem("name");
   yield localStorage.removeItem("email");
   yield localStorage.removeItem("expirationDate");
+  yield localStorage.removeItem("following");
   yield put(actions.authLogoutSucceed());
 }
 

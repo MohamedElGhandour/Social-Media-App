@@ -128,6 +128,7 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.background.paper,
     outline: "none",
     boxShadow: theme.shadows[5],
+    borderRadius: 15,
   },
   reaction: {
     "&:hover": {
@@ -231,7 +232,7 @@ export default function Post(props) {
           }
           action={
             loading ? null : (
-              <IconButton aria-label="settings">
+              <IconButton style={{ borderRadius: "25%" }} aria-label="settings">
                 <MoreHoriz />
               </IconButton>
             )
@@ -434,11 +435,20 @@ export default function Post(props) {
       >
         <Fade in={open}>
           <div className={classes.paper}>
-            <AppBar position="static" color="inherit">
+            <AppBar
+              style={{
+                borderRadius: "15px 15px 0 0",
+              }}
+              position="static"
+              color="inherit"
+            >
               <ThemeProvider theme={theme}>
                 <Tabs
                   value={value}
                   onChange={handleChange}
+                  style={{
+                    borderRadius: "15px 15px 0 0",
+                  }}
                   indicatorColor="primary"
                   textColor="primary"
                   aria-label="simple tabs example"

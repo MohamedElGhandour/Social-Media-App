@@ -114,6 +114,27 @@
       "postId": 12,
       "userId": 2,
       "id": 11
+    },
+    {
+      "body": "test\n\n",
+      "timestamp": 1620252579757,
+      "postId": 12,
+      "userId": 2,
+      "id": 12
+    },
+    {
+      "body": "bogy ya wala\n\n",
+      "timestamp": 1620252622055,
+      "postId": 12,
+      "userId": 2,
+      "id": 13
+    },
+    {
+      "body": "bogy ya wala\n\n",
+      "timestamp": 1620252744001,
+      "postId": 13,
+      "userId": 3,
+      "id": 14
     }
   ],
   "users": [
@@ -123,9 +144,7 @@
       "name": "bruno",
       "email": "bruno@email.com",
       "password": "bruno",
-      "following": [
-        2
-      ],
+      "following": [],
       "pending": [
         2,
         3
@@ -140,9 +159,7 @@
       "following": [
         3
       ],
-      "pending": [
-        3
-      ]
+      "pending": []
     },
     {
       "id": 3,
@@ -150,7 +167,9 @@
       "email": "MohamedElghandour@email.com",
       "password": "123456",
       "name": "Mohamed Elghandour",
-      "following": [],
+      "following": [
+        2
+      ],
       "pending": [
         1
       ]

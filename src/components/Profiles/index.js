@@ -4,6 +4,9 @@ import Grid from "@material-ui/core/Grid";
 import Posts from "../../containers/Posts/index";
 import Lists from "../Lists/index";
 import Requests from "../../containers/Requests/index";
+import Profile from "./Profile/index";
+import { useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const useStyles = makeStyles((theme) => ({
   sectionMobile: {
@@ -21,18 +24,26 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Home() {
+  const { id } = useParams();
+  const users = useSelector((state) => state.posts.users);
+  const [user] = users.filter((user) => user.id === parseInt(id));
+  const userId = localStorage.getItem("userId");
+  const me = userId === id;
   const classes = useStyles();
   return (
     <Grid container direction="row" justify="center" alignItems="flex-start">
-      <Grid item xs={12} md={8} style={{ padding: "0 16px", marginTop: 16 }}>
-        <Posts home />
+      <Grid item xs={12}>
+        <Profile
+          name={user.name}
+          email={user.email}
+          avatar={user.avatar}
+          id={user.id}
+        />
       </Grid>
-      <Grid
-        item
-        xs={4}
-        style={{ marginTop: 16 }}
-        className={classes.sectionDesktop}
-      >
+      <Grid item style={{ padding: "0 16px", marginTop: 16 }}>
+        <Posts profile={me} profileId={user.id} />
+      </Grid>
+      <Grid item style={{ marginTop: 16 }} className={classes.sectionDesktop}>
         <Grid
           container
           direction="column"

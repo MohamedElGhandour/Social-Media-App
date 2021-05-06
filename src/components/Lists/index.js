@@ -13,8 +13,7 @@ const useStyles = makeStyles((theme) => ({
   root: {
     width: "auto",
     maxWidth: 360,
-    margin: "auto",
-    marginTop: 16,
+    margin: "16px auto",
     backgroundColor: "transparent",
   },
   user: {
@@ -61,8 +60,8 @@ export default function SimpleList() {
               fontSize: ".9rem",
               color: "#fff",
               margin: "0 10px 0 0",
-              borderRadius: 9,
               paddingTop: 4,
+              borderRadius: "25%",
             }}
           >
             {length}

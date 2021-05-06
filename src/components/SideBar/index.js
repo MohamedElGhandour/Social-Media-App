@@ -7,11 +7,12 @@ import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import HomeOutlinedIcon from "@material-ui/icons/HomeOutlined";
-import PublicOutlinedIcon from "@material-ui/icons/PublicOutlined";
+import EventNoteOutlinedIcon from "@material-ui/icons/EventNoteOutlined";
 import SettingsOutlinedIcon from "@material-ui/icons/SettingsOutlined";
 import GroupAddOutlinedIcon from "@material-ui/icons/GroupAddOutlined";
 import PhotoLibraryOutlinedIcon from "@material-ui/icons/PhotoLibraryOutlined";
 import PersonOutlineOutlinedIcon from "@material-ui/icons/PersonOutlineOutlined";
+import { useLocation } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -81,6 +82,29 @@ export default function SelectedListItem() {
       }
     });
   const length = pendding.length;
+  const pathname = useLocation().pathname;
+  React.useEffect(() => {
+    switch (pathname) {
+      case "/":
+        setSelectedIndex(0);
+        break;
+      case "/people":
+        setSelectedIndex(1);
+        break;
+      case "/photos":
+        setSelectedIndex(2);
+        break;
+      case "/news":
+        setSelectedIndex(3);
+        break;
+      case "/setting":
+        setSelectedIndex(5);
+        break;
+      default:
+        break;
+    }
+    if (pathname.match(/profile/)) setSelectedIndex(4);
+  }, [pathname]);
   return (
     <div
       style={{
@@ -90,10 +114,9 @@ export default function SelectedListItem() {
       <div className={classes.root}>
         <List component="nav" style={{ paddingTop: 25, paddingBottom: 25 }}>
           <NavLink
+            activeClassName={classes.activeDomains}
+            className={classes.domains}
             to="/"
-            className={
-              selectedIndex === 0 ? classes.activeDomains : classes.domains
-            }
             style={{
               textDecoration: "none",
             }}
@@ -144,10 +167,9 @@ export default function SelectedListItem() {
             </ListItem>
           </NavLink>
           <NavLink
+            activeClassName={classes.activeDomains}
+            className={classes.domains}
             to="/people"
-            className={
-              selectedIndex === 1 ? classes.activeDomains : classes.domains
-            }
             style={{
               textDecoration: "none",
             }}
@@ -209,7 +231,7 @@ export default function SelectedListItem() {
                     </Grid>
                   </Grid>
                 </Grid>
-                {selectedIndex !== 1 ? (
+                {selectedIndex !== 1 && length > 0 ? (
                   <Grid item>
                     <p
                       style={{
@@ -219,7 +241,7 @@ export default function SelectedListItem() {
                         fontSize: ".9rem",
                         color: "#fff",
                         margin: "0",
-                        borderRadius: 9,
+                        borderRadius: "25%",
                         paddingTop: 4,
                       }}
                     >
@@ -231,10 +253,9 @@ export default function SelectedListItem() {
             </ListItem>
           </NavLink>
           <NavLink
+            activeClassName={classes.activeDomains}
+            className={classes.domains}
             to="/photos"
-            className={
-              selectedIndex === 2 ? classes.activeDomains : classes.domains
-            }
             style={{
               textDecoration: "none",
             }}
@@ -285,10 +306,9 @@ export default function SelectedListItem() {
             </ListItem>
           </NavLink>
           <NavLink
-            to="/explore"
-            className={
-              selectedIndex === 3 ? classes.activeDomains : classes.domains
-            }
+            activeClassName={classes.activeDomains}
+            className={classes.domains}
+            to="/news"
             style={{
               textDecoration: "none",
             }}
@@ -310,7 +330,7 @@ export default function SelectedListItem() {
               onClick={(event) => handleListItemClick(event, 3)}
             >
               <ListItemIcon>
-                <PublicOutlinedIcon
+                <EventNoteOutlinedIcon
                   style={
                     selectedIndex === 3
                       ? {
@@ -333,16 +353,15 @@ export default function SelectedListItem() {
                       : null
                   }
                 >
-                  Explore
+                  News Feed
                 </span>
               </div>
             </ListItem>
           </NavLink>
           <NavLink
+            activeClassName={classes.activeDomains}
+            className={classes.domains}
             to={`/profile/${userId}`}
-            className={
-              selectedIndex === 4 ? classes.activeDomains : classes.domains
-            }
             style={{
               textDecoration: "none",
             }}
@@ -393,6 +412,8 @@ export default function SelectedListItem() {
             </ListItem>
           </NavLink>
           <NavLink
+            activeClassName={classes.activeDomains}
+            className={classes.domains}
             to="/setting"
             style={{
               textDecoration: "none",
