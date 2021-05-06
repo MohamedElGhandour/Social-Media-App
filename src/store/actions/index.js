@@ -18,7 +18,7 @@ export {
   successFetchNews,
   fetchProfile,
   successFetchProfile,
-} from "./posts";
+} from "./db";
 
 export {
   successAuth,

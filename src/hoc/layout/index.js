@@ -37,9 +37,9 @@ const useStyles = makeStyles((theme) => ({
       width: 350,
     },
     [theme.breakpoints.up("lg")]: {
-      width: 330,
+      width: 340,
     },
-    width: 250,
+    width: 260,
   },
 }));
 

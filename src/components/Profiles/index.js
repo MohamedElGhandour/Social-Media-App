@@ -27,7 +27,8 @@ export default function Home() {
   const { id } = useParams();
   const users = useSelector((state) => state.posts.users);
   const [user] = users.filter((user) => user.id === parseInt(id));
-  const userId = localStorage.getItem("userId");
+  const userId = parseInt(localStorage.getItem("userId"));
+  const [userfollow] = users.filter((user) => user.id === userId);
   const me = userId === id;
   const classes = useStyles();
   return (
@@ -38,6 +39,8 @@ export default function Home() {
           email={user.email}
           avatar={user.avatar}
           id={user.id}
+          following={userfollow.following}
+          pending={user.pending}
         />
       </Grid>
       <Grid item style={{ padding: "0 16px", marginTop: 16 }}>

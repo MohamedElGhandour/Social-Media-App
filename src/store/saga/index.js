@@ -9,7 +9,7 @@ import {
   toggleFollowSaga,
   fetchNewsSaga,
   fetchProfileSaga,
-} from "./posts";
+} from "./db";
 import {
   authSaga,
   authLogoutSaga,
@@ -19,7 +19,7 @@ import {
 
 import * as actionTypes from "../actions/actionTypes";
 
-export function* watchPosts() {
+export function* watchDb() {
   yield all([
     takeEvery(actionTypes.FETCH_POSTS, fetchPostsSaga),
     takeEvery(actionTypes.FETCH_NEWS, fetchNewsSaga),

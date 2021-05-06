@@ -7,9 +7,9 @@ import { createStore, combineReducers, applyMiddleware, compose } from "redux";
 import { Provider } from "react-redux";
 import createSagaMiddleware from "redux-saga";
 import reportWebVitals from "./reportWebVitals";
-import postsReducer from "./store/reducers/posts";
+import dbReducer from "./store/reducers/db";
 import authReducer from "./store/reducers/auth";
-import { watchPosts, watchAuth } from "./store/saga/index";
+import { watchDb, watchAuth } from "./store/saga/index";
 
 const composeEnhancers =
   (process.env.NODE_ENV === "development"
@@ -17,7 +17,7 @@ const composeEnhancers =
     : null) || compose;
 
 const rootReducer = combineReducers({
-  posts: postsReducer,
+  posts: dbReducer,
   auth: authReducer,
 });
 
@@ -28,7 +28,7 @@ const store = createStore(
   composeEnhancers(applyMiddleware(sagaMiddleware))
 );
 
-sagaMiddleware.run(watchPosts);
+sagaMiddleware.run(watchDb);
 sagaMiddleware.run(watchAuth);
 
 ReactDOM.render(
