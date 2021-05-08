@@ -9,6 +9,8 @@ import {
   toggleFollowSaga,
   fetchNewsSaga,
   fetchProfileSaga,
+  changeAvatarSaga,
+  changeCoverSaga,
 } from "./db";
 import {
   authSaga,
@@ -30,6 +32,8 @@ export function* watchDb() {
     takeEvery(actionTypes.TOGGLE_LOVE, toggleLoveSaga),
     takeEvery(actionTypes.TOGGLE_REQUEST, toggleRequestSaga),
     takeEvery(actionTypes.TOGGLE_FOLLOW, toggleFollowSaga),
+    takeEvery(actionTypes.CHANGE_AVATAR, changeAvatarSaga),
+    takeEvery(actionTypes.CHANGE_COVER, changeCoverSaga),
   ]);
 }
 

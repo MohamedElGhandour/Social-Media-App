@@ -1,7 +1,8 @@
-import { put } from "redux-saga/effects";
+import { put, delay } from "redux-saga/effects";
 import * as actions from "../actions/index";
 
 export function* fetchPostsSaga() {
+  yield put(actions.loadingFetchPosts(true));
   const token = yield localStorage.getItem("token");
   const userId = yield parseInt(localStorage.getItem("userId"));
   const following = yield localStorage.getItem("following");
@@ -18,6 +19,8 @@ export function* fetchPostsSaga() {
       },
     });
     const res = yield response.json();
+    yield delay(1000);
+    yield put(actions.loadingFetchPosts(false));
     yield put(actions.successFetchPosts(res));
   } catch (error) {
     yield console.log(error);
@@ -27,6 +30,7 @@ export function* fetchPostsSaga() {
 
 export function* fetchProfileSaga(action) {
   const token = yield localStorage.getItem("token");
+  yield put(actions.loadingFetchPosts(true));
   try {
     const response = yield fetch(
       `http://localhost:4000/api/posts?_embed=comments&_sort=id&_order=desc&userId=${action.id}`,
@@ -37,6 +41,8 @@ export function* fetchProfileSaga(action) {
       }
     );
     const res = yield response.json();
+    yield delay(1000);
+    yield put(actions.loadingFetchPosts(false));
     yield put(actions.successFetchProfile(res));
   } catch (error) {
     yield console.log(error);
@@ -46,6 +52,7 @@ export function* fetchProfileSaga(action) {
 
 export function* fetchNewsSaga() {
   const token = yield localStorage.getItem("token");
+  yield put(actions.loadingFetchPosts(true));
   try {
     const response = yield fetch(
       "http://localhost:4000/api/posts?_embed=comments&_sort=id&_order=desc",
@@ -56,6 +63,8 @@ export function* fetchNewsSaga() {
       }
     );
     const res = yield response.json();
+    yield delay(1000);
+    yield put(actions.loadingFetchPosts(false));
     yield put(actions.successFetchNews(res));
   } catch (error) {
     yield console.log(error);
@@ -65,6 +74,7 @@ export function* fetchNewsSaga() {
 
 export function* sendNewPostSaga(action) {
   const token = yield localStorage.getItem("token");
+  yield put(actions.loadingSendPost(true));
   try {
     const response = yield fetch("http://localhost:4000/api/posts", {
       method: "POST", // *GET, POST, PUT, DELETE, etc.
@@ -81,6 +91,8 @@ export function* sendNewPostSaga(action) {
       body: JSON.stringify(action.data), // body data type must match "Content-Type" header
     });
     const res = yield response.json();
+    yield delay(1000);
+    yield put(actions.loadingSendPost(false));
     yield put(actions.successSendNewPost(res));
   } catch (error) {
     yield put(actions.failFetchPosts(error));
@@ -89,6 +101,7 @@ export function* sendNewPostSaga(action) {
 
 export function* addCommentSaga(action) {
   const token = yield localStorage.getItem("token");
+  yield put(actions.loadingSendComment(true));
   try {
     const response = yield fetch(`http://localhost:4000/api/comments/`, {
       method: "POST", // *GET, POST, PUT, DELETE, etc.
@@ -105,6 +118,8 @@ export function* addCommentSaga(action) {
       body: JSON.stringify(action.comment), // body data type must match "Content-Type" header
     });
     const res = yield response.json();
+    yield delay(1000);
+    yield put(actions.loadingSendComment(false));
     yield put(actions.successAddComment(action.data, res));
   } catch (error) {
     yield console.log(error);
@@ -207,6 +222,63 @@ export function* toggleFollowSaga(action) {
     });
     const res = yield response.json();
     yield put(actions.successToggleFollow(res));
+  } catch (error) {
+    yield console.log(error);
+    yield put(actions.failFetchPosts(error));
+  }
+}
+
+export function* changeAvatarSaga(action) {
+  const token = yield localStorage.getItem("token");
+  yield put(actions.loadingChangePic(true));
+  try {
+    const response = yield fetch(`http://localhost:4000/api/avatar`, {
+      method: "PUT", // *GET, POST, PUT, DELETE, etc.
+      mode: "cors", // no-cors, *cors, same-origin
+      cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+      credentials: "same-origin", // include, *same-origin, omit
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+        // 'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      redirect: "follow", // manual, *follow, error
+      referrerPolicy: "no-referrer", // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+      body: JSON.stringify({ id: action.id, avatar: action.avatar }), // body data type must match "Content-Type" header
+    });
+    const res = yield response.json();
+    yield delay(1000);
+    yield put(actions.loadingChangePic(false));
+    yield localStorage.setItem("avatar", action.avatar);
+    yield put(actions.successChangeAvatar(res));
+  } catch (error) {
+    yield console.log(error);
+    yield put(actions.failFetchPosts(error));
+  }
+}
+
+export function* changeCoverSaga(action) {
+  const token = yield localStorage.getItem("token");
+  yield put(actions.loadingChangePic(true));
+  try {
+    const response = yield fetch(`http://localhost:4000/api/cover`, {
+      method: "PUT", // *GET, POST, PUT, DELETE, etc.
+      mode: "cors", // no-cors, *cors, same-origin
+      cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+      credentials: "same-origin", // include, *same-origin, omit
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+        // 'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      redirect: "follow", // manual, *follow, error
+      referrerPolicy: "no-referrer", // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+      body: JSON.stringify({ id: action.id, cover: action.cover }), // body data type must match "Content-Type" header
+    });
+    const res = yield response.json();
+    yield delay(1000);
+    yield put(actions.loadingChangePic(false));
+    yield put(actions.successChangeCover(res));
   } catch (error) {
     yield console.log(error);
     yield put(actions.failFetchPosts(error));

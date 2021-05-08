@@ -34,6 +34,15 @@ const useStyles = makeStyles((theme) => ({
     color: "#000",
     borderRadius: 10,
   },
+  reqBtn: {
+    width: "100%",
+    borderRadius: 10,
+    backgroundColor: "#1878f2",
+    color: "#fff",
+    "&:hover": {
+      backgroundColor: "#216FDB",
+    },
+  },
 }));
 
 export default function SimpleList() {
@@ -176,11 +185,7 @@ export default function SimpleList() {
               <Grid spacing={2} container>
                 <Grid xs item>
                   <Button
-                    className={classes.btnUser}
-                    style={{
-                      backgroundColor: "#216FDB",
-                      color: "#fff",
-                    }}
+                    className={(classes.btnUser, classes.reqBtn)}
                     onClick={() => follow(user.id, true)}
                     color="inherit"
                   >

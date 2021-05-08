@@ -18,6 +18,10 @@ export {
   successFetchNews,
   fetchProfile,
   successFetchProfile,
+  changeAvatar,
+  successChangeAvatar,
+  changeCover,
+  successChangeCover,
 } from "./db";
 
 export {
@@ -27,4 +31,13 @@ export {
   authLogoutSucceed,
   checkAuthTimeout,
   authCheckState,
+  failAuth,
+  failSignup,
 } from "./auth";
+
+export {
+  loadingSendPost,
+  loadingSendComment,
+  loadingFetchPosts,
+  loadingChangePic,
+} from "./ui";

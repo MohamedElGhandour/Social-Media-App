@@ -37,6 +37,8 @@ import { cloneDeep } from "lodash";
 import { createMuiTheme } from "@material-ui/core/styles";
 import { ThemeProvider } from "@material-ui/styles";
 import Tooltip from "../../containers/Tooltip/index";
+import CircularProgress from "@material-ui/core/CircularProgress";
+
 const theme = createMuiTheme({
   palette: {
     primary: {
@@ -205,6 +207,9 @@ export default function Post(props) {
         }
       }
     });
+  const loadingNewComment = useSelector(
+    (state) => state.ui.loading.sendComment
+  );
   return (
     <React.Fragment>
       <Card className={classes.card}>
@@ -415,6 +420,17 @@ export default function Post(props) {
                 userId={comment.userId}
               />
             ))}
+            {loadingNewComment && (
+              <div style={{ padding: 10 }}>
+                <CircularProgress
+                  style={{
+                    color: "#1878f2",
+                    marginLeft: "auto",
+                    display: "block",
+                  }}
+                />
+              </div>
+            )}
           </Collapse>
         )}
       </Card>

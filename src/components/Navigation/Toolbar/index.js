@@ -14,7 +14,7 @@ import SearchIcon from "@material-ui/icons/Search";
 import MailOutlineIcon from "@material-ui/icons/MailOutline";
 import NotificationsNoneIcon from "@material-ui/icons/NotificationsNone";
 import { NavLink } from "react-router-dom";
-import logo from "../../../assets/images/newL.svg";
+import logo from "../../../assets/images/logoAvatar.svg";
 
 const useStyles = makeStyles((theme) => ({
   grow: {

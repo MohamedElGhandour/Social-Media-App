@@ -5,6 +5,16 @@ export const successAuth = (data) => ({
   data: data,
 });
 
+export const failAuth = (error) => ({
+  type: actionTypes.FAIL_AUTH,
+  error: error,
+});
+
+export const failSignup = (error) => ({
+  type: actionTypes.FAIL_SIGNUP,
+  error: error,
+});
+
 export const auth = (data) => ({
   type: actionTypes.AUTH,
   data: data,

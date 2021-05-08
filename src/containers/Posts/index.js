@@ -30,26 +30,33 @@ export default function Posts(props) {
       ? dispatch(fetchPosts())
       : dispatch(fetchNews());
   }, [dispatch, home, profileId]);
+  const loading = useSelector((state) => state.ui.loading.fetchPosts);
   return (
     <Grid container direction="column" justify="center" alignItems="center">
       {profile === undefined ? <PostGen /> : profile ? <PostGen /> : null}
-      {posts.length > 0 ? (
-        posts.map((post) => (
-          <Post
-            global={post}
-            key={post.id}
-            id={post.id}
-            avatar={post.avatar}
-            image={post.image}
-            body={post.body}
-            name={post.name}
-            timestamp={post.timestamp}
-            comments={post.comments}
-            loves={post.loves}
-            toggleLove={toggleLoveFun}
-            userId={post.userId}
-          />
-        ))
+      {!loading ? (
+        posts.length > 0 ? (
+          posts.map((post) => (
+            <Post
+              global={post}
+              key={post.id}
+              id={post.id}
+              avatar={post.avatar}
+              image={post.image}
+              body={post.body}
+              name={post.name}
+              timestamp={post.timestamp}
+              comments={post.comments}
+              loves={post.loves}
+              toggleLove={toggleLoveFun}
+              userId={post.userId}
+            />
+          ))
+        ) : (
+          <div style={{ color: "#a1aebe" }}>
+            make some friends and share with us what you love
+          </div>
+        )
       ) : (
         <React.Fragment>
           <Post loading />

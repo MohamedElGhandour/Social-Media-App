@@ -7,6 +7,7 @@ export function* authSaga(action) {
   action.data.isSignUp &&
     (url = yield "http://localhost:4000/api/auth/register");
   const authData = {
+    name: action.data.name,
     email: action.data.email,
     password: action.data.password,
   };
@@ -25,6 +26,7 @@ export function* authSaga(action) {
       body: JSON.stringify(authData), // body data type must match "Content-Type" header
     });
     const res = yield response.json();
+    if (res.status === 401) throw res;
     const expirationDate = yield new Date(res.expiresIn * 1000);
     let avatar = defoultProfilePic;
     res.avatar && (avatar = res.avatar);
@@ -35,9 +37,12 @@ export function* authSaga(action) {
     yield localStorage.setItem("email", res.email);
     yield localStorage.setItem("expirationDate", expirationDate);
     yield localStorage.setItem("following", res.following);
+    yield localStorage.setItem("pending", res.pending);
     yield put(actions.successAuth(res));
   } catch (error) {
-    yield console.log(error);
+    action.data.isSignUp
+      ? yield put(actions.failSignup(error))
+      : yield put(actions.failAuth(error));
   }
 }
 

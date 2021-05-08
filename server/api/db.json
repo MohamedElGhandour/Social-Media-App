@@ -1,186 +1,191 @@
 {
-  "posts": [
-    {
-      "image": "https://1.bp.blogspot.com/-UzSiErjcaRY/XXEHGwjzhNI/AAAAAAAAFzw/jwNALBF1CBUdiDwn8bXgjKM0sh7UMgYnQCLcBGAs/s640/maxresdefault.jpg",
-      "body": "LOVE ❤️",
-      "timestamp": 1619019362514,
-      "userId": 3,
-      "id": 8,
-      "loves": [
-        3
-      ]
-    },
-    {
-      "image": "https://user-images.githubusercontent.com/22680912/46479049-d8a9c400-c80b-11e8-92a1-89fc10701f4a.jpg",
-      "body": "GREAT ❤️",
-      "timestamp": 1619036535266,
-      "userId": 3,
-      "id": 9,
-      "loves": [
-        2
-      ]
-    },
-    {
-      "image": "https://images.ctfassets.net/hrltx12pl8hq/7yQR5uJhwEkRfjwMFJ7bUK/dc52a0913e8ff8b5c276177890eb0129/offset_comp_772626-opt.jpg?fit=fill&w=800&h=300",
-      "body": "Hi, I'm New Here ❤️",
-      "timestamp": 1619312569596,
-      "userId": 2,
-      "id": 10,
-      "loves": []
-    },
-    {
-      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/1200px-Image_created_with_a_mobile_phone.png",
-      "body": "take your way 😊",
-      "timestamp": 1619378929084,
-      "userId": 1,
-      "id": 11,
-      "loves": [
-        1,
-        3
-      ]
-    },
-    {
-      "image": "http://c.files.bbci.co.uk/C870/production/_112921315_gettyimages-876284806.jpg",
-      "body": "❤️",
-      "timestamp": 1619640651314,
-      "userId": 2,
-      "loves": [
-        3,
-        2
-      ],
-      "id": 12
-    },
-    {
-      "image": "https://imagevars.gulfnews.com/2019/05/05/Ramadan-Kareem-or-Ramadan-Mubarak-_16a884b1951_medium.jpg",
-      "body": "Ramadan Kareem ☪️🌙",
-      "timestamp": 1620334977829,
-      "userId": 5,
-      "loves": [],
-      "id": 13
-    },
-    {
-      "image": "https://static01.nyt.com/images/2020/12/14/well/14google-photo/14google-photo-facebookJumbo.jpg",
-      "body": "Google",
-      "timestamp": 1620341598050,
-      "userId": 4,
-      "loves": [],
-      "id": 14
-    }
-  ],
-  "comments": [
-    {
-      "body": "good Job",
-      "timestamp": 1619107594210,
-      "id": 1,
-      "postId": 9,
-      "userId": 3
-    },
-    {
-      "body": "Hi ❤️\n\n",
-      "timestamp": 1619357378732,
-      "postId": 9,
-      "id": 4,
-      "userId": 2
-    },
-    {
-      "body": "Follow me ❤️\n\n",
-      "timestamp": 1619377722531,
-      "postId": 10,
-      "userId": 2,
-      "id": 5
-    },
-    {
-      "body": "Love It ❤️\n\n",
-      "timestamp": 1619378045259,
-      "postId": 8,
-      "userId": 2,
-      "id": 6
-    },
-    {
-      "body": "Nice Camera\n\n",
-      "timestamp": 1619378554539,
-      "postId": 10,
-      "userId": 1,
-      "id": 7
-    },
-    {
-      "body": "I love It ❤️\n\n",
-      "timestamp": 1619378653746,
-      "postId": 9,
-      "userId": 1,
-      "id": 8
-    },
-    {
-      "body": "I love it ❤️😍\n\n",
-      "timestamp": 1619405215358,
-      "postId": 11,
-      "userId": 3,
-      "id": 9
-    }
-  ],
-  "users": [
-    {
-      "id": 1,
-      "avatar": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTn3vWR41hjrGM7qQj0Qag5bllKhPLqG0nb8g&usqp=CAU",
-      "name": "bruno",
-      "email": "bruno@email.com",
-      "password": "bruno",
-      "following": [],
-      "pending": [
-        3
-      ]
-    },
-    {
-      "id": 2,
-      "avatar": "https://i.pinimg.com/280x280_RS/c8/b1/52/c8b15270291073a9d23d86cbade9ffa1.jpg",
-      "name": "nilson",
-      "email": "nilson@email.com",
-      "password": "nilson",
-      "following": [
-        3,
-        1,
-        5
-      ],
-      "pending": [
-        1
-      ]
-    },
-    {
-      "id": 3,
-      "avatar": "https://avatars.githubusercontent.com/u/42450595?v=4",
-      "email": "MohamedElghandour@email.com",
-      "password": "123456",
-      "name": "Mohamed Elghandour",
-      "following": [
-        2
-      ],
-      "pending": [
-        1
-      ]
-    },
-    {
-      "id": 4,
-      "email": "ahmed@email.com",
-      "password": "ahmed",
-      "name": "ahmed",
-      "avatar": "https://i.insider.com/55e5f86e9dd7cc1d008b76cb?width=1100&format=jpeg&auto=webp",
-      "following": [],
-      "pending": [
-        2,
-        3,
-        1
-      ]
-    },
-    {
-      "id": 5,
-      "email": "tamer@email.com",
-      "password": "tamer",
-      "name": "tamer",
-      "avatar": "https://upload.wikimedia.org/wikipedia/commons/0/0e/Tamer_%C5%9Eahin_Konferans.png",
-      "following": [
-        3
-      ],
-      "pending": []
-    }
-  ]
+    "posts": [
+        {
+            "image": "https://1.bp.blogspot.com/-UzSiErjcaRY/XXEHGwjzhNI/AAAAAAAAFzw/jwNALBF1CBUdiDwn8bXgjKM0sh7UMgYnQCLcBGAs/s640/maxresdefault.jpg",
+            "body": "LOVE ❤️",
+            "timestamp": 1619019362514,
+            "userId": 3,
+            "id": 8,
+            "loves": [
+                3
+            ]
+        },
+        {
+            "image": "https://user-images.githubusercontent.com/22680912/46479049-d8a9c400-c80b-11e8-92a1-89fc10701f4a.jpg",
+            "body": "GREAT ❤️",
+            "timestamp": 1619036535266,
+            "userId": 3,
+            "id": 9,
+            "loves": [
+                2
+            ]
+        },
+        {
+            "image": "https://images.ctfassets.net/hrltx12pl8hq/7yQR5uJhwEkRfjwMFJ7bUK/dc52a0913e8ff8b5c276177890eb0129/offset_comp_772626-opt.jpg?fit=fill&w=800&h=300",
+            "body": "Hi, I'm New Here ❤️",
+            "timestamp": 1619312569596,
+            "userId": 2,
+            "id": 10,
+            "loves": []
+        },
+        {
+            "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/1200px-Image_created_with_a_mobile_phone.png",
+            "body": "take your way 😊",
+            "timestamp": 1619378929084,
+            "userId": 1,
+            "id": 11,
+            "loves": [
+                1,
+                3
+            ]
+        },
+        {
+            "image": "http://c.files.bbci.co.uk/C870/production/_112921315_gettyimages-876284806.jpg",
+            "body": "❤️",
+            "timestamp": 1619640651314,
+            "userId": 2,
+            "loves": [
+                3,
+                2
+            ],
+            "id": 12
+        },
+        {
+            "image": "https://imagevars.gulfnews.com/2019/05/05/Ramadan-Kareem-or-Ramadan-Mubarak-_16a884b1951_medium.jpg",
+            "body": "Ramadan Kareem ☪️🌙",
+            "timestamp": 1620334977829,
+            "userId": 5,
+            "loves": [],
+            "id": 13
+        },
+        {
+            "image": "https://static01.nyt.com/images/2020/12/14/well/14google-photo/14google-photo-facebookJumbo.jpg",
+            "body": "Google",
+            "timestamp": 1620341598050,
+            "userId": 4,
+            "loves": [],
+            "id": 14
+        }
+    ],
+    "comments": [
+        {
+            "body": "good Job",
+            "timestamp": 1619107594210,
+            "id": 1,
+            "postId": 9,
+            "userId": 3
+        },
+        {
+            "body": "Hi ❤️\n\n",
+            "timestamp": 1619357378732,
+            "postId": 9,
+            "id": 4,
+            "userId": 2
+        },
+        {
+            "body": "Follow me ❤️\n\n",
+            "timestamp": 1619377722531,
+            "postId": 10,
+            "userId": 2,
+            "id": 5
+        },
+        {
+            "body": "Love It ❤️\n\n",
+            "timestamp": 1619378045259,
+            "postId": 8,
+            "userId": 2,
+            "id": 6
+        },
+        {
+            "body": "Nice Camera\n\n",
+            "timestamp": 1619378554539,
+            "postId": 10,
+            "userId": 1,
+            "id": 7
+        },
+        {
+            "body": "I love It ❤️\n\n",
+            "timestamp": 1619378653746,
+            "postId": 9,
+            "userId": 1,
+            "id": 8
+        },
+        {
+            "body": "I love it ❤️😍\n\n",
+            "timestamp": 1619405215358,
+            "postId": 11,
+            "userId": 3,
+            "id": 9
+        }
+    ],
+    "users": [
+        {
+            "id": 1,
+            "avatar": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTn3vWR41hjrGM7qQj0Qag5bllKhPLqG0nb8g&usqp=CAU",
+            "name": "bruno",
+            "email": "bruno@email.com",
+            "cover": null,
+            "password": "bruno",
+            "following": [],
+            "pending": [
+                3
+            ]
+        },
+        {
+            "id": 2,
+            "avatar": "https://i.pinimg.com/280x280_RS/c8/b1/52/c8b15270291073a9d23d86cbade9ffa1.jpg",
+            "name": "nilson",
+            "email": "nilson@email.com",
+            "cover": null,
+            "password": "nilson",
+            "following": [
+                3,
+                1,
+                5
+            ],
+            "pending": [
+                1
+            ]
+        },
+        {
+            "id": 3,
+            "avatar": "https://avatars.githubusercontent.com/u/42450595?v=4",
+            "email": "mohamed@email.com",
+            "password": "mohamed",
+            "name": "Mohamed Elghandour",
+            "cover": null,
+            "following": [
+                2
+            ],
+            "pending": [
+                1
+            ]
+        },
+        {
+            "id": 4,
+            "email": "ahmed@email.com",
+            "password": "ahmed",
+            "name": "ahmed aly",
+            "cover": null,
+            "avatar": "https://i.insider.com/55e5f86e9dd7cc1d008b76cb?width=1100&format=jpeg&auto=webp",
+            "following": [],
+            "pending": [
+                2,
+                3,
+                1
+            ]
+        },
+        {
+            "id": 5,
+            "email": "tamer@email.com",
+            "password": "tamer",
+            "name": "tamer",
+            "cover": null,
+            "avatar": "https://upload.wikimedia.org/wikipedia/commons/0/0e/Tamer_%C5%9Eahin_Konferans.png",
+            "following": [
+                3
+            ],
+            "pending": []
+        }
+    ]
 }

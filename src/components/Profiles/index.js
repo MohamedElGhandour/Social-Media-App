@@ -21,6 +21,12 @@ const useStyles = makeStyles((theme) => ({
       display: "flex",
     },
   },
+  postContainer: {
+    [theme.breakpoints.up("sm")]: {
+      minWidth: 680,
+    },
+    minWidth: 384,
+  },
 }));
 
 export default function Home() {
@@ -28,23 +34,17 @@ export default function Home() {
   const users = useSelector((state) => state.posts.users);
   const [user] = users.filter((user) => user.id === parseInt(id));
   const userId = parseInt(localStorage.getItem("userId"));
-  const [userfollow] = users.filter((user) => user.id === userId);
-  const me = userId === id;
+  const me = userId === parseInt(id);
   const classes = useStyles();
   return (
     <Grid container direction="row" justify="center" alignItems="flex-start">
       <Grid item xs={12}>
-        <Profile
-          name={user.name}
-          email={user.email}
-          avatar={user.avatar}
-          id={user.id}
-          following={userfollow.following}
-          pending={user.pending}
-        />
+        <Profile />
       </Grid>
       <Grid item style={{ padding: "0 16px", marginTop: 16 }}>
-        <Posts profile={me} profileId={user.id} />
+        <div className={classes.postContainer}>
+          <Posts profile={me} profileId={user.id} />
+        </div>
       </Grid>
       <Grid item style={{ marginTop: 16 }} className={classes.sectionDesktop}>
         <Grid

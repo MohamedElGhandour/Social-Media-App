@@ -94,3 +94,25 @@ export const successToggleFollow = (users) => ({
   type: actionTypes.SUCCESS_TOGGLE_FOLLOW,
   users: users,
 });
+
+export const changeAvatar = (id, avatar) => ({
+  type: actionTypes.CHANGE_AVATAR,
+  id: id,
+  avatar: avatar,
+});
+
+export const successChangeAvatar = (users) => ({
+  type: actionTypes.SUCCESS_CHANGE_AVATAR,
+  users: users,
+});
+
+export const changeCover = (id, cover) => ({
+  type: actionTypes.CHANGE_COVER,
+  id: id,
+  cover: cover,
+});
+
+export const successChangeCover = (users) => ({
+  type: actionTypes.SUCCESS_CHANGE_COVER,
+  users: users,
+});

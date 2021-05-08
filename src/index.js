@@ -9,6 +9,7 @@ import createSagaMiddleware from "redux-saga";
 import reportWebVitals from "./reportWebVitals";
 import dbReducer from "./store/reducers/db";
 import authReducer from "./store/reducers/auth";
+import uiReducer from "./store/reducers/ui";
 import { watchDb, watchAuth } from "./store/saga/index";
 
 const composeEnhancers =
@@ -19,6 +20,7 @@ const composeEnhancers =
 const rootReducer = combineReducers({
   posts: dbReducer,
   auth: authReducer,
+  ui: uiReducer,
 });
 
 const sagaMiddleware = createSagaMiddleware();

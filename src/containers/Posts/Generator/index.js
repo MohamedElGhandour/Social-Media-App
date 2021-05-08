@@ -12,12 +12,31 @@ import Alert from "@material-ui/lab/Alert";
 import Collapse from "@material-ui/core/Collapse";
 import CloseIcon from "@material-ui/icons/Close";
 import TextField from "@material-ui/core/TextField";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { sendNewPost } from "../../../store/actions/index";
 import Button from "@material-ui/core/Button";
 import AddPhotoAlternateOutlinedIcon from "@material-ui/icons/AddPhotoAlternateOutlined";
 import Fab from "@material-ui/core/Fab";
 import AddIcon from "@material-ui/icons/Add";
+import CircularProgress from "@material-ui/core/CircularProgress";
+import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
+
+const theme = createMuiTheme({
+  palette: {
+    primary: {
+      light: "#757ce8",
+      main: "#1878f2",
+      dark: "#002884",
+      contrastText: "#fff",
+    },
+    secondary: {
+      light: "#ff7961",
+      main: "#f44336",
+      dark: "#ba000d",
+      contrastText: "#000",
+    },
+  },
+});
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -184,6 +203,7 @@ const useStyles = makeStyles((theme) => ({
   },
   imgUrl: {
     width: "100%",
+    marginTop: 5,
   },
   fab: {
     position: "fixed",
@@ -194,6 +214,10 @@ const useStyles = makeStyles((theme) => ({
     zIndex: 100,
     color: "#fff",
     backgroundColor: "#1878f2",
+    borderRadius: "25%",
+    "&:hover": {
+      backgroundColor: "#216FDB",
+    },
   },
   [theme.breakpoints.up("xs")]: {
     paper: {
@@ -228,6 +252,10 @@ export default function PostGen(props) {
   const avatar = localStorage.getItem("avatar");
   const name = localStorage.getItem("name");
   const userId = parseInt(localStorage.getItem("userId"));
+  const loading = useSelector((state) => state.ui.loading.sendPost);
+  React.useEffect(() => {
+    if (loading === false) handleClose();
+  }, [loading]);
 
   const sendPost = () => {
     const body = content.current.innerHTML;
@@ -314,6 +342,31 @@ export default function PostGen(props) {
       >
         <Fade in={open}>
           <div className={classes.paper}>
+            {loading && (
+              <div
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  background: "rgba(255, 255, 255, 0.5)",
+                  position: "absolute",
+                  top: 0,
+                  left: 0,
+                  zIndex: 100,
+                  borderRadius: 15,
+                }}
+              >
+                <span
+                  style={{
+                    position: "absolute",
+                    top: "50%",
+                    left: "50%",
+                    transform: "translate(-50%, -50%)",
+                  }}
+                >
+                  <CircularProgress style={{ color: "#1878f2" }} />
+                </span>
+              </div>
+            )}
             <h2 id="transition-modal-title" className={classes.header}>
               Create Post
             </h2>
@@ -401,13 +454,17 @@ export default function PostGen(props) {
                   )}
                 </Grid>
                 <Grid item xs={12}>
-                  <TextField
-                    className={classes.imgUrl}
-                    value={imgURL}
-                    onChange={(e) => setImgURL(e.target.value)}
-                    id="standard-basic"
-                    label="Image URL"
-                  />
+                  <ThemeProvider theme={theme}>
+                    <TextField
+                      className={classes.imgUrl}
+                      value={imgURL}
+                      onChange={(e) => setImgURL(e.target.value)}
+                      color="primary"
+                      id="outlined-basic"
+                      variant="outlined"
+                      label="Image URL"
+                    />
+                  </ThemeProvider>
                 </Grid>
                 <Grid item xs={12}>
                   <Button onClick={sendPost} className={classes.btnPost}>

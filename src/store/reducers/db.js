@@ -1,6 +1,7 @@
 import * as actionTypes from "../actions/actionTypes";
 import cloneDeep from "lodash/cloneDeep";
 import defoultProfilePic from "../../assets/images/avatar.jpg";
+import defaultCoverPic from "../../assets/images/cover.jpg";
 
 const initialState = {
   posts: [],
@@ -90,8 +91,10 @@ const successAddComment = (state, action) => {
 const successFetchUsers = (state, action) => {
   const users = cloneDeep(action.data);
   const avatar = defoultProfilePic;
+  const cover = defaultCoverPic;
   users.forEach((user) => {
     !user.avatar && (user.avatar = avatar);
+    !user.cover && (user.cover = cover);
   });
   return { ...state, users: users };
 };
@@ -107,20 +110,13 @@ const successToggleLove = (state, action) => {
   return { ..._State };
 };
 
-const successToggleFollow = (state, action) => {
+const successToggle = (state, action) => {
   const { users } = cloneDeep(action.users);
   const avatar = defoultProfilePic;
+  const cover = defaultCoverPic;
   users.forEach((user) => {
     !user.avatar && (user.avatar = avatar);
-  });
-  return { ...state, users: users };
-};
-
-const successToggleRequest = (state, action) => {
-  const { users } = cloneDeep(action.users);
-  const avatar = defoultProfilePic;
-  users.forEach((user) => {
-    !user.avatar && (user.avatar = avatar);
+    !user.cover && (user.cover = cover);
   });
   return { ...state, users: users };
 };
@@ -144,9 +140,10 @@ const reducer = (state = initialState, action) => {
     case actionTypes.SUCCESS_TOGGLE_LOVE:
       return successToggleLove(state, action);
     case actionTypes.SUCCESS_TOGGLE_REQUEST:
-      return successToggleRequest(state, action);
     case actionTypes.SUCCESS_TOGGLE_FOLLOW:
-      return successToggleFollow(state, action);
+    case actionTypes.SUCCESS_CHANGE_AVATAR:
+    case actionTypes.SUCCESS_CHANGE_COVER:
+      return successToggle(state, action);
     default:
       return state;
   }

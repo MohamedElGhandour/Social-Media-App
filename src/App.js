@@ -3,7 +3,8 @@ import Layout from "./hoc/layout/index";
 import Home from "./components/Home/index";
 import Profiles from "./components/Profiles/index";
 import News from "./components/News/index";
-import Auth from "./containers/auth/Login/index";
+import Login from "./containers/auth/Login/index";
+import Signup from "./containers/auth/Signup/index";
 import Logout from "./containers/auth/Logout/index";
 import People from "./components/People/index";
 import Photos from "./components/Photos/index";
@@ -19,8 +20,9 @@ function App() {
   dispatch(authCheckState());
   let route = (
     <Switch>
-      <Route exact path="/auth" component={Auth} />
-      <Redirect to="/auth" />
+      <Route exact path="/signup" component={Signup} />
+      <Route exact path="/login" component={Login} />
+      <Redirect to="/login" />
     </Switch>
   );
   token !== null &&

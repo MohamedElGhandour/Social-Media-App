@@ -98,14 +98,18 @@ const useStyles = makeStyles((theme) => ({
 export default function SignInSide() {
   const classes = useStyles();
   const dispatch = useDispatch();
-  const error = useSelector((state) => state.auth.errorLogin);
+  const error = useSelector((state) => state.auth.errorSignup);
   const [controls, setControls] = React.useState({
-    email: {
-      elementType: "input",
-      elementConfig: {
-        type: "email",
-        placeholder: "Your E-Mail",
+    name: {
+      value: "",
+      validation: {
+        required: true,
+        minLength: 3,
       },
+      valid: false,
+      touched: false,
+    },
+    email: {
       value: "",
       validation: {
         required: true,
@@ -115,11 +119,6 @@ export default function SignInSide() {
       touched: false,
     },
     password: {
-      elementType: "input",
-      elementConfig: {
-        type: "password",
-        placeholder: "Your password",
-      },
       value: "",
       validation: {
         required: true,
@@ -141,14 +140,15 @@ export default function SignInSide() {
   };
   const authEvent = (e) => {
     e.preventDefault();
+    const name = controls.name.value;
     const email = controls.email.value;
     const password = controls.password.value;
     if (email && password !== ("" || null || undefined)) {
       const authData = {
-        name: null,
+        name: name,
         email: email,
         password: password,
-        isSignUp: false,
+        isSignUp: true,
       };
       dispatch(auth(authData));
     }
@@ -159,7 +159,7 @@ export default function SignInSide() {
       <div className={classes.paper}>
         <img src={logo} className={classes.logo} alt="logo"></img>
         <Typography component="h1" className={classes.header} variant="h5">
-          Login in
+          Sign up
         </Typography>
         {error && (
           <Alert style={{ width: "100%" }} severity="error">
@@ -167,6 +167,27 @@ export default function SignInSide() {
           </Alert>
         )}
         <form className={classes.form} onSubmit={authEvent}>
+          <ThemeProvider theme={theme}>
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              id="name"
+              label="Full Name"
+              name="name"
+              type="text"
+              autoComplete="name"
+              autoFocus
+              value={controls.name.value}
+              onChange={(event) => changedInputHandler(event, "name")}
+              color={
+                !controls.name.valid && controls.name.touched
+                  ? "secondary"
+                  : "primary"
+              }
+            />
+          </ThemeProvider>
           <ThemeProvider theme={theme}>
             <TextField
               variant="outlined"
@@ -215,17 +236,12 @@ export default function SignInSide() {
             color="primary"
             className={classes.submit}
           >
-            Sign In
+            Sign Up
           </Button>
-          <Grid container>
-            <Grid item xs>
-              <Link href="#" className={classes.link} variant="body2">
-                Forgot password?
-              </Link>
-            </Grid>
+          <Grid container justify="flex-end">
             <Grid item>
-              <NavLink to="/signup" className={classes.link}>
-                {"Don't have an account? Sign Up"}
+              <NavLink to="/login" className={classes.link}>
+                {"Already have an account? Log in"}
               </NavLink>
             </Grid>
           </Grid>
