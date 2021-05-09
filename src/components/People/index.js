@@ -7,7 +7,7 @@ import { useSelector } from "react-redux";
 import Tooltip from "../../containers/Tooltip/index";
 import Button from "@material-ui/core/Button";
 import { useDispatch } from "react-redux";
-import { toggleFollow } from "../../store/actions/index";
+import { toggleFollow, fetchUsers } from "../../store/actions/index";
 
 const useStyles = makeStyles((theme) => ({
   sectionMobile: {
@@ -33,6 +33,9 @@ export default function Home() {
   const follow = (id, isAccepted) => {
     dispatch(toggleFollow(id, userId, isAccepted));
   };
+  React.useEffect(() => {
+    dispatch(fetchUsers());
+  }, [dispatch]);
   const pendding = [];
   user !== undefined &&
     user.pending.forEach((id) => {

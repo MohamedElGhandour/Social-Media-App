@@ -308,15 +308,15 @@ const Profile = (props) => {
   const userId = parseInt(localStorage.getItem("userId"));
   const users = useSelector((state) => state.posts.users);
   const [user] = users.filter((user) => user.id === idUser);
-  const [userfollow] = users.filter((user) => user.id === userId);
+  const [realUser] = users.filter((user) => user.id === userId);
   // const { name, avatar, id, email, following, pending } = props;
   const name = user.name;
   const email = user.email;
   const avatar = user.avatar;
   const cover = user.cover;
   const id = user.id;
-  const following = userfollow.following;
-  const pending = user.pending;
+  const following = realUser.following;
+  const pending = realUser.pending;
   const [btnName, setBtnName] = React.useState("Request");
   const [openAlert, setOpenAlert] = React.useState(false);
   const input = React.useRef();
@@ -337,7 +337,7 @@ const Profile = (props) => {
   const follow = (id, isAccepted) => {
     dispatch(toggleFollow(id, userId, isAccepted));
   };
-  const penddingReq = user.pending.includes(id);
+  const penddingReq = pending.includes(id);
   const changeAvatarReq = () => {
     const image = imgURL ? imgURL : null;
     dispatch(changeAvatar(id, image));
@@ -403,7 +403,7 @@ const Profile = (props) => {
                       onClick={() => request(id)}
                       color="inherit"
                     >
-                      {pending.includes(userId) ? (
+                      {pending.includes(id) ? (
                         <React.Fragment>
                           <PauseIcon />
                           <span
@@ -729,7 +729,7 @@ const Profile = (props) => {
                     className={classes.imgUrl}
                     value={imgURL}
                     onChange={(e) => setImgURL(e.target.value)}
-                    id="standard-basic"
+                    variant="outlined"
                     label="Image URL"
                   />
                 </Grid>

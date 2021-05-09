@@ -47,10 +47,12 @@
       "userId": 2,
       "loves": [
         2,
+        3,
+        7,
         3
       ],
       "id": 12,
-      "name": "nilson"
+      "name": "Ingrid Nilson"
     },
     {
       "image": "https://imagevars.gulfnews.com/2019/05/05/Ramadan-Kareem-or-Ramadan-Mubarak-_16a884b1951_medium.jpg",

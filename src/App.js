@@ -15,22 +15,27 @@ import { authCheckState } from "./store/actions/index";
 import "./App.css";
 
 function App() {
-  const token = useSelector((state) => state.auth.token);
+  const token = localStorage.getItem("token");
+  const tokenAccess = useSelector((state) => state.auth.token);
   const dispatch = useDispatch();
-  dispatch(authCheckState());
+  React.useEffect(() => {
+    dispatch(authCheckState());
+  }, [dispatch]);
   let route = (
     <Switch>
+      {false && tokenAccess}
       <Route exact path="/signup" component={Signup} />
       <Route exact path="/login" component={Login} />
-      <Redirect to="/login" />
+      {!token && <Redirect to="/login" />}
     </Switch>
   );
-  token !== null &&
+  token &&
     (route = (
       <Layout>
         <Switch>
           <Route
             path="/Profile/:id"
+            exact
             render={() => (
               <Suspense fallback={<CircularProgress />}>
                 <Profiles />
@@ -39,6 +44,7 @@ function App() {
           />
           <Route
             path="/logout"
+            exact
             render={() => (
               <Suspense fallback={<CircularProgress />}>
                 <Logout />
@@ -47,6 +53,7 @@ function App() {
           />
           <Route
             path="/people"
+            exact
             render={() => (
               <Suspense fallback={<CircularProgress />}>
                 <People />
@@ -55,6 +62,7 @@ function App() {
           />
           <Route
             path="/photos"
+            exact
             render={() => (
               <Suspense fallback={<CircularProgress />}>
                 <Photos />
@@ -63,6 +71,7 @@ function App() {
           />
           <Route
             path="/news"
+            exact
             render={() => (
               <Suspense fallback={<CircularProgress />}>
                 <News />

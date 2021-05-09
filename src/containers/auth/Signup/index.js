@@ -199,7 +199,6 @@ export default function SignInSide() {
               name="email"
               type="email"
               autoComplete="email"
-              autoFocus
               value={controls.email.value}
               onChange={(event) => changedInputHandler(event, "email")}
               color={

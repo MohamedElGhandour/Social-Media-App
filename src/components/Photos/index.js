@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import Grid from "@material-ui/core/Grid";
 import { useSelector, useDispatch } from "react-redux";
 import Photo from "./photo/index";
-import { fetchNews } from "../../store/actions/index";
+import { fetchNews, fetchUsers } from "../../store/actions/index";
 import CircularProgress from "@material-ui/core/CircularProgress";
 
 export default function Home() {
@@ -10,6 +10,7 @@ export default function Home() {
   const filteredPosts = posts.filter((post) => post.image !== null);
   const dispatch = useDispatch();
   useEffect(() => {
+    dispatch(fetchUsers());
     dispatch(fetchNews());
   }, [dispatch]);
   const loading = useSelector((state) => state.ui.loading.fetchPosts);
