@@ -93,7 +93,7 @@ export function* sendNewPostSaga(action) {
     const res = yield response.json();
     yield delay(1000);
     yield put(actions.loadingSendPost(false));
-    yield put(actions.successSendNewPost(res));
+    yield put(actions.successSendNewPost(res, action.postType));
   } catch (error) {
     yield put(actions.failFetchPosts(error));
   }
@@ -120,7 +120,7 @@ export function* addCommentSaga(action) {
     const res = yield response.json();
     yield delay(1000);
     yield put(actions.loadingSendComment(false));
-    yield put(actions.successAddComment(action.data, res));
+    yield put(actions.successAddComment(action.data, res, action.postType));
   } catch (error) {
     yield console.log(error);
     yield put(actions.failFetchPosts(error));
@@ -167,7 +167,7 @@ export function* toggleLoveSaga(action) {
       }
     );
     const res = yield response.json();
-    yield put(actions.successToggleLove(res));
+    yield put(actions.successToggleLove(res, action.postType));
   } catch (error) {
     yield console.log(error);
     yield put(actions.failFetchPosts(error));

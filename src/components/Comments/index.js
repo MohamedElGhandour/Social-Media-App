@@ -4,7 +4,7 @@ import Grid from "@material-ui/core/Grid";
 import { makeStyles } from "@material-ui/core/styles";
 import { NavLink } from "react-router-dom";
 import Typography from "@material-ui/core/Typography";
-import Tooltip from "../Tooltip/index";
+import Tooltip from "../../containers/Tooltip/index";
 
 const useStyles = makeStyles((theme) => ({
   root: {

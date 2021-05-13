@@ -26,7 +26,7 @@ export function* authSaga(action) {
       body: JSON.stringify(authData), // body data type must match "Content-Type" header
     });
     const res = yield response.json();
-    if (res.status === 401) throw res;
+    if (res.status !== 200) throw res;
     const expirationDate = yield new Date(res.expiresIn * 1000);
     let avatar = defoultProfilePic;
     res.avatar && (avatar = res.avatar);

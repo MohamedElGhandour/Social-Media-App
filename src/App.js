@@ -1,13 +1,13 @@
 import React, { Suspense } from "react";
-import Layout from "./hoc/layout/index";
+import Layout from "./layout/index";
 import Home from "./components/Home/index";
-import Profiles from "./components/Profiles/index";
+import Profiles from "./containers/Profiles/index";
 import News from "./components/News/index";
 import Login from "./containers/auth/Login/index";
 import Signup from "./containers/auth/Signup/index";
 import Logout from "./containers/auth/Logout/index";
 import People from "./components/People/index";
-import Photos from "./components/Photos/index";
+import Photos from "./containers/Photos/index";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { useSelector, useDispatch } from "react-redux";
 import { Switch, Route, Redirect } from "react-router-dom";

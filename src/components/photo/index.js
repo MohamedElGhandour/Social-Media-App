@@ -3,7 +3,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
 import Avatar from "@material-ui/core/Avatar";
 import { NavLink } from "react-router-dom";
-import Tooltip from "../../../containers/Tooltip/index";
+import Tooltip from "../../containers/Tooltip/index";
 import Collapse from "@material-ui/core/Collapse";
 import Fade from "@material-ui/core/Fade";
 

@@ -33,36 +33,42 @@ export const failFetchPosts = (error) => ({
   error: error,
 });
 
-export const sendNewPost = (data) => ({
+export const sendNewPost = (data, postType) => ({
   type: actionTypes.SEND_NEW_POST,
   data: data,
+  postType: postType,
 });
 
-export const successSendNewPost = (data) => ({
+export const successSendNewPost = (data, postType) => ({
   type: actionTypes.SUCCESS_SEND_NEW_POST,
   data: data,
+  postType: postType,
 });
 
-export const addComment = (data, comment) => ({
+export const addComment = (data, comment, postType) => ({
   type: actionTypes.ADD_COMMENT,
   data: data,
   comment: comment,
+  postType: postType,
 });
 
-export const toggleLove = (post) => ({
-  type: actionTypes.TOGGLE_LOVE,
-  post: post,
-});
-
-export const successToggleLove = (post) => ({
-  type: actionTypes.SUCCESS_TOGGLE_LOVE,
-  post: post,
-});
-
-export const successAddComment = (data, comment) => ({
+export const successAddComment = (data, comment, postType) => ({
   type: actionTypes.SUCCESS_ADD_COMMENT,
   data: data,
   comment: comment,
+  postType: postType,
+});
+
+export const toggleLove = (post, postType) => ({
+  type: actionTypes.TOGGLE_LOVE,
+  post: post,
+  postType: postType,
+});
+
+export const successToggleLove = (post, postType) => ({
+  type: actionTypes.SUCCESS_TOGGLE_LOVE,
+  post: post,
+  postType: postType,
 });
 
 export const fetchUsers = () => ({ type: actionTypes.FETCH_USERS });

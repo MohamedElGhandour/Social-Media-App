@@ -1,20 +1,15 @@
 import React from "react";
-import Toolbar from "../../components/Navigation/Toolbar/index";
+import Toolbar from "../components/Navigation/Toolbar/index";
 import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
-import Main from "../../components/Main/index";
-import SideBar from "../../components/SideBar/index";
+import Main from "../components/Main/index";
+import SideBar from "../components/SideBar/index";
 import { useLocation } from "react-router-dom";
 import Drawer from "@material-ui/core/Drawer";
 
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
-    position: "relative",
-    [theme.breakpoints.up("sm")]: {
-      top: 55,
-    },
-    top: 50,
   },
   sectionMobile: {
     display: "flex",
@@ -31,15 +26,16 @@ const useStyles = makeStyles((theme) => ({
   paperAnchorLeft: {
     width: 300,
   },
-  sideNav: {
-    position: "fixed",
-    [theme.breakpoints.up("xl")]: {
-      width: 350,
+  underRoot: {
+    overflow: "auto",
+    height: "100vh",
+  },
+  content: {
+    position: "relative",
+    [theme.breakpoints.up("sm")]: {
+      top: 55,
     },
-    [theme.breakpoints.up("lg")]: {
-      width: 340,
-    },
-    width: 260,
+    top: 50,
   },
 }));
 
@@ -50,6 +46,7 @@ export default function Layout(props) {
   const match = pathname.match(/profile/);
   const type = match?.[0];
   const toggleDrawer = () => setOpen((prevState) => !prevState);
+
   const SideNav = (
     <Grid
       container
@@ -61,7 +58,7 @@ export default function Layout(props) {
         <Main />
       </Grid>
       <Grid item xs={12}>
-        <SideBar />
+        <SideBar closeDrawer={() => setOpen(false)} />
       </Grid>
     </Grid>
   );
@@ -74,9 +71,18 @@ export default function Layout(props) {
           direction="row"
           justify="center"
           alignItems="flex-start"
+          className={classes.underRoot}
         >
           {!type ? (
-            <Grid item xs={3} className={classes.sectionDesktop}>
+            <Grid
+              item
+              xs={3}
+              className={classes.sectionDesktop}
+              style={{
+                position: "sticky",
+                top: 0,
+              }}
+            >
               <Grid
                 container
                 direction="column"
@@ -84,7 +90,7 @@ export default function Layout(props) {
                 alignItems="stretch"
                 style={{ width: "100%" }}
               >
-                <Grid item className={classes.sideNav}>
+                <Grid item className={classes.content}>
                   {SideNav}
                 </Grid>
               </Grid>
@@ -94,6 +100,7 @@ export default function Layout(props) {
             style={{
               position: "relative",
             }}
+            className={classes.content}
             item
             xs={12}
             md={!type ? 9 : 12}

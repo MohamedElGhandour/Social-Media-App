@@ -1,14 +1,17 @@
-// server.js
+// Json Server
 const fs = require("fs");
+const path = require("path");
 const bodyParser = require("body-parser");
 const jwt = require("jsonwebtoken");
 const jsonServer = require("json-server");
 const server = jsonServer.create();
-const router = jsonServer.router("./api/db.json");
+const dirabsolutePath = path.resolve(__dirname, "api/db.json");
+const router = jsonServer.router(dirabsolutePath);
 const middlewares = jsonServer.defaults();
-const userdb = JSON.parse(fs.readFileSync("./api/db.json", "UTF-8"));
+const userdb = JSON.parse(fs.readFileSync(dirabsolutePath, "UTF-8"));
 const SECRET_KEY = "123456789";
 const expiresIn = "1h";
+process.title = "socail media app";
 
 server.use(jsonServer.defaults());
 server.use(bodyParser.urlencoded({ extended: true }));
@@ -72,7 +75,7 @@ server.use("/api/usersInfo", (req, res) => {
     )
       throw decoded;
 
-    fs.readFile("./api/db.json", (err, data) => {
+    fs.readFile(dirabsolutePath, (err, data) => {
       if (err) {
         const status = 401;
         const message = err;
@@ -106,7 +109,7 @@ server.post("/api/auth/login", (req, res) => {
     return;
   }
 
-  fs.readFile("./api/db.json", (err, data) => {
+  fs.readFile(dirabsolutePath, (err, data) => {
     if (err) {
       const status = 401;
       const message = err;
@@ -151,7 +154,7 @@ server.post("/api/auth/register", (req, res) => {
     return;
   }
 
-  fs.readFile("./api/db.json", (err, data) => {
+  fs.readFile(dirabsolutePath, (err, data) => {
     if (err) {
       const status = 401;
       const message = err;
@@ -179,7 +182,7 @@ server.post("/api/auth/register", (req, res) => {
 
     //add some data
     const writeData = fs.writeFile(
-      "./api/db.json",
+      dirabsolutePath,
       JSON.stringify(currentData),
       (err, result) => {
         // WRITE
@@ -222,7 +225,7 @@ server.use("/api/request", (req, res) => {
     )
       throw decoded;
 
-    fs.readFile("./api/db.json", (err, data) => {
+    fs.readFile(dirabsolutePath, (err, data) => {
       if (err) {
         const status = 401;
         const message = err;
@@ -260,7 +263,7 @@ server.use("/api/request", (req, res) => {
       });
       //add some data
       const writeData = fs.writeFile(
-        "./api/db.json",
+        dirabsolutePath,
         JSON.stringify(currentData),
         (err, result) => {
           // WRITE
@@ -314,7 +317,7 @@ server.use("/api/follow", (req, res) => {
     )
       throw decoded;
 
-    fs.readFile("./api/db.json", (err, data) => {
+    fs.readFile(dirabsolutePath, (err, data) => {
       if (err) {
         const status = 401;
         const message = err;
@@ -346,7 +349,7 @@ server.use("/api/follow", (req, res) => {
       });
       //add some data
       const writeData = fs.writeFile(
-        "./api/db.json",
+        dirabsolutePath,
         JSON.stringify(currentData),
         (err, result) => {
           // WRITE
@@ -400,7 +403,7 @@ server.use("/api/avatar", (req, res) => {
     )
       throw decoded;
 
-    fs.readFile("./api/db.json", (err, data) => {
+    fs.readFile(dirabsolutePath, (err, data) => {
       if (err) {
         const status = 401;
         const message = err;
@@ -415,7 +418,7 @@ server.use("/api/avatar", (req, res) => {
       });
       //add some data
       const writeData = fs.writeFile(
-        "./api/db.json",
+        dirabsolutePath,
         JSON.stringify(currentData),
         (err, result) => {
           // WRITE
@@ -469,7 +472,7 @@ server.use("/api/Cover", (req, res) => {
     )
       throw decoded;
 
-    fs.readFile("./api/db.json", (err, data) => {
+    fs.readFile(dirabsolutePath, (err, data) => {
       if (err) {
         const status = 401;
         const message = err;
@@ -484,7 +487,7 @@ server.use("/api/Cover", (req, res) => {
       });
       //add some data
       const writeData = fs.writeFile(
-        "./api/db.json",
+        dirabsolutePath,
         JSON.stringify(currentData),
         (err, result) => {
           // WRITE
@@ -542,7 +545,7 @@ server.use(/^(?!\/auth).*$/, (req, res, next) => {
 
 server.use("/api", router);
 server.use(middlewares);
-// server.use(router);
+server.use(router);
 server.listen(4000, () => {
-  console.log("JSON Server is running");
+  console.log("JSON Server is running on port 4000");
 });

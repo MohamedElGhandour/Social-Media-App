@@ -29,8 +29,8 @@ import {
   ChatBubbleOutlineOutlined,
 } from "@material-ui/icons";
 import Skeleton from "@material-ui/lab/Skeleton";
-import CommentGenerator from "../../containers/Comments/Generator/index";
-import Comment from "../../containers/Comments/index";
+import CommentGenerator from "../../containers/ComGenerator/index";
+import Comment from "../Comments/index";
 import { NavLink } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { cloneDeep } from "lodash";
@@ -410,6 +410,7 @@ export default function Post(props) {
               comments={comments}
               avatar={props.avatar}
               author={props.name}
+              commentsType={props.commentsType}
             />
             {comments.map((comment) => (
               <Comment

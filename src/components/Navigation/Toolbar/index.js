@@ -165,7 +165,7 @@ export default function PrimarySearchAppBar(props) {
   return (
     <div className={classes.grow}>
       <AppBar
-        position="fixed"
+        // position="static"
         style={{
           boxShadow:
             "rgb(238 238 238 / 20%) 0px 2px 1px -1px, rgb(0 0 0 / 14%) 0px 1px 1px 0px, rgb(0 0 0 / 12%) 0px 1px 3px 0px, 0px 0px 20px 20px rgb(0 0 0 / 3%)",

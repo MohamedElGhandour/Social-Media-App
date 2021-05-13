@@ -3,7 +3,7 @@ import Avatar from "@material-ui/core/Avatar";
 import Grid from "@material-ui/core/Grid";
 import { makeStyles } from "@material-ui/core/styles";
 import { useDispatch } from "react-redux";
-import { addComment } from "../../../store/actions/index";
+import { addComment } from "../../store/actions/index";
 import { NavLink } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
@@ -71,7 +71,7 @@ export default function ComGen(props) {
         userId: userId,
       };
       const newPost = { ...props.global };
-      dispatch(addComment(newPost, newComment));
+      dispatch(addComment(newPost, newComment, props.commentsType));
       body.current.innerHTML = "";
       placeholder.current.style.display = "block";
     }

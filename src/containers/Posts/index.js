@@ -21,7 +21,8 @@ export default function Posts(props) {
       ? state.posts.posts
       : state.posts.news
   );
-  const toggleLoveFun = (post) => dispatch(toggleLove(post));
+  const type = profileId !== undefined ? "profile" : home ? "posts" : "news";
+  const toggleLoveFun = (post) => dispatch(toggleLove(post, type));
   useEffect(() => {
     dispatch(fetchUsers());
     profileId !== undefined
@@ -33,7 +34,11 @@ export default function Posts(props) {
   const loading = useSelector((state) => state.ui.loading.fetchPosts);
   return (
     <Grid container direction="column" justify="center" alignItems="center">
-      {profile === undefined ? <PostGen /> : profile ? <PostGen /> : null}
+      {profile === undefined ? (
+        <PostGen />
+      ) : profile ? (
+        <PostGen postType={type} />
+      ) : null}
       {!loading ? (
         posts.length > 0 ? (
           posts.map((post) => (
@@ -50,6 +55,7 @@ export default function Posts(props) {
               loves={post.loves}
               toggleLove={toggleLoveFun}
               userId={post.userId}
+              commentsType={type}
             />
           ))
         ) : (

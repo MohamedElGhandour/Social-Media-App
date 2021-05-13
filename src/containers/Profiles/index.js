@@ -2,7 +2,7 @@ import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
 import Posts from "../../containers/Posts/index";
-import Lists from "../Lists/index";
+import Lists from "../../components/Lists/index";
 import Requests from "../../containers/Requests/index";
 import Profile from "./Profile/index";
 import { useParams } from "react-router-dom";

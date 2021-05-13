@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import Grid from "@material-ui/core/Grid";
 import { useSelector, useDispatch } from "react-redux";
-import Photo from "./photo/index";
+import Photo from "../../components/photo/index";
 import { fetchNews, fetchUsers } from "../../store/actions/index";
 import CircularProgress from "@material-ui/core/CircularProgress";
 

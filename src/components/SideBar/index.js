@@ -46,6 +46,17 @@ const useStyles = makeStyles((theme) => ({
       transition: "all .5s ease-out",
     },
   },
+  lastDomain: {
+    "&::after": {
+      width: "0%",
+      margin: "auto",
+      backgroundColor: "#eee",
+      content: '""',
+      display: "block",
+      height: 1,
+      transition: "all .5s ease-out",
+    },
+  },
   textRoot: {
     flex: "1 1 auto",
     minWidth: 0,
@@ -63,12 +74,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function SelectedListItem() {
+export default function SelectedListItem(props) {
   const classes = useStyles();
   const [selectedIndex, setSelectedIndex] = React.useState(0);
-
+  const { closeDrawer } = props;
   const handleListItemClick = (event, index) => {
     setSelectedIndex(index);
+    closeDrawer();
   };
   const userId = parseInt(localStorage.getItem("userId"));
   const users = useSelector((state) => state.posts.users);
@@ -413,7 +425,7 @@ export default function SelectedListItem() {
           </NavLink>
           <NavLink
             activeClassName={classes.activeDomains}
-            className={classes.domains}
+            className={classes.lastDomain}
             to="/setting"
             style={{
               textDecoration: "none",

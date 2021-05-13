@@ -60,7 +60,7 @@ const failedFetchPosts = (state, action) => {
 };
 
 const successSendNewPost = (state, action) => {
-  const newArr = cloneDeep(state.posts);
+  const newArr = cloneDeep(state[action.postType]);
   const name = localStorage.getItem("name");
   const avatar = localStorage.getItem("avatar");
   const addCommentsToPost = {
@@ -70,7 +70,7 @@ const successSendNewPost = (state, action) => {
     comments: [],
   };
   newArr.unshift(addCommentsToPost);
-  return { ...state, posts: newArr };
+  return { ...state, [action.postType]: newArr };
 };
 
 const successAddComment = (state, action) => {
@@ -80,7 +80,7 @@ const successAddComment = (state, action) => {
   const avatar = localStorage.getItem("avatar");
   newComment.author = name;
   newComment.avatar = avatar;
-  newState.posts.forEach((post) => {
+  newState[action.postType].forEach((post) => {
     if (action.data.id === post.id) {
       post.comments.push(newComment);
     }
@@ -102,7 +102,7 @@ const successFetchUsers = (state, action) => {
 const successToggleLove = (state, action) => {
   const _State = cloneDeep(state);
   const _Post = cloneDeep(action.post);
-  _State.posts.forEach((post) => {
+  _State[action.postType].forEach((post) => {
     if (_Post.id === post.id) {
       post.loves = _Post.loves;
     }

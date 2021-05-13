@@ -14,13 +14,7 @@ You will also see any lint errors in the console.
 
 In the project directory, you can run (Back End):
 
-### `cd server`
-
-### `node ./server.js`
-
-### or
-
-### `nodemon ./server.js`
+### `npm run server-start`
 
 it's better to use [nodemon](https://github.com/remy/nodemon).
 

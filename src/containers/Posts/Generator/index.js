@@ -256,7 +256,6 @@ export default function PostGen(props) {
   React.useEffect(() => {
     if (loading === false) handleClose();
   }, [loading]);
-
   const sendPost = () => {
     const body = content.current.innerHTML;
     const image = imgURL ? imgURL : null;
@@ -267,7 +266,7 @@ export default function PostGen(props) {
       userId: userId,
       loves: [],
     };
-    dispatch(sendNewPost(data));
+    dispatch(sendNewPost(data, props.postType));
   };
 
   const handleOpen = () => {
