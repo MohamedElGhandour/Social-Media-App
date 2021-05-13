@@ -1,6 +1,7 @@
 // Json Server
 const fs = require("fs");
 const path = require("path");
+const PORT = process.env.PORT || 4000;
 const bodyParser = require("body-parser");
 const jwt = require("jsonwebtoken");
 const jsonServer = require("json-server");
@@ -546,6 +547,6 @@ server.use(/^(?!\/auth).*$/, (req, res, next) => {
 server.use("/api", router);
 server.use(middlewares);
 server.use(router);
-server.listen(4000, () => {
+server.listen(PORT, () => {
   console.log("JSON Server is running on port 4000");
 });
