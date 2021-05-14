@@ -2,15 +2,22 @@ import { put, delay } from "redux-saga/effects";
 import defoultProfilePic from "../../assets/images/avatar.jpg";
 import * as actions from "../actions/index";
 
+const server =
+  process.env.NODE_ENV === "production"
+    ? "https://social-media-app-ghandour.herokuapp.com"
+    : "http://localhost:4000";
+
 export function* authSaga(action) {
-  let url = yield "http://localhost:4000/api/auth/login";
-  action.data.isSignUp &&
-    (url = yield "http://localhost:4000/api/auth/register");
+  let url = yield `${server}/api/auth/login`;
+  action.data.isSignUp && (url = yield `${server}/api/auth/register`);
   const authData = {
     name: action.data.name,
     email: action.data.email,
     password: action.data.password,
   };
+  action.data.isSignUp
+    ? yield put(actions.loadingSignup(true))
+    : yield put(actions.loadingLogin(true));
   try {
     const response = yield fetch(url, {
       method: "POST", // *GET, POST, PUT, DELETE, etc.
@@ -38,11 +45,18 @@ export function* authSaga(action) {
     yield localStorage.setItem("expirationDate", expirationDate);
     yield localStorage.setItem("following", res.following);
     yield localStorage.setItem("pending", res.pending);
+    // yield delay(5000);
+    action.data.isSignUp
+      ? yield put(actions.loadingSignup(false))
+      : yield put(actions.loadingLogin(false));
     yield put(actions.successAuth(res));
   } catch (error) {
     action.data.isSignUp
       ? yield put(actions.failSignup(error))
       : yield put(actions.failAuth(error));
+    action.data.isSignUp
+      ? yield put(actions.loadingSignup(false))
+      : yield put(actions.loadingLogin(false));
   }
 }
 

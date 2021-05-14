@@ -40,4 +40,7 @@ export {
   loadingSendComment,
   loadingFetchPosts,
   loadingChangePic,
+  loadingFetchUsers,
+  loadingLogin,
+  loadingSignup,
 } from "./ui";

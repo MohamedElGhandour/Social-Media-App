@@ -85,7 +85,6 @@
       "timestamp": 1620512072209,
       "userId": 6,
       "loves": [
-        6,
         3
       ],
       "id": 15,
@@ -141,20 +140,6 @@
       "postId": 11,
       "userId": 3,
       "id": 9
-    },
-    {
-      "body": "test\n\n",
-      "timestamp": 1620683687301,
-      "postId": 12,
-      "userId": 3,
-      "id": 10
-    },
-    {
-      "body": "alooooooooo\n\n",
-      "timestamp": 1620683714892,
-      "postId": 16,
-      "userId": 3,
-      "id": 11
     },
     {
       "body": "Eid Saied ☪️🌙\n\n",

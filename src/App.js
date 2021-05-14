@@ -24,8 +24,28 @@ function App() {
   let route = (
     <Switch>
       {false && tokenAccess}
-      <Route exact path="/signup" component={Signup} />
-      <Route exact path="/login" component={Login} />
+      <Route
+        exact
+        path="/signup"
+        render={() => (
+          <Suspense
+            fallback={<CircularProgress style={{ color: "#1878f2" }} />}
+          >
+            <Signup />
+          </Suspense>
+        )}
+      />
+      <Route
+        exact
+        path="/login"
+        render={() => (
+          <Suspense
+            fallback={<CircularProgress style={{ color: "#1878f2" }} />}
+          >
+            <Login />
+          </Suspense>
+        )}
+      />
       {!token && <Redirect to="/login" />}
     </Switch>
   );
@@ -37,7 +57,9 @@ function App() {
             path="/Profile/:id"
             exact
             render={() => (
-              <Suspense fallback={<CircularProgress />}>
+              <Suspense
+                fallback={<CircularProgress style={{ color: "#1878f2" }} />}
+              >
                 <Profiles />
               </Suspense>
             )}
@@ -46,7 +68,9 @@ function App() {
             path="/logout"
             exact
             render={() => (
-              <Suspense fallback={<CircularProgress />}>
+              <Suspense
+                fallback={<CircularProgress style={{ color: "#1878f2" }} />}
+              >
                 <Logout />
               </Suspense>
             )}
@@ -55,7 +79,9 @@ function App() {
             path="/people"
             exact
             render={() => (
-              <Suspense fallback={<CircularProgress />}>
+              <Suspense
+                fallback={<CircularProgress style={{ color: "#1878f2" }} />}
+              >
                 <People />
               </Suspense>
             )}
@@ -64,7 +90,9 @@ function App() {
             path="/photos"
             exact
             render={() => (
-              <Suspense fallback={<CircularProgress />}>
+              <Suspense
+                fallback={<CircularProgress style={{ color: "#1878f2" }} />}
+              >
                 <Photos />
               </Suspense>
             )}
@@ -73,7 +101,9 @@ function App() {
             path="/news"
             exact
             render={() => (
-              <Suspense fallback={<CircularProgress />}>
+              <Suspense
+                fallback={<CircularProgress style={{ color: "#1878f2" }} />}
+              >
                 <News />
               </Suspense>
             )}
@@ -82,7 +112,9 @@ function App() {
             path="/"
             exact
             render={() => (
-              <Suspense fallback={<CircularProgress />}>
+              <Suspense
+                fallback={<CircularProgress style={{ color: "#1878f2" }} />}
+              >
                 <Home />
               </Suspense>
             )}

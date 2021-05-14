@@ -8,6 +8,7 @@ import Tooltip from "../../containers/Tooltip/index";
 import Button from "@material-ui/core/Button";
 import { useDispatch } from "react-redux";
 import { toggleFollow, fetchUsers } from "../../store/actions/index";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 const useStyles = makeStyles((theme) => ({
   sectionMobile: {
@@ -46,310 +47,323 @@ export default function Home() {
     });
   const length = pendding.length;
   const lengthUsers = users.length;
-
+  const loading = useSelector((state) => state.ui.loading.fetchUsers);
   return (
     <div
       style={{ maxWidth: 680, width: "100%", margin: "auto", marginTop: 32 }}
     >
       <Grid container direction="row" justify="center" alignItems="flex-start">
         <Grid item xs={12} style={{ padding: "0 16px" }}>
-          {length > 0 ? (
-            <Grid
-              container
-              direction="row"
-              justify="space-between"
-              alignItems="flex-start"
-            >
-              <Grid item>
-                <p
-                  style={{
-                    color: "#a1aebe",
-                    fontWeight: 600,
-                    fontSize: "1rem",
-                    lineHeight: 1.1765,
-                    wordBreak: "break-word",
-                    margin: "0",
-                    padding: "0 0 0 16px",
-                  }}
-                >
-                  Requests
-                </p>
-              </Grid>
-              <Grid item>
-                <p
-                  style={{
-                    fontWeight: 500,
-                    padding: "3px 7px",
-                    backgroundColor: "#216fdb",
-                    fontSize: ".9rem",
-                    color: "#fff",
-                    margin: "0 10px 0 0",
-                    paddingTop: 4,
-                    borderRadius: "25%",
-                  }}
-                >
-                  {length}
-                </p>
-              </Grid>
-            </Grid>
-          ) : null}
-          {pendding &&
-            pendding.map((user) => (
-              <Grid
-                container
-                key={user.id}
-                direction="row"
-                justify="space-between"
-                alignItems="center"
-                spacing={2}
-                style={{
-                  overflow: "auto",
-                  width: "auto",
-                  backgroundColor: "#fff",
-                  borderRadius: 15,
-                  boxShadow: "0px 0px 20px 20px rgb(0 0 0 / 3%)",
-                  margin: "10px",
-                  padding: "10px 10px ",
-                }}
-              >
-                <Grid item>
-                  <Grid container spacing={2} alignItems="center">
-                    <Grid item>
-                      <Tooltip
-                        id={user.id}
-                        name={user.name}
-                        avatar={user.avatar}
-                        placement="top"
-                      >
-                        <NavLink
-                          to={`/profile/${user.id}`}
-                          style={{
-                            textDecoration: "none",
-                            color: "#1d3a5f",
-                            fontWeight: 500,
-                          }}
-                        >
-                          <Avatar
-                            src={user.avatar}
-                            style={{
-                              borderRadius: "25%",
-                              width: 60,
-                              height: 60,
-                            }}
-                          />
-                        </NavLink>
-                      </Tooltip>
-                    </Grid>
-                    <Grid item>
-                      <Tooltip
-                        id={user.id}
-                        name={user.name}
-                        avatar={user.avatar}
-                        placement="top"
-                      >
-                        <NavLink
-                          to={`/profile/${user.id}`}
-                          style={{
-                            textDecoration: "none",
-                            color: "#1d3a5f",
-                            fontWeight: 500,
-                          }}
-                        >
-                          <span
-                            style={{
-                              fontSize: "1rem",
-                              fontFamily: ` "Roboto", "Helvetica", "Arial", sans-serif`,
-                              fontWeight: 500,
-                              lineHeight: 1.5,
-                              letterSpacing: "0.00938em",
-                            }}
-                          >
-                            {user.name}
-                          </span>
-                        </NavLink>
-                      </Tooltip>
-                      <div
-                        style={{
-                          fontFamily: ` "Roboto", "Helvetica", "Arial", sans-serif`,
-                          fontWeight: 400,
-                          lineHeight: 1.5,
-                          fontSize: ".9rem",
-                          letterSpacing: "0.00938em",
-                          color: "#1d3a5f",
-                        }}
-                      >
-                        wants too follow you
-                      </div>
-                    </Grid>
-                  </Grid>
-                </Grid>
-
-                <Grid item>
-                  <Grid spacing={2} container>
-                    <Grid xs item>
-                      <Button
-                        className={classes.btnUser}
-                        style={{
-                          backgroundColor: "#216FDB",
-                          color: "#fff",
-                        }}
-                        onClick={() => follow(user.id, true)}
-                        color="inherit"
-                      >
-                        Accept
-                      </Button>
-                    </Grid>
-                    <Grid xs item>
-                      <Button
-                        className={classes.btnUser}
-                        onClick={() => follow(user.id, false)}
-                        color="inherit"
-                      >
-                        Decline
-                      </Button>
-                    </Grid>
-                  </Grid>
-                </Grid>
-              </Grid>
-            ))}
-          <Grid
-            container
-            direction="row"
-            justify="space-between"
-            alignItems="flex-start"
-          >
-            <Grid item>
-              <p
-                style={{
-                  color: "#a1aebe",
-                  fontWeight: 600,
-                  fontSize: "1rem",
-                  lineHeight: 1.1765,
-                  wordBreak: "break-word",
-                  margin: "0",
-                  padding: "0 0 0 16px",
-                }}
-              >
-                People
-              </p>
-            </Grid>
-            <Grid item>
-              <p
-                style={{
-                  fontWeight: 500,
-                  padding: "3px 7px",
-                  backgroundColor: "#abb9c9",
-                  fontSize: ".9rem",
-                  color: "#fff",
-                  margin: "0 10px 0 0",
-                  paddingTop: 4,
-                  borderRadius: "25%",
-                }}
-              >
-                {lengthUsers}
-              </p>
-            </Grid>
-          </Grid>
-          {users.map((user) => (
-            <Grid
-              container
-              key={user.id}
-              direction="row"
-              justify="space-between"
-              alignItems="center"
-              spacing={2}
+          {loading ? (
+            <CircularProgress
               style={{
-                overflow: "auto",
-                width: "auto",
-                backgroundColor: "#fff",
-                borderRadius: 15,
-                boxShadow: "0px 0px 20px 20px rgb(0 0 0 / 3%)",
-                margin: "10px",
-                padding: "10px 10px ",
+                color: "#1878f2",
+                margin: "auto",
+                display: "block",
+                marginTop: 100,
               }}
-            >
-              <Grid item>
-                <Grid container spacing={2} alignItems="center">
+            />
+          ) : (
+            <React.Fragment>
+              {length > 0 ? (
+                <Grid
+                  container
+                  direction="row"
+                  justify="space-between"
+                  alignItems="flex-start"
+                >
                   <Grid item>
-                    <Tooltip
-                      id={user.id}
-                      name={user.name}
-                      avatar={user.avatar}
-                      placement="top"
-                    >
-                      <NavLink
-                        to={`/profile/${user.id}`}
-                        style={{
-                          textDecoration: "none",
-                          color: "#1d3a5f",
-                          fontWeight: 500,
-                        }}
-                      >
-                        <Avatar
-                          src={user.avatar}
-                          style={{
-                            borderRadius: "25%",
-                            width: 60,
-                            height: 60,
-                          }}
-                        />
-                      </NavLink>
-                    </Tooltip>
-                  </Grid>
-                  <Grid item>
-                    <Tooltip
-                      id={user.id}
-                      name={user.name}
-                      avatar={user.avatar}
-                      placement="top"
-                    >
-                      <NavLink
-                        to={`/profile/${user.id}`}
-                        style={{
-                          textDecoration: "none",
-                          color: "#1d3a5f",
-                          fontWeight: 500,
-                        }}
-                      >
-                        <span
-                          style={{
-                            fontSize: "1rem",
-                            fontFamily: ` "Roboto", "Helvetica", "Arial", sans-serif`,
-                            fontWeight: 500,
-                            lineHeight: 1.5,
-                            letterSpacing: "0.00938em",
-                          }}
-                        >
-                          {user.name}
-                        </span>
-                      </NavLink>
-                    </Tooltip>
-                    <NavLink
-                      to={`/profile/${user.id}`}
+                    <p
                       style={{
-                        textDecoration: "none",
-                        color: "#1d3a5f",
-                        fontWeight: 500,
+                        color: "#a1aebe",
+                        fontWeight: 600,
+                        fontSize: "1rem",
+                        lineHeight: 1.1765,
+                        wordBreak: "break-word",
+                        margin: "0",
+                        padding: "0 0 0 16px",
                       }}
                     >
-                      <div
-                        style={{
-                          fontFamily: ` "Roboto", "Helvetica", "Arial", sans-serif`,
-                          fontWeight: 400,
-                          lineHeight: 1.5,
-                          fontSize: ".9rem",
-                          letterSpacing: "0.00938em",
-                          color: "#1d3a5f",
-                        }}
-                      >
-                        @{user.name}
-                      </div>
-                    </NavLink>
+                      Requests
+                    </p>
+                  </Grid>
+                  <Grid item>
+                    <p
+                      style={{
+                        fontWeight: 500,
+                        padding: "3px 7px",
+                        backgroundColor: "#216fdb",
+                        fontSize: ".9rem",
+                        color: "#fff",
+                        margin: "0 10px 0 0",
+                        paddingTop: 4,
+                        borderRadius: "25%",
+                      }}
+                    >
+                      {length}
+                    </p>
                   </Grid>
                 </Grid>
+              ) : null}
+              {pendding &&
+                pendding.map((user) => (
+                  <Grid
+                    container
+                    key={user.id}
+                    direction="row"
+                    justify="space-between"
+                    alignItems="center"
+                    spacing={2}
+                    style={{
+                      overflow: "auto",
+                      width: "auto",
+                      backgroundColor: "#fff",
+                      borderRadius: 15,
+                      boxShadow: "0px 0px 20px 20px rgb(0 0 0 / 3%)",
+                      margin: "10px",
+                      padding: "10px 10px ",
+                    }}
+                  >
+                    <Grid item>
+                      <Grid container spacing={2} alignItems="center">
+                        <Grid item>
+                          <Tooltip
+                            id={user.id}
+                            name={user.name}
+                            avatar={user.avatar}
+                            placement="top"
+                          >
+                            <NavLink
+                              to={`/profile/${user.id}`}
+                              style={{
+                                textDecoration: "none",
+                                color: "#1d3a5f",
+                                fontWeight: 500,
+                              }}
+                            >
+                              <Avatar
+                                src={user.avatar}
+                                style={{
+                                  borderRadius: "25%",
+                                  width: 60,
+                                  height: 60,
+                                }}
+                              />
+                            </NavLink>
+                          </Tooltip>
+                        </Grid>
+                        <Grid item>
+                          <Tooltip
+                            id={user.id}
+                            name={user.name}
+                            avatar={user.avatar}
+                            placement="top"
+                          >
+                            <NavLink
+                              to={`/profile/${user.id}`}
+                              style={{
+                                textDecoration: "none",
+                                color: "#1d3a5f",
+                                fontWeight: 500,
+                              }}
+                            >
+                              <span
+                                style={{
+                                  fontSize: "1rem",
+                                  fontFamily: ` "Roboto", "Helvetica", "Arial", sans-serif`,
+                                  fontWeight: 500,
+                                  lineHeight: 1.5,
+                                  letterSpacing: "0.00938em",
+                                }}
+                              >
+                                {user.name}
+                              </span>
+                            </NavLink>
+                          </Tooltip>
+                          <div
+                            style={{
+                              fontFamily: ` "Roboto", "Helvetica", "Arial", sans-serif`,
+                              fontWeight: 400,
+                              lineHeight: 1.5,
+                              fontSize: ".9rem",
+                              letterSpacing: "0.00938em",
+                              color: "#1d3a5f",
+                            }}
+                          >
+                            wants too follow you
+                          </div>
+                        </Grid>
+                      </Grid>
+                    </Grid>
+
+                    <Grid item>
+                      <Grid spacing={2} container>
+                        <Grid xs item>
+                          <Button
+                            className={classes.btnUser}
+                            style={{
+                              backgroundColor: "#216FDB",
+                              color: "#fff",
+                            }}
+                            onClick={() => follow(user.id, true)}
+                            color="inherit"
+                          >
+                            Accept
+                          </Button>
+                        </Grid>
+                        <Grid xs item>
+                          <Button
+                            className={classes.btnUser}
+                            onClick={() => follow(user.id, false)}
+                            color="inherit"
+                          >
+                            Decline
+                          </Button>
+                        </Grid>
+                      </Grid>
+                    </Grid>
+                  </Grid>
+                ))}
+              <Grid
+                container
+                direction="row"
+                justify="space-between"
+                alignItems="flex-start"
+              >
+                <Grid item>
+                  <p
+                    style={{
+                      color: "#a1aebe",
+                      fontWeight: 600,
+                      fontSize: "1rem",
+                      lineHeight: 1.1765,
+                      wordBreak: "break-word",
+                      margin: "0",
+                      padding: "0 0 0 16px",
+                    }}
+                  >
+                    People
+                  </p>
+                </Grid>
+                <Grid item>
+                  <p
+                    style={{
+                      fontWeight: 500,
+                      padding: "3px 7px",
+                      backgroundColor: "#abb9c9",
+                      fontSize: ".9rem",
+                      color: "#fff",
+                      margin: "0 10px 0 0",
+                      paddingTop: 4,
+                      borderRadius: "25%",
+                    }}
+                  >
+                    {lengthUsers}
+                  </p>
+                </Grid>
               </Grid>
-            </Grid>
-          ))}
+              {users.map((user) => (
+                <Grid
+                  container
+                  key={user.id}
+                  direction="row"
+                  justify="space-between"
+                  alignItems="center"
+                  spacing={2}
+                  style={{
+                    overflow: "auto",
+                    width: "auto",
+                    backgroundColor: "#fff",
+                    borderRadius: 15,
+                    boxShadow: "0px 0px 20px 20px rgb(0 0 0 / 3%)",
+                    margin: "10px",
+                    padding: "10px 10px ",
+                  }}
+                >
+                  <Grid item>
+                    <Grid container spacing={2} alignItems="center">
+                      <Grid item>
+                        <Tooltip
+                          id={user.id}
+                          name={user.name}
+                          avatar={user.avatar}
+                          placement="top"
+                        >
+                          <NavLink
+                            to={`/profile/${user.id}`}
+                            style={{
+                              textDecoration: "none",
+                              color: "#1d3a5f",
+                              fontWeight: 500,
+                            }}
+                          >
+                            <Avatar
+                              src={user.avatar}
+                              style={{
+                                borderRadius: "25%",
+                                width: 60,
+                                height: 60,
+                              }}
+                            />
+                          </NavLink>
+                        </Tooltip>
+                      </Grid>
+                      <Grid item>
+                        <Tooltip
+                          id={user.id}
+                          name={user.name}
+                          avatar={user.avatar}
+                          placement="top"
+                        >
+                          <NavLink
+                            to={`/profile/${user.id}`}
+                            style={{
+                              textDecoration: "none",
+                              color: "#1d3a5f",
+                              fontWeight: 500,
+                            }}
+                          >
+                            <span
+                              style={{
+                                fontSize: "1rem",
+                                fontFamily: ` "Roboto", "Helvetica", "Arial", sans-serif`,
+                                fontWeight: 500,
+                                lineHeight: 1.5,
+                                letterSpacing: "0.00938em",
+                              }}
+                            >
+                              {user.name}
+                            </span>
+                          </NavLink>
+                        </Tooltip>
+                        <NavLink
+                          to={`/profile/${user.id}`}
+                          style={{
+                            textDecoration: "none",
+                            color: "#1d3a5f",
+                            fontWeight: 500,
+                          }}
+                        >
+                          <div
+                            style={{
+                              fontFamily: ` "Roboto", "Helvetica", "Arial", sans-serif`,
+                              fontWeight: 400,
+                              lineHeight: 1.5,
+                              fontSize: ".9rem",
+                              letterSpacing: "0.00938em",
+                              color: "#1d3a5f",
+                            }}
+                          >
+                            @{user.name}
+                          </div>
+                        </NavLink>
+                      </Grid>
+                    </Grid>
+                  </Grid>
+                </Grid>
+              ))}
+            </React.Fragment>
+          )}
         </Grid>
       </Grid>
     </div>

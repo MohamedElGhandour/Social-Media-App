@@ -35,7 +35,7 @@ export default function Posts(props) {
   return (
     <Grid container direction="column" justify="center" alignItems="center">
       {profile === undefined ? (
-        <PostGen />
+        <PostGen postType={type} />
       ) : profile ? (
         <PostGen postType={type} />
       ) : null}

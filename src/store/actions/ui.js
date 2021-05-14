@@ -19,3 +19,18 @@ export const loadingChangePic = (loading) => ({
   type: actionTypes.LOADING_CHANGE_PIC,
   loading: loading,
 });
+
+export const loadingFetchUsers = (loading) => ({
+  type: actionTypes.LOADING_FETCH_USERS,
+  loading: loading,
+});
+
+export const loadingLogin = (loading) => ({
+  type: actionTypes.LOADING_LOGIN,
+  loading: loading,
+});
+
+export const loadingSignup = (loading) => ({
+  type: actionTypes.LOADING_SIGNUP,
+  loading: loading,
+});

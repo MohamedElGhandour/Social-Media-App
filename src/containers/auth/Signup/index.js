@@ -16,6 +16,7 @@ import { auth } from "../../../store/actions/index";
 import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
 import { NavLink } from "react-router-dom";
 import { checkValidity } from "../../../shared/utility";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 const theme = createMuiTheme({
   palette: {
@@ -153,6 +154,7 @@ export default function SignInSide() {
       dispatch(auth(authData));
     }
   };
+  const loading = useSelector((state) => state.ui.loading.login);
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
@@ -235,7 +237,13 @@ export default function SignInSide() {
             color="primary"
             className={classes.submit}
           >
-            Sign Up
+            {loading ? (
+              <CircularProgress
+                style={{ color: "#fff", height: 24, width: 24 }}
+              />
+            ) : (
+              "Sign Up"
+            )}
           </Button>
           <Grid container justify="flex-end">
             <Grid item>
