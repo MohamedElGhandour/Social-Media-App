@@ -7,7 +7,7 @@ const Logout = () => {
   const dispatch = useDispatch();
   React.useEffect(() => {
     dispatch(authLogout());
-  }, [dispatch]);
+  });
   return <Redirect to="/" />;
 };
 export default Logout;
