@@ -44,3 +44,8 @@ In the project directory, you can run (Back End):
 Runs the back end in the development mode.\
 Open [http://localhost:4000](http://localhost:4000) to view it in the browser.
 
+```js
+email: ahmed@email.com
+password:ahmed
+```
+
