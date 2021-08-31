@@ -36,12 +36,14 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function SimpleList() {
+export default function SimpleList(props) {
   const classes = useStyles();
   const users = useSelector((state) => state.posts.users);
-  const length = users.length;
+  const userId = localStorage.getItem("userId");
+  const { profile } = props;
+  const length = users ? users.length - 1 : 0;
   return (
-    <div className={classes.root}>
+    <div className={classes.root} style={{ width: profile ? 360 : "auto" }}>
       <Grid
         container
         direction="row"
@@ -71,7 +73,7 @@ export default function SimpleList() {
       <List
         component="nav"
         style={{
-          maxHeight: 400,
+          maxHeight: "50vh",
           overflow: "auto",
           backgroundColor: "#fff",
           borderRadius: 15,
@@ -83,50 +85,53 @@ export default function SimpleList() {
         }}
         aria-label="main mailbox folders"
       >
-        {users.map((user) => (
-          <Tooltip
-            key={user.id}
-            id={user.id}
-            name={user.name}
-            avatar={user.avatar}
-            placement="left-start"
-          >
-            <NavLink
-              to={`/profile/${user.id}`}
-              style={{
-                textDecoration: "none",
-                color: "#1d3a5f",
-                fontWeight: 500,
-              }}
+        {users.map((user) =>
+          user._id === userId ? null : (
+            <Tooltip
+              key={user._id}
+              _id={user._id}
+              name={user.name}
+              avatar={user.avatar}
+              pending={user.pending}
+              placement="left-start"
             >
-              <ListItem className={classes.user} button>
-                <ListItemIcon>
-                  <Avatar src={user.avatar} style={{ borderRadius: "25%" }} />
-                </ListItemIcon>
-                <div
-                  style={{
-                    flex: "1 1 auto",
-                    minWidth: 0,
-                    marginTop: 4,
-                    marginBottom: 4,
-                  }}
-                >
-                  <span
+              <NavLink
+                to={`/profile/${user._id}`}
+                style={{
+                  textDecoration: "none",
+                  color: "#1d3a5f",
+                  fontWeight: 500,
+                }}
+              >
+                <ListItem className={classes.user} button>
+                  <ListItemIcon>
+                    <Avatar src={user.avatar} style={{ borderRadius: "25%" }} />
+                  </ListItemIcon>
+                  <div
                     style={{
-                      fontSize: "1rem",
-                      fontFamily: ` "Roboto", "Helvetica", "Arial", sans-serif`,
-                      fontWeight: 500,
-                      lineHeight: 1.5,
-                      letterSpacing: "0.00938em",
+                      flex: "1 1 auto",
+                      minWidth: 0,
+                      marginTop: 4,
+                      marginBottom: 4,
                     }}
                   >
-                    {user.name}
-                  </span>
-                </div>
-              </ListItem>
-            </NavLink>
-          </Tooltip>
-        ))}
+                    <span
+                      style={{
+                        fontSize: "1rem",
+                        fontFamily: ` "Roboto", "Helvetica", "Arial", sans-serif`,
+                        fontWeight: 500,
+                        lineHeight: 1.5,
+                        letterSpacing: "0.00938em",
+                      }}
+                    >
+                      {user.name}
+                    </span>
+                  </div>
+                </ListItem>
+              </NavLink>
+            </Tooltip>
+          )
+        )}
       </List>
     </div>
   );

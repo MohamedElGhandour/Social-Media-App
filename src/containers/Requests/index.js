@@ -7,7 +7,7 @@ import { useSelector } from "react-redux";
 import Tooltip from "../Tooltip/index";
 import Button from "@material-ui/core/Button";
 import { useDispatch } from "react-redux";
-import { toggleFollow } from "../../store/actions/index";
+import { accept, decline } from "../../store/actions/index";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -47,28 +47,19 @@ const useStyles = makeStyles((theme) => ({
 
 export default function SimpleList() {
   const classes = useStyles();
-  const userId = parseInt(localStorage.getItem("userId"));
-  const users = useSelector((state) => state.posts.users);
-  const [user] = users.filter((user) => user.id === userId);
   const dispatch = useDispatch();
-  const follow = (id, isAccepted) => {
-    dispatch(toggleFollow(id, userId, isAccepted));
-  };
-  const pendding = [];
-  user !== undefined &&
-    user.pending.forEach((id) => {
-      for (let index = 0; index < users.length; index++) {
-        const element = users[index];
-        if (element.id === id) pendding.push(element);
+  const acceptFun = (id) => dispatch(accept(id));
+  const declineFun = (id) => dispatch(decline(id));
+  const pending = useSelector((state) => state.auth.pending);
+  const length = pending ? pending.length : 0;
+  if (pending) {
+    if (pending.length > 2) {
+      while (pending.length > 2) {
+        pending.pop();
       }
-    });
-  const length = pendding.length;
-  if (pendding.length > 2) {
-    while (pendding.length > 2) {
-      pendding.pop();
     }
   }
-  return pendding.length > 0 ? (
+  return pending && pending.length > 0 ? (
     <div className={classes.root}>
       <Grid
         container
@@ -96,11 +87,11 @@ export default function SimpleList() {
           </p>
         </Grid>
       </Grid>
-      {pendding &&
-        pendding.map((user) => (
+      {pending &&
+        pending.map((user) => (
           <Grid
             container
-            key={user.id}
+            key={user._id}
             direction="row"
             justify="flex-start"
             alignItems="flex-start"
@@ -117,9 +108,10 @@ export default function SimpleList() {
           >
             <Grid item>
               <Tooltip
-                id={user.id}
+                _id={user._id}
                 name={user.name}
                 avatar={user.avatar}
+                pending={user.pending}
                 placement="left-start"
               >
                 <NavLink
@@ -141,13 +133,14 @@ export default function SimpleList() {
             </Grid>
             <Grid item>
               <Tooltip
-                id={user.id}
+                _id={user._id}
                 name={user.name}
                 avatar={user.avatar}
+                pending={user.pending}
                 placement="left-start"
               >
                 <NavLink
-                  to={`/profile/${user.id}`}
+                  to={`/profile/${user._id}`}
                   style={{
                     textDecoration: "none",
                     color: "#1d3a5f",
@@ -177,16 +170,15 @@ export default function SimpleList() {
                   color: "#1d3a5f",
                 }}
               >
-                wants too follow you
+                wants to follow you
               </div>
             </Grid>
-
             <Grid item xs={12}>
               <Grid spacing={2} container>
                 <Grid xs item>
                   <Button
                     className={(classes.btnUser, classes.reqBtn)}
-                    onClick={() => follow(user.id, true)}
+                    onClick={() => acceptFun(user._id)}
                     color="inherit"
                   >
                     Accept
@@ -195,7 +187,7 @@ export default function SimpleList() {
                 <Grid xs item>
                   <Button
                     className={classes.btnUser}
-                    onClick={() => follow(user.id, false)}
+                    onClick={() => declineFun(user._id)}
                     color="inherit"
                   >
                     Decline

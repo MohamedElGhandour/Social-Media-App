@@ -8,30 +8,36 @@ import {
   toggleLove,
   fetchUsers,
   fetchNews,
-  fetchProfile,
+  fetchUser,
+  restScrollPage,
 } from "../../store/actions/index";
+import InfiniteScroll from "react-infinite-scroll-component";
+import CheckCircleOutlineIcon from "@material-ui/icons/CheckCircleOutline";
 
 export default function Posts(props) {
   const dispatch = useDispatch();
   const { home, profile, profileId } = props;
-  const posts = useSelector((state) =>
-    profileId !== undefined
-      ? state.posts.profile
-      : home
-      ? state.posts.posts
-      : state.posts.news
-  );
+  const posts = useSelector((state) => state.posts.posts);
+  const loadMore = useSelector((state) => state.posts.loadMore);
   const type = profileId !== undefined ? "profile" : home ? "posts" : "news";
   const toggleLoveFun = (post) => dispatch(toggleLove(post, type));
   useEffect(() => {
+    dispatch(restScrollPage());
     dispatch(fetchUsers());
     profileId !== undefined
-      ? dispatch(fetchProfile(profileId))
+      ? dispatch(fetchUser(profileId, "post"))
       : home
       ? dispatch(fetchPosts())
       : dispatch(fetchNews());
   }, [dispatch, home, profileId]);
   const loading = useSelector((state) => state.ui.loading.fetchPosts);
+  const nextFetchScroll = () =>
+    profileId !== undefined
+      ? dispatch(fetchUser(profileId, "post"))
+      : home
+      ? dispatch(fetchPosts())
+      : dispatch(fetchNews());
+
   return (
     <Grid container direction="column" justify="center" alignItems="center">
       {profile === undefined ? (
@@ -41,23 +47,44 @@ export default function Posts(props) {
       ) : null}
       {!loading ? (
         posts.length > 0 ? (
-          posts.map((post) => (
-            <Post
-              global={post}
-              key={post.id}
-              id={post.id}
-              avatar={post.avatar}
-              image={post.image}
-              body={post.body}
-              name={post.name}
-              timestamp={post.timestamp}
-              comments={post.comments}
-              loves={post.loves}
-              toggleLove={toggleLoveFun}
-              userId={post.userId}
-              commentsType={type}
-            />
-          ))
+          <InfiniteScroll
+            dataLength={posts.length}
+            next={nextFetchScroll}
+            hasMore={loadMore}
+            loader={<Post loading />}
+            scrollableTarget="underRoot"
+            style={{ overflow: "inherit" }}
+            endMessage={
+              <div
+                style={{
+                  textAlign: "center",
+                  padding: "20px 0",
+                  color: "#1878f2",
+                  fontWeight: 500,
+                }}
+              >
+                <CheckCircleOutlineIcon style={{ fontSize: 50 }} />
+                <p>You're All Caught Up</p>
+              </div>
+            }
+          >
+            {posts.map((post) => (
+              <Post
+                key={post._id}
+                id={post._id}
+                avatar={post.user.avatar}
+                pending={post.user.pending}
+                image={post.image}
+                body={post.body}
+                name={post.user.name}
+                createdAt={post.createdAt}
+                comments={post.comments}
+                loves={post.loves}
+                toggleLove={toggleLoveFun}
+                userId={post.user._id}
+              />
+            ))}
+          </InfiniteScroll>
         ) : (
           <div style={{ color: "#a1aebe" }}>
             make some friends and share with us what you love

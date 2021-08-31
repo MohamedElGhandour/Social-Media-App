@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import Toolbar from "../components/Navigation/Toolbar/index";
 import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
@@ -6,6 +6,8 @@ import Main from "../components/Main/index";
 import SideBar from "../components/SideBar/index";
 import { useLocation } from "react-router-dom";
 import Drawer from "@material-ui/core/Drawer";
+import { currentUser } from "../store/actions/index";
+import { useDispatch } from "react-redux";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -46,14 +48,16 @@ export default function Layout(props) {
   const match = pathname.match(/profile/);
   const type = match?.[0];
   const toggleDrawer = () => setOpen((prevState) => !prevState);
+  const body = useRef();
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(currentUser());
+    body.current.scrollTop = 0;
+  });
 
   const SideNav = (
-    <Grid
-      container
-      direction="column"
-      justify="flex-start"
-      alignItems="stretch"
-    >
+    <Grid container justify="flex-start" alignItems="stretch">
       <Grid item xs={12}>
         <Main />
       </Grid>
@@ -72,6 +76,8 @@ export default function Layout(props) {
           justify="center"
           alignItems="flex-start"
           className={classes.underRoot}
+          id="underRoot"
+          ref={body}
         >
           {!type ? (
             <Grid

@@ -25,7 +25,7 @@ export default function SimpleList() {
   const classes = useStyles();
   const name = localStorage.getItem("name");
   const avatar = localStorage.getItem("avatar");
-  const id = parseInt(localStorage.getItem("userId"));
+  const id = localStorage.getItem("userId");
 
   return (
     <div
@@ -35,7 +35,6 @@ export default function SimpleList() {
     >
       <div className={classes.root}>
         <NavLink
-          key={id}
           to={`/profile/${id}`}
           style={{
             textDecoration: "none",

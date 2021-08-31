@@ -4,16 +4,17 @@ import {
   Avatar,
   AppBar,
   Toolbar,
-  IconButton,
   Badge,
   MenuItem,
   Menu,
+  Fab,
 } from "@material-ui/core";
 import MenuIcon from "@material-ui/icons/Menu";
 import SearchIcon from "@material-ui/icons/Search";
 import MailOutlineIcon from "@material-ui/icons/MailOutline";
 import NotificationsNoneIcon from "@material-ui/icons/NotificationsNone";
 import { NavLink } from "react-router-dom";
+import { useSelector } from "react-redux";
 import logo from "../../../assets/images/logoAvatar.svg";
 
 const useStyles = makeStyles((theme) => ({
@@ -106,6 +107,7 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: "#efefef",
     borderRadius: "25%",
     color: "#111513",
+    boxShadow: "none",
     marginLeft: 10,
     "&:hover": {
       backgroundColor: "#d8d8d8",
@@ -114,7 +116,7 @@ const useStyles = makeStyles((theme) => ({
   anchorTopRight: {
     borderRadius: "25%",
     color: "#fff",
-    backgroundColor: "#f02849",
+    backgroundColor: "rgb(33, 111, 219)",
   },
 }));
 
@@ -128,9 +130,9 @@ export default function PrimarySearchAppBar(props) {
   const handleMenuClose = () => {
     setAnchorEl(null);
   };
-  const avatar = localStorage.getItem("avatar");
   const menuId = "primary-search-account-menu";
   const userId = localStorage.getItem("userId");
+  const realUser = useSelector((state) => state.auth);
   const renderMenu = (
     <Menu
       anchorEl={anchorEl}
@@ -177,18 +179,25 @@ export default function PrimarySearchAppBar(props) {
         {/* Nav Bar */}
         <Toolbar className={classes.navBar}>
           {/* Slide Toggle Btn  */}
-          <IconButton
+          <Fab
             edge="start"
             className={(classes.menuButton, classes.sectionMobile)}
+            style={{
+              width: 40,
+              height: 40,
+              backgroundColor: "#fff",
+              borderRadius: "25%",
+              color: "#111513",
+              boxShadow: "none",
+            }}
             onClick={props.toggleDrawer}
             color="inherit"
             aria-label="open drawer"
           >
             <MenuIcon />
-          </IconButton>
-          {/* logo */}
+          </Fab>
           <NavLink to="/">
-            <IconButton
+            <Fab
               style={{
                 width: 40,
                 height: 40,
@@ -198,14 +207,16 @@ export default function PrimarySearchAppBar(props) {
               color="inherit"
             >
               <Avatar src={logo} style={{ borderRadius: "25%" }} />
-            </IconButton>
-            <IconButton className={classes.iconNav} color="inherit">
+            </Fab>
+          </NavLink>
+          <NavLink to="/search">
+            <Fab className={classes.iconNav} color="inherit">
               <SearchIcon />
-            </IconButton>
+            </Fab>
           </NavLink>
           <div className={classes.grow} />
           <div>
-            <IconButton
+            <Fab
               aria-label="show 4 new mails"
               className={classes.iconNav}
               color="inherit"
@@ -219,8 +230,8 @@ export default function PrimarySearchAppBar(props) {
               >
                 <MailOutlineIcon />
               </Badge>
-            </IconButton>
-            <IconButton
+            </Fab>
+            <Fab
               className={classes.iconNav}
               aria-label="show 17 new notifications"
               color="inherit"
@@ -234,8 +245,8 @@ export default function PrimarySearchAppBar(props) {
               >
                 <NotificationsNoneIcon />
               </Badge>
-            </IconButton>
-            <IconButton
+            </Fab>
+            <Fab
               edge="end"
               aria-label="account of current user"
               aria-controls={menuId}
@@ -243,8 +254,11 @@ export default function PrimarySearchAppBar(props) {
               onClick={handleProfileMenuOpen}
               color="inherit"
             >
-              <Avatar src={avatar} style={{ borderRadius: "25%" }} />
-            </IconButton>
+              <Avatar
+                src={realUser && realUser.avatar}
+                style={{ borderRadius: "25%" }}
+              />
+            </Fab>
           </div>
         </Toolbar>
       </AppBar>

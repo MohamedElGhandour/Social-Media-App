@@ -30,7 +30,7 @@ export default function Home() {
       <Grid
         item
         xs={4}
-        style={{ marginTop: 16 }}
+        style={{ marginTop: 16, position: "sticky", top: 71 }}
         className={classes.sectionDesktop}
       >
         <Grid

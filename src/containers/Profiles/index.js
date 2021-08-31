@@ -7,7 +7,12 @@ import Requests from "../../containers/Requests/index";
 import Profile from "./Profile/index";
 import { useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { fetchUsers } from "../../store/actions/index";
+import {
+  fetchUser,
+  fetchUsers,
+  restScrollPage,
+} from "../../store/actions/index";
+import NotFound from "../../components/NotFound/index";
 
 const useStyles = makeStyles((theme) => ({
   sectionMobile: {
@@ -26,46 +31,57 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.up("sm")]: {
       minWidth: 680,
     },
-    minWidth: 384,
+    minWidth: "auto",
   },
 }));
 
 export default function Home() {
   const { id } = useParams();
-  const users = useSelector((state) => state.posts.users);
-  const [user] = users.filter((user) => user.id === parseInt(id));
-  const userId = parseInt(localStorage.getItem("userId"));
-  const me = userId === parseInt(id);
+  const userId = localStorage.getItem("userId");
+  const profile = useSelector((state) => state.posts.profile);
+  const notFoundUser = useSelector((state) => state.posts.notFoundUser);
+  const currentUser = userId === id;
   const dispatch = useDispatch();
   React.useEffect(() => {
+    dispatch(restScrollPage());
     dispatch(fetchUsers());
-  }, [dispatch]);
+    dispatch(fetchUser(id, "profile"));
+  }, [dispatch, id]);
   const classes = useStyles();
-  return (
+  // console.log(profile);
+  return notFoundUser ? (
+    <NotFound />
+  ) : (
     <Grid container direction="row" justify="center" alignItems="flex-start">
       <Grid item xs={12}>
-        {user && <Profile />}
+        {profile && <Profile user={profile} />}
       </Grid>
       <Grid item style={{ padding: "0 16px", marginTop: 16 }}>
         <div className={classes.postContainer}>
-          {user && <Posts profile={me} profileId={user.id} />}
+          {profile && <Posts profile={currentUser} profileId={profile._id} />}
         </div>
       </Grid>
-      <Grid item style={{ marginTop: 16 }} className={classes.sectionDesktop}>
+      {profile && (
         <Grid
-          container
-          direction="column"
-          justify="flex-start"
-          alignItems="stretch"
+          item
+          style={{ marginTop: 16, position: "sticky", top: 71 }}
+          className={classes.sectionDesktop}
         >
-          <Grid item>
-            <Requests />
-          </Grid>
-          <Grid item>
-            <Lists />
+          <Grid
+            container
+            direction="column"
+            justify="flex-start"
+            alignItems="center"
+          >
+            <Grid item>
+              <Requests />
+            </Grid>
+            <Grid item>
+              <Lists profile />
+            </Grid>
           </Grid>
         </Grid>
-      </Grid>
+      )}
     </Grid>
   );
 }

@@ -26,9 +26,10 @@ export default function Comment(props) {
       <Grid container>
         <Grid item xs={2} sm={1}>
           <Tooltip
-            id={props.userId}
+            _id={props.userId}
             name={props.author}
             avatar={props.avatar}
+            pending={props.pending}
             placement="top"
           >
             <NavLink to={`/profile/${props.userId}`}>
@@ -45,9 +46,10 @@ export default function Comment(props) {
             className={classes.comment}
           >
             <Tooltip
-              id={props.userId}
+              _id={props.userId}
               name={props.author}
               avatar={props.avatar}
+              pending={props.pending}
               placement="top"
             >
               <NavLink

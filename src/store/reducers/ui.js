@@ -10,6 +10,7 @@ const initialState = {
     changePic: false,
     login: false,
     signup: false,
+    search: false,
   },
   error: {},
 };
@@ -17,6 +18,12 @@ const initialState = {
 const sendPost = (state, action) => {
   const newObj = cloneDeep(state);
   newObj.loading.sendPost = action.loading;
+  return newObj;
+};
+
+const search = (state, action) => {
+  const newObj = cloneDeep(state);
+  newObj.loading.search = action.loading;
   return newObj;
 };
 
@@ -72,6 +79,8 @@ const reducer = (state = initialState, action) => {
       return login(state, action);
     case actionTypes.LOADING_SIGNUP:
       return signup(state, action);
+    case actionTypes.LOADING_SEARCH:
+      return search(state, action);
     default:
       return state;
   }

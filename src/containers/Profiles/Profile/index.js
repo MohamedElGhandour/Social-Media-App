@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo, useCallback } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Avatar from "@material-ui/core/Avatar";
 import Grid from "@material-ui/core/Grid";
@@ -10,24 +10,28 @@ import PauseIcon from "@material-ui/icons/Pause";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import {
-  changeAvatar,
-  toggleRequest,
-  toggleFollow,
-  changeCover,
+  // changeAvatar,
+  follow,
+  cancel,
+  unfollow,
+  // changeCover,
+  accept,
+  decline,
+  uploadImage,
 } from "../../../store/actions/index";
 import Backdrop from "@material-ui/core/Backdrop";
 import Fade from "@material-ui/core/Fade";
 import IconButton from "@material-ui/core/IconButton";
+import Fab from "@material-ui/core/Fab";
 import ClearIcon from "@material-ui/icons/Clear";
 import Modal from "@material-ui/core/Modal";
-import TextField from "@material-ui/core/TextField";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Alert from "@material-ui/lab/Alert";
 import Collapse from "@material-ui/core/Collapse";
 import CloseIcon from "@material-ui/icons/Close";
 import AddPhotoAlternateOutlinedIcon from "@material-ui/icons/AddPhotoAlternateOutlined";
-import { useParams } from "react-router-dom";
-import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
+import { createMuiTheme } from "@material-ui/core/styles";
+import { useDropzone } from "react-dropzone";
 
 const theme = createMuiTheme({
   palette: {
@@ -93,6 +97,22 @@ const useStyles = makeStyles((theme) => ({
     width: "auto",
     maxWidth: 1045,
   },
+  btns: {
+    [theme.breakpoints.up("sm")]: {
+      maxWidth: 680,
+    },
+    [theme.breakpoints.up("md")]: {
+      maxWidth: 1045,
+    },
+    paddingTop: 10,
+    backgroundColor: "#fff",
+    boxShadow: "0px 0px 20px 20px rgb(0 0 0 / 3%)",
+    margin: "auto",
+    marginTop: 16,
+    borderRadius: "15px",
+    width: "auto",
+    maxWidth: 1045,
+  },
   name: {
     textAlign: "center",
     fontWeight: 500,
@@ -128,7 +148,7 @@ const useStyles = makeStyles((theme) => ({
     textAlign: "center",
     cursor: "pointer",
     fontSize: "1.3rem",
-    textShadow: "1px 1px #ddd",
+    textShadow: "1px 1px #000",
     opacity: 0,
     paddingTop: 137,
     boxSizing: "border-box",
@@ -150,7 +170,7 @@ const useStyles = makeStyles((theme) => ({
     textAlign: "center",
     cursor: "pointer",
     fontSize: "1.3rem",
-    textShadow: "1px 1px #ddd",
+    textShadow: "1px 1px #000",
     paddingTop: 74,
     boxSizing: "border-box",
     transition: "all .5s ease-in-out",
@@ -166,10 +186,9 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "center",
     justifyContent: "center",
   },
-
   paper: {
     backgroundColor: theme.palette.background.paper,
-    width: 500,
+    width: 680,
     boxShadow:
       "0 12px 28px 0 rgb(0 0 0 / 20%),0 2px 4px 0 rgb(0 0 0 / 10%),inset 0 0 0 1px rgb(255 255 255 / 50%)",
     padding: theme.spacing(3, 2),
@@ -177,6 +196,7 @@ const useStyles = makeStyles((theme) => ({
     border: "none",
     position: "relative",
     borderRadius: 15,
+    boxSizing: "border-box",
   },
   Moddelheader: {
     textAlign: "center",
@@ -191,7 +211,9 @@ const useStyles = makeStyles((theme) => ({
     top: 0,
     right: 0,
     borderRadius: "25%",
-    margin: theme.spacing(2, 2, 0, 0),
+    width: 40,
+    height: 40,
+    margin: theme.spacing(1.5, 2, 0, 0),
   },
   rootModal: {
     flexGrow: 1,
@@ -220,7 +242,6 @@ const useStyles = makeStyles((theme) => ({
   btnPost: {
     backgroundColor: "#1878f2",
     color: "#fff",
-    margin: theme.spacing(2, 0, 0),
     textAlign: "center",
     padding: theme.spacing(1.1),
     borderRadius: 7,
@@ -234,10 +255,11 @@ const useStyles = makeStyles((theme) => ({
   },
 
   contanerPost: {
-    maxHeight: "400px",
+    maxHeight: "600px",
+    boxSizing: "border-box",
     overflow: "auto",
     "&::-webkit-scrollbar": {
-      width: "20px",
+      width: "6px",
     },
     "&::-webkit-scrollbar-track": {
       backgroundColor: "transparent",
@@ -245,7 +267,7 @@ const useStyles = makeStyles((theme) => ({
     "&::-webkit-scrollbar-thumb": {
       backgroundColor: "#d6dee1",
       borderRadius: "20px",
-      border: "6px solid transparent",
+      border: "0px solid transparent",
       backgroundClip: "content-box",
     },
     "&::-webkit-scrollbar-thumb:hover": {
@@ -261,17 +283,20 @@ const useStyles = makeStyles((theme) => ({
       width: "100%",
       margin: "20px",
     },
-    inputPost: {
-      minHeight: 100,
+    contanerPost: {
+      maxHeight: "400px",
     },
   },
   [theme.breakpoints.up("sm")]: {
     paper: {
-      width: 500,
-      margin: 0,
+      width: "80%",
+      margin: "20px",
     },
-    inputPost: {
-      minHeight: 60,
+  },
+  [theme.breakpoints.up("md")]: {
+    paper: {
+      width: 680,
+      margin: 0,
     },
   },
   previewImg: {
@@ -297,30 +322,61 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const baseStyle = {
+  flex: 1,
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "center",
+  padding: "20px",
+  borderWidth: 2,
+  borderRadius: 2,
+  borderColor: "#1878f2",
+  borderStyle: "dashed",
+  backgroundColor: "rgb(24 120 242 / 10%)",
+  fontWeight: 900,
+  color: "#1878f2",
+  outline: "none",
+  transition: "border .24s ease-in-out",
+  cursor: "pointer",
+  marginTop: 15,
+};
+
+const activeStyle = {
+  borderColor: "#2196f3",
+};
+
+const acceptStyle = {
+  borderColor: "#00e676",
+  backgroundColor: "rgb(0 230 118 / 10%)",
+  color: "#00e676",
+};
+
+const rejectStyle = {
+  borderColor: "#ff1744",
+  backgroundColor: "rgb(255 23 68 / 10%)",
+  color: "#ff1744",
+};
+
 const Profile = (props) => {
   const classes = useStyles();
   const dispatch = useDispatch();
-  const idUser = parseInt(useParams().id);
   const [open, setOpen] = React.useState(false);
   const [openAvatar, setOpenAvatar] = React.useState(false);
   const [img, setImg] = React.useState(null);
   const [imgURL, setImgURL] = React.useState("");
-  const userId = parseInt(localStorage.getItem("userId"));
-  const users = useSelector((state) => state.posts.users);
-  const [user] = users.filter((user) => user.id === idUser);
-  const [realUser] = users.filter((user) => user.id === userId);
-  // const { name, avatar, id, email, following, pending } = props;
-  const name = user.name;
-  const email = user.email;
-  const avatar = user.avatar;
-  const cover = user.cover;
-  const id = user.id;
-  const following = realUser.following;
-  const pending = realUser.pending;
+  const [disabled, setDisabled] = React.useState(false);
+  const userId = localStorage.getItem("userId");
+  const realUser = useSelector((state) => state.auth);
+  let pending = false;
+  const { user } = props;
+  realUser.pending.forEach((userPending) => {
+    if (userPending._id === user._id) {
+      pending = true;
+    }
+  });
   const [btnName, setBtnName] = React.useState("Request");
   const [openAlert, setOpenAlert] = React.useState(false);
-  const input = React.useRef();
-  const me = userId === id;
+  const me = userId === user._id;
   const loading = useSelector((state) => state.ui.loading.changePic);
   const handleOpen = () => setOpen(true);
   const handleOpenAva = () => setOpenAvatar(true);
@@ -330,41 +386,75 @@ const Profile = (props) => {
     setOpenAlert(false);
     setImg(null);
     setImgURL("");
+    setDisabled(false);
   };
-  const request = (id) => {
-    dispatch(toggleRequest(userId, id));
-  };
-  const follow = (id, isAccepted) => {
-    dispatch(toggleFollow(id, userId, isAccepted));
-  };
-  const penddingReq = pending.includes(id);
+  const followFun = (id) => dispatch(follow(id));
+  const cancelTheRequest = (id) => dispatch(cancel(id));
+  const unFollowFun = (id) => dispatch(unfollow(id));
+  const acceptFun = (id) => dispatch(accept(id));
+  const declineFun = (id) => dispatch(decline(id));
   const changeAvatarReq = () => {
     const image = imgURL ? imgURL : null;
-    dispatch(changeAvatar(id, image));
+    const data = {
+      image: image,
+      type: "avatar",
+    };
+    if (image && !disabled) dispatch(uploadImage(data));
   };
   const changeCoverReq = () => {
     const image = imgURL ? imgURL : null;
-    dispatch(changeCover(id, image));
+    const data = {
+      image: image,
+      type: "cover",
+    };
+    if (image && !disabled) dispatch(uploadImage(data));
   };
   React.useEffect(() => {
     if (loading === false) handleClose();
   }, [loading]);
-  const handleChange = (event) => {
-    setImg(URL.createObjectURL(event.target.files[0]));
-    setOpenAlert(true);
-  };
-  const openInputFile = () => {
-    input.current.click();
-  };
   const handleRemoveImg = () => {
     setImg(null);
     setOpenAlert(false);
+    setDisabled(false);
   };
-  return (
+  const onDrop = useCallback((acceptedFiles) => {
+    // Do something with the files
+    if (acceptedFiles.length > 0) {
+      setOpenAlert(false);
+      setImg(URL.createObjectURL(acceptedFiles[0]));
+      setImgURL(acceptedFiles[0]);
+      if (acceptedFiles[0].size > 2097152) {
+        setDisabled(true);
+        setOpenAlert(true);
+      }
+    }
+  }, []);
+  const {
+    getRootProps,
+    getInputProps,
+    isDragActive,
+    isDragAccept,
+    isDragReject,
+  } = useDropzone({
+    accept: "image/*",
+    maxFiles: 1,
+    onDrop,
+  });
+
+  const style = useMemo(
+    () => ({
+      ...baseStyle,
+      ...(isDragActive ? activeStyle : {}),
+      ...(isDragAccept ? acceptStyle : {}),
+      ...(isDragReject ? rejectStyle : {}),
+    }),
+    [isDragActive, isDragReject, isDragAccept]
+  );
+  return user ? (
     <div className={classes.root}>
       <div
         className={classes.header}
-        style={{ backgroundImage: `url(${cover})` }}
+        style={{ backgroundImage: `url(${user.cover})` }}
       >
         {me && (
           <div className={classes.changeCover} onClick={handleOpen}>
@@ -373,48 +463,63 @@ const Profile = (props) => {
         )}
         {me ? (
           <div>
-            <Avatar src={avatar} className={classes.avatar} />
+            <Avatar src={user.avatar} className={classes.avatar} />
             <div className={classes.changeAvatar} onClick={handleOpenAva}>
               Change Avatar
             </div>
           </div>
         ) : (
-          <Avatar src={avatar} className={classes.avatar} />
+          <Avatar src={user.avatar} className={classes.avatar} />
         )}
       </div>
       <div style={{ paddingRight: 15, paddingLeft: 15 }}>
         <div className={classes.info}>
-          <h1 className={classes.name}>{name}</h1>
-          <p className={classes.para}>{email}</p>
-          {!me && (
+          <h1 className={classes.name}>{user.name}</h1>
+          <p className={classes.para}>{user.email}</p>
+          <p className={classes.para}>
+            {user.following.length} Following {user.followers.length} Followers
+          </p>
+        </div>
+        {!me && (
+          <div className={classes.btns}>
             <Grid
               container
               direction="row"
               justify="space-between"
               alignItems="center"
-              style={{ padding: 10 }}
+              style={{ padding: "5px 10px" }}
               spacing={2}
             >
               <Grid item xs={6}>
                 <Grid spacing={2} container>
-                  <Grid xs item>
+                  <Grid xs={12} sm={6} item>
                     <Button
                       className={classes.btnUser}
-                      onClick={() => request(id)}
+                      onClick={() =>
+                        user.pending.includes(userId)
+                          ? cancelTheRequest(user._id)
+                          : realUser.following.includes(user._id)
+                          ? unFollowFun(user._id)
+                          : followFun(user._id)
+                      }
+                      onMouseEnter={
+                        user.pending.includes(userId)
+                          ? () => setBtnName("Cancel")
+                          : null
+                      }
+                      onMouseLeave={
+                        user.pending.includes(userId)
+                          ? () => setBtnName("Request")
+                          : null
+                      }
                       color="inherit"
                     >
-                      {pending.includes(id) ? (
+                      {user.pending.includes(userId) ? (
                         <React.Fragment>
                           <PauseIcon />
-                          <span
-                            onMouseEnter={() => setBtnName("Cancel")}
-                            onMouseLeave={() => setBtnName("Request")}
-                            style={{ paddingLeft: 5 }}
-                          >
-                            {btnName}
-                          </span>
+                          <span style={{ paddingLeft: 5 }}>{btnName}</span>
                         </React.Fragment>
-                      ) : following.includes(id) ? (
+                      ) : realUser && realUser.following.includes(user._id) ? (
                         <React.Fragment>
                           <PersonAddDisabledOutlinedIcon />
                           <span style={{ paddingLeft: 5 }}>UNFollow</span>
@@ -427,7 +532,7 @@ const Profile = (props) => {
                       )}
                     </Button>
                   </Grid>
-                  <Grid xs item>
+                  <Grid xs={12} sm={6} item>
                     <Button className={classes.btnUser} color="inherit">
                       <ForumOutlinedIcon />
                       <span style={{ paddingLeft: 5 }}>chat</span>
@@ -435,22 +540,22 @@ const Profile = (props) => {
                   </Grid>
                 </Grid>
               </Grid>
-              {penddingReq && (
+              {pending && (
                 <Grid item xs={6}>
                   <Grid spacing={2} container>
-                    <Grid xs item>
+                    <Grid xs={12} sm={6} item>
                       <Button
                         className={classes.reqBtn}
-                        onClick={() => follow(user.id, true)}
+                        onClick={() => acceptFun(user._id)}
                         color="inherit"
                       >
                         Accept
                       </Button>
                     </Grid>
-                    <Grid xs item>
+                    <Grid xs={12} sm={6} item>
                       <Button
                         className={classes.btnUser}
-                        onClick={() => follow(user.id, false)}
+                        onClick={() => declineFun(user._id)}
                         color="inherit"
                       >
                         Decline
@@ -460,8 +565,8 @@ const Profile = (props) => {
                 </Grid>
               )}
             </Grid>
-          )}
-        </div>
+          </div>
+        )}
       </div>
       <Modal
         aria-labelledby="transition-modal-title"
@@ -505,55 +610,19 @@ const Profile = (props) => {
                 </span>
               </div>
             )}
-            <h2 id="transition-modal-title" className={classes.Moddelheader}>
+            <h3 id="transition-modal-title" className={classes.Moddelheader}>
               Change Cover
-            </h2>
-            <IconButton
+            </h3>
+            <Fab
               color="inherit"
               onClick={handleClose}
               className={classes.clear}
             >
               <ClearIcon style={{ color: "#666d75" }} />
-            </IconButton>
+            </Fab>
             <div className={classes.rootModal}>
               <Grid container>
-                <Grid
-                  container
-                  direction="row"
-                  justify="flex-start"
-                  alignItems="flex-start"
-                  className={classes.upHeader}
-                >
-                  <Grid item>
-                    <Avatar src={avatar} style={{ borderRadius: "25%" }} />
-                  </Grid>
-                  <Grid item>
-                    <h3 className={classes.profileName}>{name}</h3>
-                  </Grid>
-                </Grid>
                 <Grid item className={classes.contanerPost} xs={12}>
-                  <Grid
-                    container
-                    direction="row"
-                    justify="space-between"
-                    alignItems="flex-end"
-                  >
-                    <Grid item xs={2} sm={1}>
-                      <IconButton onClick={openInputFile} color="inherit">
-                        <AddPhotoAlternateOutlinedIcon
-                          style={{ color: "#46bd62" }}
-                        />
-                      </IconButton>
-                      <input
-                        id="file-input"
-                        type="file"
-                        ref={input}
-                        onChange={handleChange}
-                        style={{ display: "none" }}
-                        accept="image/*"
-                      />
-                    </Grid>
-                  </Grid>
                   {img && (
                     <Grid item xs={12} className={classes.imgContainer}>
                       <img
@@ -572,26 +641,51 @@ const Profile = (props) => {
                   )}
                 </Grid>
                 <Grid item xs={12}>
-                  <ThemeProvider theme={theme}>
-                    <TextField
-                      className={classes.imgUrl}
-                      value={imgURL}
-                      onChange={(e) => setImgURL(e.target.value)}
-                      id="outlined-basic"
-                      variant="outlined"
-                      label="Image URL"
-                    />
-                  </ThemeProvider>
+                  <div className="container">
+                    <div {...getRootProps({ style })}>
+                      <input {...getInputProps()} />
+                      <p>
+                        <AddPhotoAlternateOutlinedIcon
+                          style={{
+                            fontWeight: 900,
+                            fontSize: "4rem",
+                            filter: " drop-shadow(0px 0px 8px)",
+                          }}
+                        />
+                      </p>
+                      <p>
+                        Drag 'n' drop your image here, or click to select your
+                        image
+                      </p>
+                    </div>
+                  </div>
                 </Grid>
                 <Grid item xs={12}>
-                  <Button onClick={changeCoverReq} className={classes.btnPost}>
-                    Save it!
-                  </Button>
+                  <div
+                    style={{
+                      cursor: disabled ? "not-allowed" : "pointer",
+                      margin: theme.spacing(2, 0, 0),
+                    }}
+                  >
+                    <Button
+                      onClick={changeCoverReq}
+                      disabled={disabled}
+                      style={{
+                        color: disabled ? "white" : "white",
+                        background: disabled
+                          ? "rgb(24 120 242 / 38%)"
+                          : "rgb(24, 120, 242)",
+                      }}
+                      className={classes.btnPost}
+                    >
+                      Save it!
+                    </Button>
+                  </div>
                 </Grid>
                 <Grid item xs={12} style={{ marginTop: 10 }}>
                   <Collapse in={openAlert}>
                     <Alert
-                      severity="warning"
+                      severity="error"
                       className={classes.alert}
                       action={
                         <IconButton
@@ -606,8 +700,7 @@ const Profile = (props) => {
                         </IconButton>
                       }
                     >
-                      Uploading Files doesn't work for now but can use Image
-                      URL.
+                      Maximum allowed file size for upload is 2m.
                     </Alert>
                   </Collapse>
                 </Grid>
@@ -658,55 +751,19 @@ const Profile = (props) => {
                 </span>
               </div>
             )}
-            <h2 id="transition-modal-title" className={classes.Moddelheader}>
+            <h3 id="transition-modal-title" className={classes.Moddelheader}>
               Change Avatar
-            </h2>
-            <IconButton
+            </h3>
+            <Fab
               color="inherit"
               onClick={handleClose}
               className={classes.clear}
             >
               <ClearIcon style={{ color: "#666d75" }} />
-            </IconButton>
+            </Fab>
             <div className={classes.rootModal}>
               <Grid container>
-                <Grid
-                  container
-                  direction="row"
-                  justify="flex-start"
-                  alignItems="flex-start"
-                  className={classes.upHeader}
-                >
-                  <Grid item>
-                    <Avatar src={avatar} style={{ borderRadius: "25%" }} />
-                  </Grid>
-                  <Grid item>
-                    <h3 className={classes.profileName}>{name}</h3>
-                  </Grid>
-                </Grid>
                 <Grid item className={classes.contanerPost} xs={12}>
-                  <Grid
-                    container
-                    direction="row"
-                    justify="space-between"
-                    alignItems="flex-end"
-                  >
-                    <Grid item xs={2} sm={1}>
-                      <IconButton onClick={openInputFile} color="inherit">
-                        <AddPhotoAlternateOutlinedIcon
-                          style={{ color: "#46bd62" }}
-                        />
-                      </IconButton>
-                      <input
-                        id="file-input"
-                        type="file"
-                        ref={input}
-                        onChange={handleChange}
-                        style={{ display: "none" }}
-                        accept="image/*"
-                      />
-                    </Grid>
-                  </Grid>
                   {img && (
                     <Grid item xs={12} className={classes.imgContainer}>
                       <img
@@ -725,23 +782,51 @@ const Profile = (props) => {
                   )}
                 </Grid>
                 <Grid item xs={12}>
-                  <TextField
-                    className={classes.imgUrl}
-                    value={imgURL}
-                    onChange={(e) => setImgURL(e.target.value)}
-                    variant="outlined"
-                    label="Image URL"
-                  />
+                  <div className="container">
+                    <div {...getRootProps({ style })}>
+                      <input {...getInputProps()} />
+                      <p>
+                        <AddPhotoAlternateOutlinedIcon
+                          style={{
+                            fontWeight: 900,
+                            fontSize: "4rem",
+                            filter: " drop-shadow(0px 0px 8px)",
+                          }}
+                        />
+                      </p>
+                      <p>
+                        Drag 'n' drop your image here, or click to select your
+                        image
+                      </p>
+                    </div>
+                  </div>
                 </Grid>
                 <Grid item xs={12}>
-                  <Button onClick={changeAvatarReq} className={classes.btnPost}>
-                    Save it!
-                  </Button>
+                  <div
+                    style={{
+                      cursor: disabled ? "not-allowed" : "pointer",
+                      margin: theme.spacing(2, 0, 0),
+                    }}
+                  >
+                    <Button
+                      onClick={changeAvatarReq}
+                      disabled={disabled}
+                      style={{
+                        color: disabled ? "white" : "white",
+                        background: disabled
+                          ? "rgb(24 120 242 / 38%)"
+                          : "rgb(24, 120, 242)",
+                      }}
+                      className={classes.btnPost}
+                    >
+                      Save it!
+                    </Button>
+                  </div>
                 </Grid>
                 <Grid item xs={12} style={{ marginTop: 10 }}>
                   <Collapse in={openAlert}>
                     <Alert
-                      severity="warning"
+                      severity="error"
                       className={classes.alert}
                       action={
                         <IconButton
@@ -756,8 +841,7 @@ const Profile = (props) => {
                         </IconButton>
                       }
                     >
-                      Uploading Files doesn't work for now but can use Image
-                      URL.
+                      Maximum allowed file size for upload is 2m.
                     </Alert>
                   </Collapse>
                 </Grid>
@@ -767,7 +851,7 @@ const Profile = (props) => {
         </Fade>
       </Modal>
     </div>
-  );
+  ) : null;
 };
 
 export default Profile;

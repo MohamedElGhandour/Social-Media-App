@@ -12,7 +12,7 @@ import PersonAddOutlinedIcon from "@material-ui/icons/PersonAddOutlined";
 import PersonAddDisabledOutlinedIcon from "@material-ui/icons/PersonAddDisabledOutlined";
 import PauseIcon from "@material-ui/icons/Pause";
 import { useDispatch } from "react-redux";
-import { toggleRequest } from "../../store/actions/index";
+import { follow, cancel, unfollow } from "../../store/actions/index";
 
 const HtmlTooltip = withStyles((theme) => ({
   tooltip: {
@@ -42,16 +42,13 @@ const useStyles = makeStyles((theme) => ({
 export default function ToolTip(props) {
   const classes = useStyles();
   const dispatch = useDispatch();
-  const userId = parseInt(localStorage.getItem("userId"));
-  const users = useSelector((state) => state.posts.users);
+  const userId = localStorage.getItem("userId");
   const [btnName, setBtnName] = React.useState("Request");
-  const { name, id, avatar, children, placement } = props;
-  const [user] = users.filter((user) => user.id === id);
-  const pending = user.pending;
-  const [userfollow] = users.filter((user) => user.id === userId);
-  const request = (id) => {
-    dispatch(toggleRequest(userId, id));
-  };
+  const { name, _id, avatar, children, placement, pending } = props;
+  const userfollow = useSelector((state) => state.auth);
+  const followFun = (id) => dispatch(follow(id));
+  const cancelTheRequest = (id) => dispatch(cancel(id));
+  const unFollowFun = (id) => dispatch(unfollow(id));
   return (
     <HtmlTooltip
       interactive
@@ -69,7 +66,7 @@ export default function ToolTip(props) {
         >
           <Grid item>
             <NavLink
-              to={`/profile/${id}`}
+              to={`/profile/${_id}`}
               style={{
                 textDecoration: "none",
                 color: "#1d3a5f",
@@ -88,7 +85,7 @@ export default function ToolTip(props) {
           </Grid>
           <Grid item>
             <NavLink
-              to={`/profile/${id}`}
+              to={`/profile/${_id}`}
               style={{
                 textDecoration: "none",
                 color: "#1d3a5f",
@@ -108,7 +105,7 @@ export default function ToolTip(props) {
               </span>
             </NavLink>
             <NavLink
-              to={`/profile/${id}`}
+              to={`/profile/${_id}`}
               style={{
                 textDecoration: "none",
                 color: "#1d3a5f",
@@ -129,27 +126,37 @@ export default function ToolTip(props) {
               </div>
             </NavLink>
           </Grid>
-          {id === userId ? null : (
+          {_id === userId ? null : (
             <Grid item xs={12}>
               <Grid spacing={2} container>
                 <Grid xs item>
                   <Button
                     className={classes.btnUser}
-                    onClick={() => request(id)}
+                    onClick={() =>
+                      pending && pending.includes(userId)
+                        ? cancelTheRequest(_id)
+                        : userfollow.following.includes(_id)
+                        ? unFollowFun(_id)
+                        : followFun(_id)
+                    }
                     color="inherit"
+                    onMouseEnter={
+                      pending && pending.includes(userId)
+                        ? () => setBtnName("Cancel")
+                        : null
+                    }
+                    onMouseLeave={
+                      pending && pending.includes(userId)
+                        ? () => setBtnName("Request")
+                        : null
+                    }
                   >
-                    {pending.includes(userId) ? (
+                    {pending && pending.includes(userId) ? (
                       <React.Fragment>
                         <PauseIcon />
-                        <span
-                          onMouseEnter={() => setBtnName("Cancel")}
-                          onMouseLeave={() => setBtnName("Request")}
-                          style={{ paddingLeft: 5 }}
-                        >
-                          {btnName}
-                        </span>
+                        <span style={{ paddingLeft: 5 }}>{btnName}</span>
                       </React.Fragment>
-                    ) : userfollow.following.includes(id) ? (
+                    ) : userfollow.following.includes(_id) ? (
                       <React.Fragment>
                         <PersonAddDisabledOutlinedIcon />
                         <span style={{ paddingLeft: 5 }}>UNFollow</span>

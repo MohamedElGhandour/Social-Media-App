@@ -34,3 +34,7 @@ export const checkAuthTimeout = (expirationTime) => ({
   type: actionTypes.CHECK_AUTH_TIMEOUT,
   expirationTime: expirationTime,
 });
+
+export const currentUser = () => ({
+  type: actionTypes.CURRENT_USER,
+});

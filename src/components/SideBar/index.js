@@ -1,7 +1,7 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { NavLink } from "react-router-dom";
-import { useSelector } from "react-redux";
+// import { useSelector } from "react-redux";
 import Grid from "@material-ui/core/Grid";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
@@ -12,6 +12,8 @@ import SettingsOutlinedIcon from "@material-ui/icons/SettingsOutlined";
 import GroupAddOutlinedIcon from "@material-ui/icons/GroupAddOutlined";
 import PhotoLibraryOutlinedIcon from "@material-ui/icons/PhotoLibraryOutlined";
 import PersonOutlineOutlinedIcon from "@material-ui/icons/PersonOutlineOutlined";
+import SearchIcon from "@material-ui/icons/Search";
+import { useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
@@ -82,18 +84,9 @@ export default function SelectedListItem(props) {
     setSelectedIndex(index);
     closeDrawer();
   };
-  const userId = parseInt(localStorage.getItem("userId"));
-  const users = useSelector((state) => state.posts.users);
-  const [user] = users.filter((user) => user.id === userId);
-  const pendding = [];
-  user !== undefined &&
-    user.pending.forEach((id) => {
-      for (let index = 0; index < users.length; index++) {
-        const element = users[index];
-        if (element.id === id) pendding.push(element);
-      }
-    });
-  const length = pendding.length;
+  const userId = localStorage.getItem("userId");
+  const pending = useSelector((state) => state.auth.pending);
+  const length = pending ? pending.length : 0;
   const pathname = useLocation().pathname;
   React.useEffect(() => {
     switch (pathname) {
@@ -111,6 +104,9 @@ export default function SelectedListItem(props) {
         break;
       case "/setting":
         setSelectedIndex(5);
+        break;
+      case "/search":
+        setSelectedIndex(6);
         break;
       default:
         break;
@@ -262,6 +258,59 @@ export default function SelectedListItem(props) {
                   </Grid>
                 ) : null}
               </Grid>
+            </ListItem>
+          </NavLink>
+          <NavLink
+            activeClassName={classes.activeDomains}
+            className={classes.domains}
+            to="/search"
+            style={{
+              textDecoration: "none",
+            }}
+          >
+            <ListItem
+              button
+              selected={selectedIndex === 6}
+              style={
+                selectedIndex === 6
+                  ? {
+                      backgroundColor: "#fbfbfc",
+                      borderLeft: "2px solid #1878f2",
+                      color: "#1878f2",
+                    }
+                  : {
+                      color: "rgb(29, 58, 95)",
+                    }
+              }
+              onClick={(event) => handleListItemClick(event, 6)}
+            >
+              <ListItemIcon>
+                <SearchIcon
+                  style={
+                    selectedIndex === 6
+                      ? {
+                          color: "#1878f2",
+                        }
+                      : {
+                          color: "#abb9c9",
+                        }
+                  }
+                />
+              </ListItemIcon>
+              <div className={classes.textRoot}>
+                <span
+                  className={classes.spanText}
+                  style={
+                    selectedIndex === 6
+                      ? {
+                          color: "#1878f2",
+                        }
+                      : null
+                  }
+                >
+                  Search
+                </span>
+              </div>
             </ListItem>
           </NavLink>
           <NavLink

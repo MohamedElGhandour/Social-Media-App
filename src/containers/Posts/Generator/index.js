@@ -8,18 +8,17 @@ import Backdrop from "@material-ui/core/Backdrop";
 import Fade from "@material-ui/core/Fade";
 import IconButton from "@material-ui/core/IconButton";
 import ClearIcon from "@material-ui/icons/Clear";
-import Alert from "@material-ui/lab/Alert";
-import Collapse from "@material-ui/core/Collapse";
-import CloseIcon from "@material-ui/icons/Close";
-import TextField from "@material-ui/core/TextField";
 import { useDispatch, useSelector } from "react-redux";
-import { sendNewPost } from "../../../store/actions/index";
+import { sendNewPost, uploadImage } from "../../../store/actions/index";
 import Button from "@material-ui/core/Button";
+import CloseIcon from "@material-ui/icons/Close";
 import AddPhotoAlternateOutlinedIcon from "@material-ui/icons/AddPhotoAlternateOutlined";
 import Fab from "@material-ui/core/Fab";
 import AddIcon from "@material-ui/icons/Add";
 import CircularProgress from "@material-ui/core/CircularProgress";
-import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
+import Alert from "@material-ui/lab/Alert";
+import Collapse from "@material-ui/core/Collapse";
+import { createMuiTheme } from "@material-ui/core/styles";
 
 const theme = createMuiTheme({
   palette: {
@@ -85,7 +84,7 @@ const useStyles = makeStyles((theme) => ({
   },
   paper: {
     backgroundColor: theme.palette.background.paper,
-    width: 500,
+    width: 680,
     boxShadow:
       "0 12px 28px 0 rgb(0 0 0 / 20%),0 2px 4px 0 rgb(0 0 0 / 10%),inset 0 0 0 1px rgb(255 255 255 / 50%)",
     padding: theme.spacing(3, 2),
@@ -93,6 +92,7 @@ const useStyles = makeStyles((theme) => ({
     border: "none",
     position: "relative",
     borderRadius: 15,
+    boxSizing: "border-box",
   },
   header: {
     textAlign: "center",
@@ -107,7 +107,9 @@ const useStyles = makeStyles((theme) => ({
     top: 0,
     right: 0,
     borderRadius: "25%",
-    margin: theme.spacing(2, 2, 0, 0),
+    width: 40,
+    height: 40,
+    margin: theme.spacing(1.5, 2, 0, 0),
   },
   rootModal: {
     flexGrow: 1,
@@ -119,7 +121,6 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(2, 0),
   },
   inputPost: {
-    width: "100%",
     resize: "none",
     height: "auto",
     overflow: "hidden",
@@ -129,12 +130,9 @@ const useStyles = makeStyles((theme) => ({
     lineHeight: 1.1667,
     color: "#566b87",
     cursor: "text",
-    minHeight: 60,
+    minHeight: 100,
     position: "inherit",
     fontWeight: 400,
-  },
-  commentPost: {
-    backgroundColor: "#fff",
   },
   form: {
     position: "relative",
@@ -153,7 +151,6 @@ const useStyles = makeStyles((theme) => ({
   btnPost: {
     backgroundColor: "#1878f2",
     color: "#fff",
-    margin: theme.spacing(2, 0, 0),
     textAlign: "center",
     padding: theme.spacing(1.1),
     borderRadius: 7,
@@ -179,14 +176,19 @@ const useStyles = makeStyles((theme) => ({
     right: 0,
     margin: " 28px 8px 0px 0px",
     backgroundColor: "rgb(255 255 255)",
-    width: 30,
-    height: 30,
+    width: 35,
+    height: 15,
+    borderRadius: "25%",
+    "&:hover": {
+      backgroundColor: "rgb(228 230 235)",
+    },
   },
   contanerPost: {
-    maxHeight: "400px",
+    maxHeight: "600px",
+    boxSizing: "border-box",
     overflow: "auto",
     "&::-webkit-scrollbar": {
-      width: "20px",
+      width: "6px",
     },
     "&::-webkit-scrollbar-track": {
       backgroundColor: "transparent",
@@ -194,16 +196,12 @@ const useStyles = makeStyles((theme) => ({
     "&::-webkit-scrollbar-thumb": {
       backgroundColor: "#d6dee1",
       borderRadius: "20px",
-      border: "6px solid transparent",
+      border: "0px solid transparent",
       backgroundClip: "content-box",
     },
     "&::-webkit-scrollbar-thumb:hover": {
       backgroundColor: "#a8bbbf",
     },
-  },
-  imgUrl: {
-    width: "100%",
-    marginTop: 5,
   },
   fab: {
     position: "fixed",
@@ -224,17 +222,20 @@ const useStyles = makeStyles((theme) => ({
       width: "100%",
       margin: "20px",
     },
-    inputPost: {
-      minHeight: 100,
+    contanerPost: {
+      maxHeight: "400px",
     },
   },
   [theme.breakpoints.up("sm")]: {
     paper: {
-      width: 500,
-      margin: 0,
+      width: "80%",
+      margin: "20px",
     },
-    inputPost: {
-      minHeight: 60,
+  },
+  [theme.breakpoints.up("md")]: {
+    paper: {
+      width: 680,
+      margin: 0,
     },
   },
 }));
@@ -243,30 +244,30 @@ export default function PostGen(props) {
   const classes = useStyles();
   const dispatch = useDispatch();
   const [open, setOpen] = React.useState(false);
-  const [openAlert, setOpenAlert] = React.useState(false);
+  const [disabled, setDisabled] = React.useState(false);
   const content = React.useRef();
   const input = React.useRef();
   const placeHolder = React.useRef();
   const [img, setImg] = React.useState(null);
-  const [imgURL, setImgURL] = React.useState("");
+  const [imgPath, setImgPath] = React.useState(null);
+  const [openAlert, setOpenAlert] = React.useState(false);
   const avatar = localStorage.getItem("avatar");
   const name = localStorage.getItem("name");
-  const userId = parseInt(localStorage.getItem("userId"));
   const loading = useSelector((state) => state.ui.loading.sendPost);
   React.useEffect(() => {
     if (loading === false) handleClose();
   }, [loading]);
   const sendPost = () => {
-    const body = content.current.innerHTML;
-    const image = imgURL ? imgURL : null;
+    const body = content.current.innerText;
+    const image = imgPath ? imgPath : null;
     const data = {
       image: image,
       body: body,
-      timestamp: new Date().getTime(),
-      userId: userId,
-      loves: [],
+      type: "post",
     };
-    dispatch(sendNewPost(data, props.postType));
+    image
+      ? !disabled && dispatch(uploadImage(data))
+      : dispatch(sendNewPost(data));
   };
 
   const handleOpen = () => {
@@ -274,8 +275,10 @@ export default function PostGen(props) {
   };
   const handleClose = () => {
     setOpen(false);
-    setOpenAlert(false);
     setImg(null);
+    setImgPath(null);
+    setOpenAlert(false);
+    setDisabled(false);
   };
   const onInput = (event) => {
     const input = event.target;
@@ -298,8 +301,13 @@ export default function PostGen(props) {
     placeHolder.current.style.color = "#8c8d8e";
   };
   const handleChange = (event) => {
+    setOpenAlert(false);
     setImg(URL.createObjectURL(event.target.files[0]));
-    setOpenAlert(true);
+    setImgPath(event.target.files[0]);
+    if (event.target.files[0].size > 2097152) {
+      setDisabled(true);
+      setOpenAlert(true);
+    }
   };
   const openInputFile = () => {
     input.current.click();
@@ -307,6 +315,7 @@ export default function PostGen(props) {
   const handleRemoveImg = () => {
     setImg(null);
     setOpenAlert(false);
+    setDisabled(false);
   };
   return (
     <React.Fragment>
@@ -366,16 +375,16 @@ export default function PostGen(props) {
                 </span>
               </div>
             )}
-            <h2 id="transition-modal-title" className={classes.header}>
+            <h3 id="transition-modal-title" className={classes.header}>
               Create Post
-            </h2>
-            <IconButton
+            </h3>
+            <Fab
               color="inherit"
               onClick={handleClose}
               className={classes.clear}
             >
               <ClearIcon style={{ color: "#666d75" }} />
-            </IconButton>
+            </Fab>
             <div className={classes.rootModal}>
               <Grid container>
                 <Grid
@@ -389,50 +398,30 @@ export default function PostGen(props) {
                     <Avatar src={avatar} style={{ borderRadius: "25%" }} />
                   </Grid>
                   <Grid item>
-                    <h3 className={classes.profileName}>{name}</h3>
+                    <h4 className={classes.profileName}>{name}</h4>
                   </Grid>
                 </Grid>
                 <Grid item className={classes.contanerPost} xs={12}>
-                  <Grid className={classes.commentPost} item xs={10} sm={11}>
-                    <Grid
-                      container
-                      direction="row"
-                      justify="space-between"
-                      alignItems="flex-end"
-                    >
-                      <Grid item xs={10} sm={11}>
-                        <div className={classes.form}>
-                          <div
-                            className={classes.placeholder}
-                            ref={placeHolder}
-                          >
-                            What's on your mind, {name}?
-                          </div>
-                          <div
-                            ref={content}
-                            className={classes.inputPost}
-                            onFocus={onFocusIn}
-                            onBlur={onFocusOut}
-                            onInput={onInput}
-                            contentEditable="plaintext-only"
-                          ></div>
+                  <Grid
+                    container
+                    direction="row"
+                    justify="space-between"
+                    alignItems="flex-end"
+                  >
+                    <Grid item xs={12}>
+                      <div className={classes.form}>
+                        <div className={classes.placeholder} ref={placeHolder}>
+                          What's on your mind, {name}?
                         </div>
-                      </Grid>
-                      <Grid item xs={2} sm={1}>
-                        <IconButton onClick={openInputFile} color="inherit">
-                          <AddPhotoAlternateOutlinedIcon
-                            style={{ color: "#46bd62" }}
-                          />
-                        </IconButton>
-                        <input
-                          id="file-input"
-                          type="file"
-                          ref={input}
-                          onChange={handleChange}
-                          style={{ display: "none" }}
-                          accept="image/*"
-                        />
-                      </Grid>
+                        <div
+                          ref={content}
+                          className={classes.inputPost}
+                          onFocus={onFocusIn}
+                          onBlur={onFocusOut}
+                          onInput={onInput}
+                          contentEditable="plaintext-only"
+                        ></div>
+                      </div>
                     </Grid>
                   </Grid>
                   {img && (
@@ -442,38 +431,99 @@ export default function PostGen(props) {
                         className={classes.previewImg}
                         src={img}
                       />
-                      <IconButton
+                      <Fab
                         color="inherit"
                         onClick={handleRemoveImg}
                         className={classes.clearImg}
                       >
                         <ClearIcon style={{ color: "#666d75" }} />
-                      </IconButton>
+                      </Fab>
                     </Grid>
                   )}
                 </Grid>
                 <Grid item xs={12}>
-                  <ThemeProvider theme={theme}>
-                    <TextField
-                      className={classes.imgUrl}
-                      value={imgURL}
-                      onChange={(e) => setImgURL(e.target.value)}
-                      color="primary"
-                      id="outlined-basic"
-                      variant="outlined"
-                      label="Image URL"
-                    />
-                  </ThemeProvider>
+                  <Grid
+                    container
+                    direction="row"
+                    justify="space-between"
+                    alignItems="center"
+                    style={{
+                      padding: "0 10px",
+                      border: "solid 1px rgb(206 208 212)",
+                      borderRadius: 7,
+                      boxShadow: "0 1px 2px rgb(0 0 0 / 10%)",
+                      marginTop: 10,
+                    }}
+                  >
+                    <Grid item>
+                      <p
+                        style={{
+                          fontWeight: 500,
+                          fontSize: 16,
+                          cursor: "pointer",
+                        }}
+                        onClick={openInputFile}
+                      >
+                        Add Image into Post
+                      </p>
+                    </Grid>
+                    <Grid item>
+                      <Fab
+                        onClick={openInputFile}
+                        style={{
+                          width: 40,
+                          height: 40,
+                          borderRadius: "25%",
+                          boxShadow: "none",
+                          background: "none",
+                        }}
+                        color="inherit"
+                      >
+                        <AddPhotoAlternateOutlinedIcon
+                          style={{
+                            color: "#1878f2",
+                            width: 25,
+                            height: 25,
+                          }}
+                        />
+                      </Fab>
+                    </Grid>
+                  </Grid>
+                  <input
+                    id="file-input"
+                    type="file"
+                    ref={input}
+                    onChange={handleChange}
+                    style={{ display: "none" }}
+                    accept="image/*"
+                  />
                 </Grid>
                 <Grid item xs={12}>
-                  <Button onClick={sendPost} className={classes.btnPost}>
-                    Post it!
-                  </Button>
+                  <div
+                    style={{
+                      cursor: disabled ? "not-allowed" : "pointer",
+                      margin: theme.spacing(2, 0, 0),
+                    }}
+                  >
+                    <Button
+                      onClick={sendPost}
+                      disabled={disabled}
+                      style={{
+                        color: disabled ? "white" : "white",
+                        background: disabled
+                          ? "rgb(24 120 242 / 38%)"
+                          : "rgb(24, 120, 242)",
+                      }}
+                      className={classes.btnPost}
+                    >
+                      Post it!
+                    </Button>
+                  </div>
                 </Grid>
                 <Grid item xs={12} style={{ marginTop: 10 }}>
                   <Collapse in={openAlert}>
                     <Alert
-                      severity="warning"
+                      severity="error"
                       className={classes.alert}
                       action={
                         <IconButton
@@ -488,8 +538,7 @@ export default function PostGen(props) {
                         </IconButton>
                       }
                     >
-                      Uploading Files doesn't work for now but can use Image
-                      URL.
+                      Maximum allowed file size for upload is 2m.
                     </Alert>
                   </Collapse>
                 </Grid>

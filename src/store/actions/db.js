@@ -4,9 +4,18 @@ export const fetchPosts = () => ({
   type: actionTypes.FETCH_POSTS,
 });
 
-export const successFetchPosts = (posts) => ({
+export const successFetchPosts = (data) => ({
   type: actionTypes.SUCCESS_FETCH_POSTS,
-  posts: posts,
+  data: data,
+});
+
+export const fetchImages = () => ({
+  type: actionTypes.FETCH_IMAGES,
+});
+
+export const successFetchImages = (data) => ({
+  type: actionTypes.SUCCESS_FETCH_IMAGES,
+  data: data,
 });
 
 export const fetchNews = () => ({
@@ -18,14 +27,16 @@ export const successFetchNews = (posts) => ({
   posts: posts,
 });
 
-export const fetchProfile = (id) => ({
-  type: actionTypes.FETCH_PROFILE,
+export const fetchUser = (id, typeFetch) => ({
+  type: actionTypes.FETCH_USER,
   id: id,
+  typeFetch: typeFetch,
 });
 
-export const successFetchProfile = (posts) => ({
-  type: actionTypes.SUCCESS_FETCH_PROFILE,
-  posts: posts,
+export const successFetchUser = (data, typeFetch) => ({
+  type: actionTypes.SUCCESS_FETCH_USER,
+  data: data,
+  typeFetch: typeFetch,
 });
 
 export const failFetchPosts = (error) => ({
@@ -33,10 +44,15 @@ export const failFetchPosts = (error) => ({
   error: error,
 });
 
-export const sendNewPost = (data, postType) => ({
+export const uploadImage = (data, types) => ({
+  type: actionTypes.UPLOAD_IMAGE,
+  data: data,
+  types: types,
+});
+
+export const sendNewPost = (data) => ({
   type: actionTypes.SEND_NEW_POST,
   data: data,
-  postType: postType,
 });
 
 export const successSendNewPost = (data, postType) => ({
@@ -45,23 +61,19 @@ export const successSendNewPost = (data, postType) => ({
   postType: postType,
 });
 
-export const addComment = (data, comment, postType) => ({
+export const addComment = (data) => ({
   type: actionTypes.ADD_COMMENT,
   data: data,
-  comment: comment,
-  postType: postType,
 });
 
-export const successAddComment = (data, comment, postType) => ({
+export const successAddComment = (data) => ({
   type: actionTypes.SUCCESS_ADD_COMMENT,
   data: data,
-  comment: comment,
-  postType: postType,
 });
 
-export const toggleLove = (post, postType) => ({
+export const toggleLove = (id, postType) => ({
   type: actionTypes.TOGGLE_LOVE,
-  post: post,
+  id: id,
   postType: postType,
 });
 
@@ -78,47 +90,70 @@ export const successFetchUsers = (data) => ({
   data: data,
 });
 
-export const toggleFollow = (id, userId, isAccepted) => ({
-  type: actionTypes.TOGGLE_FOLLOW,
-  id: id,
-  userId: userId,
-  isAccepted: isAccepted,
+export const follow = (followId) => ({
+  type: actionTypes.FOLLOW,
+  followId: followId,
 });
 
-export const toggleRequest = (id, userId) => ({
-  type: actionTypes.TOGGLE_REQUEST,
-  id: id,
-  userId: userId,
+export const unfollow = (unfollowId) => ({
+  type: actionTypes.UNFOLLOW,
+  unfollowId: unfollowId,
 });
 
-export const successToggleRequest = (users) => ({
-  type: actionTypes.SUCCESS_TOGGLE_REQUEST,
-  users: users,
+export const cancel = (cancelId) => ({
+  type: actionTypes.CANCEL,
+  cancelId: cancelId,
 });
 
-export const successToggleFollow = (users) => ({
-  type: actionTypes.SUCCESS_TOGGLE_FOLLOW,
-  users: users,
+export const decline = (declineId) => ({
+  type: actionTypes.DECLINE,
+  declineId: declineId,
 });
 
-export const changeAvatar = (id, avatar) => ({
+export const accept = (acceptId) => ({
+  type: actionTypes.ACCEPT,
+  acceptId: acceptId,
+});
+
+export const successFollowSystem = (data) => ({
+  type: actionTypes.SUCCESS_FOLLOW_SYSTEM,
+  data: data,
+});
+export const changeAvatar = (avatar) => ({
   type: actionTypes.CHANGE_AVATAR,
-  id: id,
-  avatar: avatar,
+  data: avatar,
 });
 
-export const successChangeAvatar = (users) => ({
+export const successChangeAvatar = (data) => ({
   type: actionTypes.SUCCESS_CHANGE_AVATAR,
-  users: users,
+  data: data,
 });
 
-export const changeCover = (id, cover) => ({
+export const changeCover = (cover) => ({
   type: actionTypes.CHANGE_COVER,
-  id: id,
-  cover: cover,
+  data: cover,
 });
 
-export const successChangeCover = (users) => ({
+export const successChangeCover = (data) => ({
   type: actionTypes.SUCCESS_CHANGE_COVER,
+  data: data,
+});
+
+export const searchUser = (name) => ({
+  type: actionTypes.SEARCH_USER,
+  name: name,
+});
+
+export const successSearchUser = (users) => ({
+  type: actionTypes.SUCCESS_SEARCH_USER,
   users: users,
+});
+
+export const userNotFound = (isFound) => ({
+  type: actionTypes.USER_NOT_FOUND,
+  isFound: isFound,
+});
+
+export const restScrollPage = () => ({
+  type: actionTypes.RESET_SCROLL_PAGE,
 });

@@ -6,7 +6,6 @@ import {
   CardHeader,
   CardContent,
   Typography,
-  IconButton,
   Grid,
   Button,
   Avatar,
@@ -21,6 +20,7 @@ import {
   List,
   ListItem,
   ListItemIcon,
+  Fab,
 } from "@material-ui/core/";
 import {
   MoreHoriz,
@@ -33,17 +33,17 @@ import CommentGenerator from "../../containers/ComGenerator/index";
 import Comment from "../Comments/index";
 import { NavLink } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { cloneDeep } from "lodash";
 import { createMuiTheme } from "@material-ui/core/styles";
 import { ThemeProvider } from "@material-ui/styles";
 import Tooltip from "../../containers/Tooltip/index";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import ChatBubbleIcon from "@material-ui/icons/ChatBubble";
 
 const theme = createMuiTheme({
   palette: {
     primary: {
       // light: will be calculated from palette.primary.main,
-      main: "#f33e58",
+      main: "#1878f2",
       // dark: will be calculated from palette.primary.main,
       // contrastText: will be calculated to contrast with palette.primary.main
     },
@@ -62,10 +62,8 @@ const theme = createMuiTheme({
     tonalOffset: 0.2,
   },
 });
-
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
-
   return (
     <div
       role="tabpanel"
@@ -126,12 +124,7 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "center",
     justifyContent: "center",
   },
-  paper: {
-    backgroundColor: theme.palette.background.paper,
-    outline: "none",
-    boxShadow: theme.shadows[5],
-    borderRadius: 15,
-  },
+
   reaction: {
     "&:hover": {
       textDecoration: "underline",
@@ -140,43 +133,41 @@ const useStyles = makeStyles((theme) => ({
   user: {
     borderRadius: 10,
   },
+  paper: {
+    backgroundColor: theme.palette.background.paper,
+    outline: "none",
+    boxShadow: theme.shadows[5],
+    borderRadius: 15,
+  },
+  [theme.breakpoints.down("xs")]: {
+    paper: {
+      width: "90%",
+    },
+  },
 }));
 
 export default function Post(props) {
-  const { loading = false } = props;
-  // const preventDefault = (event) => event.preventDefault();
   const [comment, setComment] = React.useState(false);
   const [love, setLove] = React.useState(false);
-  const userId = parseInt(localStorage.getItem("userId"));
-  const { loves, global, comments } = props;
-  const post = () => {
-    const _Post = cloneDeep(global);
-    delete _Post.author;
-    delete _Post.avatar;
-    delete _Post.comments;
-    love
-      ? (_Post.loves = _Post.loves.filter((id) => id !== userId))
-      : _Post.loves.push(userId);
-    props.toggleLove(_Post);
-  };
-  React.useEffect(() => {
-    loves !== undefined &&
-      loves.forEach((id) => (id === userId ? setLove(true) : setLove(false)));
-    loves !== undefined && loves.length === 0 && setLove(false);
-  }, [loves, userId]);
-  const classes = useStyles();
   const [value, setValue] = React.useState(0);
-
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
-  };
   const [open, setOpen] = React.useState(false);
-  const handleOpen = () => {
-    setOpen(true);
+  const classes = useStyles();
+  const { loading = false } = props;
+  const { loves, comments, toggleLove, id } = props;
+  const post = () => {
+    toggleLove(id);
   };
-  const handleClose = () => {
-    setOpen(false);
-  };
+  const userId = localStorage.getItem("userId");
+  React.useEffect(() => {
+    loves &&
+      loves.forEach((user) => {
+        user._id === userId ? setLove(true) : setLove(false);
+      });
+    loves && !loves.length && setLove(false);
+  }, [loves, userId]);
+  const handleChange = (event, newValue) => setValue(newValue);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
   const openLove = () => {
     handleOpen();
     handleChange(null, 0);
@@ -185,28 +176,6 @@ export default function Post(props) {
     handleOpen();
     handleChange(null, 1);
   };
-
-  const users = useSelector((state) => state.posts.users);
-  const usersComment = [];
-  !loading &&
-    comments.forEach((comment) => {
-      for (let index = 0; index < users.length; index++) {
-        const element = users[index];
-        if (element.id === comment.userId) {
-          usersComment.push(element);
-        }
-      }
-    });
-  const usersLove = [];
-  !loading &&
-    loves.forEach((love) => {
-      for (let index = 0; index < users.length; index++) {
-        const element = users[index];
-        if (element.id === love) {
-          usersLove.push(element);
-        }
-      }
-    });
   const loadingNewComment = useSelector(
     (state) => state.ui.loading.sendComment
   );
@@ -224,9 +193,10 @@ export default function Post(props) {
               />
             ) : (
               <Tooltip
-                id={props.userId}
+                _id={props.userId}
                 name={props.name}
                 avatar={props.avatar}
+                pending={props.pending}
                 placement="top"
               >
                 <NavLink to={`/profile/${props.userId}`}>
@@ -237,9 +207,18 @@ export default function Post(props) {
           }
           action={
             loading ? null : (
-              <IconButton style={{ borderRadius: "25%" }} aria-label="settings">
+              <Fab
+                style={{
+                  borderRadius: "25%",
+                  boxShadow: "none",
+                  background: "none",
+                  width: 40,
+                  height: 40,
+                }}
+                aria-label="settings"
+              >
                 <MoreHoriz />
-              </IconButton>
+              </Fab>
             )
           }
           title={
@@ -257,9 +236,10 @@ export default function Post(props) {
                 component="p"
               >
                 <Tooltip
-                  id={props.userId}
+                  _id={props.userId}
                   name={props.name}
                   avatar={props.avatar}
+                  pending={props.pending}
                   placement="top"
                 >
                   <NavLink
@@ -276,7 +256,7 @@ export default function Post(props) {
             loading ? (
               <Skeleton animation="wave" height={10} width="40%" />
             ) : (
-              new Date(props.timestamp).toUTCString()
+              new Date(props.createdAt).toUTCString()
             )
           }
         />
@@ -331,7 +311,7 @@ export default function Post(props) {
                   className={classes.reaction}
                   onClick={openLove}
                   style={{
-                    color: "#f33e58",
+                    color: "#1878f2",
                     fontSize: ".9375rem",
                     cursor: "pointer",
                   }}
@@ -386,7 +366,7 @@ export default function Post(props) {
               <Button
                 className={classes.btn}
                 onClick={() => post()}
-                style={{ color: "#f33e58" }}
+                style={{ color: "#1878f2" }}
               >
                 <Favorite />
                 <span style={{ paddingLeft: 5 }}>Love</span>
@@ -405,20 +385,15 @@ export default function Post(props) {
         )}
         {loading ? null : (
           <Collapse in={comment}>
-            <CommentGenerator
-              global={props.global}
-              comments={comments}
-              avatar={props.avatar}
-              author={props.name}
-              commentsType={props.commentsType}
-            />
+            <CommentGenerator id={props.id} />
             {comments.map((comment) => (
               <Comment
-                avatar={comment.avatar}
+                avatar={comment.user.avatar}
                 body={comment.body}
-                key={comment.id}
-                author={comment.author}
-                userId={comment.userId}
+                key={comment._id}
+                author={comment.user.name}
+                userId={comment.user._id}
+                pending={comment.user.pending}
               />
             ))}
             {loadingNewComment && (
@@ -478,8 +453,8 @@ export default function Post(props) {
                   />
                   <Tab
                     label="Comments"
-                    style={{ width: "50%", color: "#4c4c4c" }}
-                    icon={<ChatBubbleOutlineOutlined />}
+                    style={{ width: "50%" }}
+                    icon={<ChatBubbleIcon />}
                     {...a11yProps(1)}
                   />
                 </Tabs>
@@ -496,58 +471,60 @@ export default function Post(props) {
                 }}
                 aria-label="main mailbox folders"
               >
-                {usersLove.length === 0 && (
+                {loves && loves.length === 0 && (
                   <div style={{ textAlign: "center" }}>Be First Love</div>
                 )}
-                {usersLove.map((user) => (
-                  <Tooltip
-                    key={user.id}
-                    id={user.id}
-                    name={user.name}
-                    avatar={user.avatar}
-                    placement="top"
-                  >
-                    <div>
-                      <NavLink
-                        to={`/profile/${user.id}`}
-                        style={{
-                          textDecoration: "none",
-                          color: "#1d3a5f",
-                          fontWeight: 500,
-                        }}
-                      >
-                        <ListItem className={classes.user} button>
-                          <ListItemIcon>
-                            <Avatar
-                              src={user.avatar}
-                              style={{ borderRadius: "25%" }}
-                            />
-                          </ListItemIcon>
-                          <div
-                            style={{
-                              flex: "1 1 auto",
-                              minWidth: 0,
-                              marginTop: 4,
-                              marginBottom: 4,
-                            }}
-                          >
-                            <span
+                {loves &&
+                  loves.map((user) => (
+                    <Tooltip
+                      key={user._id}
+                      _id={user._id}
+                      name={user.name}
+                      avatar={user.avatar}
+                      pending={user.pending}
+                      placement="top"
+                    >
+                      <div>
+                        <NavLink
+                          to={`/profile/${user._id}`}
+                          style={{
+                            textDecoration: "none",
+                            color: "#1d3a5f",
+                            fontWeight: 500,
+                          }}
+                        >
+                          <ListItem className={classes.user} button>
+                            <ListItemIcon>
+                              <Avatar
+                                src={user.avatar}
+                                style={{ borderRadius: "25%" }}
+                              />
+                            </ListItemIcon>
+                            <div
                               style={{
-                                fontSize: "1rem",
-                                fontFamily: ` "Roboto", "Helvetica", "Arial", sans-serif`,
-                                fontWeight: 500,
-                                lineHeight: 1.5,
-                                letterSpacing: "0.00938em",
+                                flex: "1 1 auto",
+                                minWidth: 0,
+                                marginTop: 4,
+                                marginBottom: 4,
                               }}
                             >
-                              {user.name}
-                            </span>
-                          </div>
-                        </ListItem>
-                      </NavLink>
-                    </div>
-                  </Tooltip>
-                ))}
+                              <span
+                                style={{
+                                  fontSize: "1rem",
+                                  fontFamily: ` "Roboto", "Helvetica", "Arial", sans-serif`,
+                                  fontWeight: 500,
+                                  lineHeight: 1.5,
+                                  letterSpacing: "0.00938em",
+                                }}
+                              >
+                                {user.name}
+                              </span>
+                            </div>
+                          </ListItem>
+                        </NavLink>
+                      </div>
+                    </Tooltip>
+                  ))}
               </List>
             </TabPanel>
             <TabPanel value={value} index={1}>
@@ -561,58 +538,60 @@ export default function Post(props) {
                 }}
                 aria-label="main mailbox folders"
               >
-                {usersComment.length === 0 && (
+                {comments && comments.length === 0 && (
                   <div style={{ textAlign: "center" }}>Be First Comment</div>
                 )}
-                {usersComment.map((user) => (
-                  <Tooltip
-                    key={user.id}
-                    id={user.id}
-                    name={user.name}
-                    avatar={user.avatar}
-                    placement="top"
-                  >
-                    <div>
-                      <NavLink
-                        to={`/profile/${user.id}`}
-                        style={{
-                          textDecoration: "none",
-                          color: "#1d3a5f",
-                          fontWeight: 500,
-                        }}
-                      >
-                        <ListItem className={classes.user} button>
-                          <ListItemIcon>
-                            <Avatar
-                              src={user.avatar}
-                              style={{ borderRadius: "25%" }}
-                            />
-                          </ListItemIcon>
-                          <div
-                            style={{
-                              flex: "1 1 auto",
-                              minWidth: 0,
-                              marginTop: 4,
-                              marginBottom: 4,
-                            }}
-                          >
-                            <span
+                {comments &&
+                  comments.map((comment) => (
+                    <Tooltip
+                      key={comment._id}
+                      _id={comment._id}
+                      name={comment.user.name}
+                      avatar={comment.user.avatar}
+                      pending={comment.user.pending}
+                      placement="top"
+                    >
+                      <div>
+                        <NavLink
+                          to={`/profile/${comment.user._id}`}
+                          style={{
+                            textDecoration: "none",
+                            color: "#1d3a5f",
+                            fontWeight: 500,
+                          }}
+                        >
+                          <ListItem className={classes.user} button>
+                            <ListItemIcon>
+                              <Avatar
+                                src={comment.user.avatar}
+                                style={{ borderRadius: "25%" }}
+                              />
+                            </ListItemIcon>
+                            <div
                               style={{
-                                fontSize: "1rem",
-                                fontFamily: ` "Roboto", "Helvetica", "Arial", sans-serif`,
-                                fontWeight: 500,
-                                lineHeight: 1.5,
-                                letterSpacing: "0.00938em",
+                                flex: "1 1 auto",
+                                minWidth: 0,
+                                marginTop: 4,
+                                marginBottom: 4,
                               }}
                             >
-                              {user.name}
-                            </span>
-                          </div>
-                        </ListItem>
-                      </NavLink>
-                    </div>
-                  </Tooltip>
-                ))}
+                              <span
+                                style={{
+                                  fontSize: "1rem",
+                                  fontFamily: ` "Roboto", "Helvetica", "Arial", sans-serif`,
+                                  fontWeight: 500,
+                                  lineHeight: 1.5,
+                                  letterSpacing: "0.00938em",
+                                }}
+                              >
+                                {comment.user.name}
+                              </span>
+                            </div>
+                          </ListItem>
+                        </NavLink>
+                      </div>
+                    </Tooltip>
+                  ))}
               </List>
             </TabPanel>
           </div>

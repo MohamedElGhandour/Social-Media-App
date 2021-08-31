@@ -48,7 +48,7 @@ export default function ComGen(props) {
   const body = React.useRef();
   const dispatch = useDispatch();
   const avatar = localStorage.getItem("avatar");
-  const userId = parseInt(localStorage.getItem("userId"));
+  const userId = localStorage.getItem("userId");
 
   const onInput = (event) => {
     const input = event.target;
@@ -63,15 +63,12 @@ export default function ComGen(props) {
     placeholder.current.style.color = "#8c8d8e";
   };
   const handleKeyDown = (event) => {
-    if (event.key === "Enter" && body.current.innerHTML !== "") {
+    if (event.key === "Enter" && body.current.innerHTML.trim() !== "") {
       const newComment = {
         body: body.current.innerHTML,
-        timestamp: new Date().getTime(),
-        postId: props.global.id,
-        userId: userId,
+        postId: props.id,
       };
-      const newPost = { ...props.global };
-      dispatch(addComment(newPost, newComment, props.commentsType));
+      dispatch(addComment(newComment));
       body.current.innerHTML = "";
       placeholder.current.style.display = "block";
     }

@@ -17,6 +17,10 @@ import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
 import { NavLink } from "react-router-dom";
 import { checkValidity } from "../../../shared/utility";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import Visibility from "@material-ui/icons/Visibility";
+import VisibilityOff from "@material-ui/icons/VisibilityOff";
+import InputAdornment from "@material-ui/core/InputAdornment";
+import IconButton from "@material-ui/core/IconButton";
 
 const theme = createMuiTheme({
   palette: {
@@ -127,8 +131,20 @@ export default function SignInSide() {
       },
       valid: false,
       touched: false,
+      showPassword: false,
     },
   });
+
+  const handleClickShowPassword = () => {
+    setControls((prevState) => ({
+      ...controls,
+      password: {
+        ...controls.password,
+        showPassword: !prevState.password.showPassword,
+      },
+    }));
+  };
+
   const changedInputHandler = (event, elementIdentifer) => {
     const updatedcontrols = cloneDeep(controls);
     updatedcontrols[elementIdentifer].value = event.target.value;
@@ -154,6 +170,11 @@ export default function SignInSide() {
       dispatch(auth(authData));
     }
   };
+
+  const handleMouseDownPassword = (event) => {
+    event.preventDefault();
+  };
+
   const loading = useSelector((state) => state.ui.loading.login);
   return (
     <Container component="main" maxWidth="xs">
@@ -218,7 +239,7 @@ export default function SignInSide() {
               fullWidth
               name="password"
               label="Password"
-              type="password"
+              type={controls.password.showPassword ? "text" : "password"}
               id="password"
               autoComplete="current-password"
               value={controls.password.value}
@@ -228,6 +249,23 @@ export default function SignInSide() {
                   ? "secondary"
                   : "primary"
               }
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={handleClickShowPassword}
+                      onMouseDown={handleMouseDownPassword}
+                    >
+                      {controls.password.showPassword ? (
+                        <Visibility />
+                      ) : (
+                        <VisibilityOff />
+                      )}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
             />
           </ThemeProvider>
           <Button

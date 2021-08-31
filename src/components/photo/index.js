@@ -66,7 +66,7 @@ function Photo(props) {
   const handleChange = () => {
     setOpen((prev) => !prev);
   };
-  const { userId, name, avatar, image, timestamp } = props;
+  const { userId, name, avatar, image, timestamp, pending } = props;
   return (
     <div className={classes.main}>
       <div className={classes.container}>
@@ -121,7 +121,13 @@ function Photo(props) {
             alignItems="center"
           >
             <Grid>
-              <Tooltip id={userId} name={name} avatar={avatar} placement="top">
+              <Tooltip
+                _id={userId}
+                name={name}
+                avatar={avatar}
+                pending={pending}
+                placement="top"
+              >
                 <NavLink
                   to={`/profile/${userId}`}
                   style={{
@@ -135,7 +141,13 @@ function Photo(props) {
               </Tooltip>
             </Grid>
             <Grid>
-              <Tooltip id={userId} name={name} avatar={avatar} placement="top">
+              <Tooltip
+                _id={userId}
+                name={name}
+                avatar={avatar}
+                pending={pending}
+                placement="top"
+              >
                 <NavLink
                   to={`/profile/${userId}`}
                   style={{

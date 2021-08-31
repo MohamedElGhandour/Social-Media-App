@@ -34,3 +34,8 @@ export const loadingSignup = (loading) => ({
   type: actionTypes.LOADING_SIGNUP,
   loading: loading,
 });
+
+export const loadingSearch = (loading) => ({
+  type: actionTypes.LOADING_SEARCH,
+  loading: loading,
+});
