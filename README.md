@@ -1,8 +1,8 @@
-# Getting Started with Socail Media App
+# Getting Started with Social Media App
 
 ## Available Live Demo
 
-Click [Here](https://social-media-app-ghandour.netlify.app/) to View the Production.
+Click [Here](https://social-media-app-ghandour.firebaseapp.com/) to View the Production.
 Server
 
 ## Available Scripts
@@ -19,7 +19,11 @@ You will also see any lint errors in the console.
 
 In the project directory, you can run (Back End):
 
-### `npm run server-start`
+### `npm run start-server`
+
+and in dev mode
+
+### `npm run dev-server`
 
 it's better to use [nodemon](https://github.com/remy/nodemon).
 
